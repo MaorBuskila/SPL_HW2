@@ -1,6 +1,9 @@
 package bgu.mics.application.objects;
 
 
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Passive object representing the cluster.
  * <p>
@@ -9,6 +12,10 @@ package bgu.mics.application.objects;
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
 public class Cluster {
+	private Vector<GPU> gpus;
+	private Vector<CPU> cpus;
+
+
 
 
 	/**
