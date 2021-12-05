@@ -35,7 +35,8 @@ public class GPU {
     }
 
     private void sendUnprocessedDataBatchToCluster(Cluster cluster){
-
+        //fuction to decide how to send
+        //cluster.add
     }
     private void getProcessedDataBatch(Cluster cluster){
 

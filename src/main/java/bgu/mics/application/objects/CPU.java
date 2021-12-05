@@ -1,5 +1,9 @@
 package bgu.mics.application.objects;
 
+import bgu.mics.Event;
+import bgu.mics.application.services.CPUService;
+
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -7,33 +11,77 @@ import java.util.concurrent.ConcurrentHashMap;
  * Add all the fields described in the assignment as private fields.
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
-public class CPU {
+public class CPU extends CPUService{
 
     private int numberOFCores;
-    private ConcurrentHashMap <Integer , DataBatch> db;
+    private Queue <DataBatch> unprocessedQueue;
     private Cluster cluster;
     private boolean isBusy = false;
+    private DataBatch dataBatch;
+    private Queue <DataBatch> processedQueue;
 
 
-    public CPU(int numberOFCores, ConcurrentHashMap<Integer, DataBatch> dataBatch, Cluster cluster) {
+
+    public CPU(int numberOFCores, Queue <DataBatch> queue, Cluster cluster,String name) {
+        super(name);
         this.numberOFCores = numberOFCores;
-        this.db = dataBatch;
+        this.unprocessedQueue = queue;
         this.cluster = cluster;
     }
 
-    private DataBatch getUnprocessedDataBatch(ConcurrentHashMap<Integer, DataBatch> dataBatch){
+    /**
+     * @pre:none
+     * @post: return value = @pre head of queue
+     * @return
+     */
+    public DataBatch getUnprocessed() {
+        if (!unprocessedQueue.isEmpty()) {
+            return unprocessedQueue.remove();
+            //    ProcessAndSendToCluster(dataBatch);
+        }
         return null;
     }
+    /**
+     * @pre: dataBatch.isProcessed == false
+     * @post: dataBatch.isProcessed == true
+     */
+    public void process( DataBatch dataBatch) {
+        int x=CPUService.getTicks();
+        //process... ticks...
+        isBusy =true;
+//        if(dataBatch.getData().getType().equals("Images")){
+//            CPUService.
+//        }
 
-    private void Process (ConcurrentHashMap dataBatch){
-        dataBatch.process = true;
+        dataBatch.process();
+        isBusy = false;
+
     }
 
-    private DataBatch sendProcessedDataBatch(ConcurrentHashMap<Integer,DataBatch> dataBatch){
-        return null;
+    /**
+     *
+     * @pre: dataBatch.isProcessed == true
+     * @post: cluster.processedBatch != null
+     * @param processedDataBatch
+     */
+
+    public void sendToCluster (DataBatch processedDataBatch){
+        this.cluster.addToProcessed(processedDataBatch);
     }
 
-    private boolean isBusy (int numberOFCores){ return false; //Todo: mabey should be public and implement the getUnprocessedDataBatch from the cluster and the cluster should push it to the cpu when he is not busy
+
+    /**
+     * @pre:
+     * @post:
+     * @return
+     */
+    public boolean checkIfBusy (){
+        return isBusy;
+    }
+
+    public void updateTick(CPUService s)
+    {
+    //    ticks=s.getTick();
     }
 
 

@@ -1,6 +1,7 @@
 package bgu.mics.application.objects;
 
 
+import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,8 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Cluster {
 	private Vector<GPU> gpus;
 	private Vector<CPU> cpus;
-
-
+	private Queue<DataBatch> UnprocessedBatch;
+	private Queue<DataBatch> processedBatch;
 
 
 	/**
@@ -26,4 +27,14 @@ public class Cluster {
 		return null;
 	}
 
+	public Queue<DataBatch> getprocessedBatch()
+	{
+		return this.processedBatch;
+	}
+	public void addToProcessed(DataBatch dataBatch) {
+		processedBatch.add(dataBatch);
+	}
+	public void addToUnprocessedBatch(DataBatch dataBatch) {
+		UnprocessedBatch.add(dataBatch);
+	}
 }

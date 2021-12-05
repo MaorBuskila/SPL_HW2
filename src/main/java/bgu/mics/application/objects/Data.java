@@ -12,6 +12,10 @@ public class Data {
         Images, Text, Tabular
     }
 
+    public Type getType() {
+        return type;
+    }
+
     private Type type;
     private int processed;
     private int size;
