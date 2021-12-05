@@ -6,9 +6,14 @@ package bgu.mics.application.objects;
  */
 
 public class DataBatch  {
-    private int id;
+    private int start_index;
     private Data data;
+    public DataBatch(Data data,int start_index)
+    {
+        this.data=data;
+        this.start_index=start_index;
 
+    }
     public boolean isProcessed() {
         return processed;
     }

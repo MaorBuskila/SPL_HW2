@@ -1,11 +1,7 @@
 package bgu.mics.application.objects;
 
 import bgu.mics.MessageBusImpl;
-import bgu.mics.MicroService;
-import bgu.mics.application.services.CPUService;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +22,8 @@ class CPUTest {
     @BeforeEach
     public void setUp() {
         msgbus = MessageBusImpl.getInstance();
-        db = new DataBatch();
+        Data data=new Data();
+        db = new DataBatch(data,0);
         queue = new LinkedList<DataBatch>();
         queue.add(db);
         cluster = new Cluster();
@@ -50,9 +47,11 @@ class CPUTest {
 
     @Test
     void testprocess() {
+        int x=db.getData().getProccessed();
         assertFalse(db.isProcessed());
         cpu.process(db);
         assertTrue(db.isProcessed());
+        assertEquals(db.getData().getProccessed()-x,1000);
         //  assertThrows("Should throw exception (DataBatch is already Processed)",Exception.class, () -> cpu.process(db));
     }
 
@@ -60,7 +59,7 @@ class CPUTest {
     void testsendToCluster() {
         cpu.process(db);
         cpu.sendToCluster(db);
-        assertEquals(cluster.getprocessedBatch().peek(), db);
+        assertEquals(cluster.getProcessedDataBatch().peek(), db);
 
 
     }

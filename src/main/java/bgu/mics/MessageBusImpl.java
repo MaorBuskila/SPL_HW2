@@ -1,12 +1,18 @@
 package bgu.mics;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * The {@link MessageBusImpl class is the implementation of the MessageBus interface.
  * Write your implementation here!
  * Only private fields and methods can be added to this class.
  */
 public class MessageBusImpl implements MessageBus {
-
+	private ConcurrentHashMap<MicroService, Queue<Message>> queueMap;
 
 	//Copy by GitHub
 	//You are allowed to add the getInstance public method to the MessageBus impl in order to create the thread safe singleton.
@@ -53,6 +59,10 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
+
+
+		Queue<Message> queue=new ConcurrentLinkedQueue<Message>();
+		queueMap.put(m,queue);
 		// TODO Auto-generated method stub
 
 	}
@@ -69,6 +79,9 @@ public class MessageBusImpl implements MessageBus {
 		return null;
 	}
 
-	
 
+	public Queue<Message> getQueueMap(MicroService m1) {
+		//private ConcurrentMap<MicroService,Queue<T>> queueMap;
+		return queueMap.get(m1);
+	}
 }

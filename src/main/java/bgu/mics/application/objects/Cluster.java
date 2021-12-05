@@ -27,10 +27,15 @@ public class Cluster {
 		return null;
 	}
 
-	public Queue<DataBatch> getprocessedBatch()
+	public Queue<DataBatch> getProcessedDataBatch()
 	{
 		return this.processedBatch;
 	}
+	public Queue<DataBatch> getUnProcessedDataBatch()
+	{
+		return this.UnprocessedBatch;
+	}
+
 	public void addToProcessed(DataBatch dataBatch) {
 		processedBatch.add(dataBatch);
 	}

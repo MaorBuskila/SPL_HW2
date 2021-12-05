@@ -43,7 +43,7 @@ public class CPU extends CPUService{
     }
     /**
      * @pre: dataBatch.isProcessed == false
-     * @post: dataBatch.isProcessed == true
+     * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
     public void process( DataBatch dataBatch) {
 //        int x=CPUService.getTicks(); // x=0
@@ -54,6 +54,7 @@ public class CPU extends CPUService{
 //        }
 
         dataBatch.process();
+        dataBatch.getData().updateProccessed();
     //    isBusy = false;
 
     }

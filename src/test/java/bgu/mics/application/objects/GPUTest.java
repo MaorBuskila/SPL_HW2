@@ -25,22 +25,47 @@ class GPUTest {
 
     @AfterEach
     void tearDown() {
-        
+        msgbus.unregister(gpu);
+
     }
 
     @Test
     void separateData() {
+        Data tmpData = model.getData();
+        int id = model.getId();
+        int x = gpu.getDataMap.getValue(id).size();
+        assertEquals(x*1000,tmpData.getSize());
+
+
     }
 
     @Test
     void sendUnprocessedDataBatchToCluster() {
+        DataBatch dataBatch = new DataBatch(model.getData(),0);
+        gpu.sendUnprocessedDataBatchToCluster(dataBatch);
+        assertTrue(cluster.getUnProcessedDataBatch().contains(dataBatch));
+
     }
 
     @Test
     void getProcessedDataBatch() {
+        //assertThrows()
+        DataBatch dataBatch = new DataBatch(model.getData(),0);
+        dataBatch.process();
+        cluster.addToProcessed(dataBatch);
+        assertTrue(gpu.getVramArray().contains(dataBatch));
+
     }
 
     @Test
     void trainDataBatchModel() {
+        assertTrue(VRAMArray.isEmpty());
+        DataBatch dataBatch = new DataBatch(model.getData(),0);
+        dataBatch.process();
+        cluster.addToProcessed(dataBatch);
+        gpu.reciveProcessedDataBatch();
+        gpu.trainDataBatch(dataBatch);
+        assertFalse(VRAMArray.contains(dataBatch));
+
     }
 }
