@@ -46,15 +46,15 @@ public class CPU extends CPUService{
      * @post: dataBatch.isProcessed == true
      */
     public void process( DataBatch dataBatch) {
-        int x=CPUService.getTicks();
+//        int x=CPUService.getTicks(); // x=0
         //process... ticks...
-        isBusy =true;
+ //       isBusy =true;
 //        if(dataBatch.getData().getType().equals("Images")){
 //            CPUService.
 //        }
 
         dataBatch.process();
-        isBusy = false;
+    //    isBusy = false;
 
     }
 
@@ -78,14 +78,6 @@ public class CPU extends CPUService{
     public boolean checkIfBusy (){
         return isBusy;
     }
-
-    public void updateTick(CPUService s)
-    {
-    //    ticks=s.getTick();
-    }
-
-
-
 }
 
 

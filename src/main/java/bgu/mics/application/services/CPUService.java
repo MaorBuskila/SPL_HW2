@@ -11,7 +11,7 @@ import bgu.mics.MicroService;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class CPUService extends MicroService {
-    private static int ticks;
+    protected static int ticks;
 
 
     public CPUService(String name) {
@@ -19,10 +19,10 @@ public class CPUService extends MicroService {
         this.ticks = ticks;
         // TODO Implement this
     }
-
-    public static int getTicks() {
-        return ticks;
-    }
+//
+//    public static int getTicks() {
+//        return ticks;
+//    }
     public void updateTick(Broadcast ticks)
     {
        // this.ticks=ticks.getInt;

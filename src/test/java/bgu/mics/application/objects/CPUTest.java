@@ -30,8 +30,8 @@ class CPUTest {
         queue = new LinkedList<DataBatch>();
         queue.add(db);
         cluster = new Cluster();
-       // cpu = new CPUService("name");
-        cpu = new CPU(16, queue , cluster, "name");
+        // cpu = new CPUService("name");
+        cpu = new CPU(16, queue, cluster, "name");
         msgbus.register(cpu);
     }
 
@@ -53,26 +53,22 @@ class CPUTest {
         assertFalse(db.isProcessed());
         cpu.process(db);
         assertTrue(db.isProcessed());
-      //  assertThrows("Should throw exception (DataBatch is already Processed)",Exception.class, () -> cpu.process(db));
+        //  assertThrows("Should throw exception (DataBatch is already Processed)",Exception.class, () -> cpu.process(db));
     }
 
     @Test
     void testsendToCluster() {
         cpu.process(db);
         cpu.sendToCluster(db);
-        assertEquals(cluster.getprocessedBatch().peek(),db);
+        assertEquals(cluster.getprocessedBatch().peek(), db);
 
 
     }
 
+    //Todo: check if we need this?
     @Test
-    void testIsBusy() {
+    void testcheckIfBusy() {
         assertFalse(cpu.checkIfBusy());
-        cpu.process(db);
-        assertTrue
-    }
 
-    @Test
-    void testUpdateTick() {
     }
 }
