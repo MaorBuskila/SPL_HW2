@@ -1,6 +1,7 @@
 package bgu.mics.application.objects;
 
 import bgu.mics.Event;
+import bgu.mics.application.services.GPUService;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Add all the fields described in the assignment as private fields.
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
-public class GPU {
+public class GPU extends GPUService {
 
     /**
      * Enum representing the type of the GPU.
@@ -23,26 +24,27 @@ public class GPU {
     private ConcurrentHashMap<Integer, DataBatch> data; //seprated model data to databatch
 
 
-    public GPU(Type type, Model model, Cluster cluster){
+    public GPU(Type type, Model model, Cluster cluster, String name){
+        super(name);
         this.type = type;
         this.model = model;
         this.cluster = cluster;
 
     }
 
-    private void separateData(Model model, ConcurrentHashMap<Integer,DataBatch> data){
+    public void separateData(Model model, ConcurrentHashMap<Integer,DataBatch> data){
 
     }
 
-    private void sendUnprocessedDataBatchToCluster(Cluster cluster){
+    public void sendUnprocessedDataBatchToCluster(Cluster cluster){
         //fuction to decide how to send
         //cluster.add
     }
-    private void getProcessedDataBatch(Cluster cluster){
+    public void getProcessedDataBatch(Cluster cluster){
 
     }
 
-    private void trainDataBatchModel(DataBatch dataBatch){
+    public void trainDataBatchModel(DataBatch dataBatch){
 
     }
 
