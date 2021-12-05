@@ -26,6 +26,7 @@ public class CPU {
     }
 
     private void Process (ConcurrentHashMap dataBatch){
+        dataBatch.process = true;
     }
 
     private DataBatch sendProcessedDataBatch(ConcurrentHashMap<Integer,DataBatch> dataBatch){
