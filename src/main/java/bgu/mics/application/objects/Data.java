@@ -7,6 +7,13 @@ package bgu.mics.application.objects;
 public class Data {
 
 
+
+    public Data(Type type, int processed, int size) {
+        this.type = type;
+        this.processed = processed;
+        this.size = size;
+    }
+
     public int getProccessed() {
         return processed;
     }

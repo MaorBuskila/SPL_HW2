@@ -5,31 +5,43 @@ package bgu.mics.application.objects;
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
 
-public class DataBatch  {
+public class DataBatch {
     private int start_index;
     private Data data;
-    public DataBatch(Data data,int start_index)
-    {
-        this.data=data;
-        this.start_index=start_index;
+    private boolean processed = false;
+    private boolean trained = false;
+
+
+    public DataBatch(Data data, int start_index) {
+
+        this.data = data;
+        this.start_index = start_index;
 
     }
+
     public boolean isProcessed() {
         return processed;
     }
-    public Data getData()
-    {
+
+    public Data getData() {
         return data;
     }
 
-    private boolean processed = false;
 
     public void process() {
-        if (!processed){
+        if (!processed) {
             processed = true;
-        }
-        else{
+        } else {
             System.out.println("already processed!");
         }
+    }
+
+    public void train() {
+        if (!trained) {
+            trained = true;
+        } else {
+            System.out.println("already trained!");
+        }
+
     }
 }

@@ -8,10 +8,16 @@ package bgu.mics.application.objects;
 public class Model {
     private int id;
     private Data data;
+
+    public Model(int id, Data data) {
+        this.id = id;
+        this.data = data;
+    }
+
+
     public int getId() {
         return id;
     }
-
     public Data getData() {
         return data;
     }
