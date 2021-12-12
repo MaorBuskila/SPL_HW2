@@ -14,10 +14,8 @@ import java.util.concurrent.ConcurrentMap;
 public class MessageBusImpl implements MessageBus {
 	private ConcurrentHashMap<MicroService, Queue<Message>> queueMap;
 
-	//Copy by GitHub
 	//You are allowed to add the getInstance public method to the MessageBus impl in order to create the thread safe singleton.
 	private static MessageBusImpl msgBus = null;
-
 	public static MessageBusImpl getInstance() {
 		if (msgBus == null) {
 			msgBus = new MessageBusImpl();
@@ -61,7 +59,7 @@ public class MessageBusImpl implements MessageBus {
 	public void register(MicroService m) {
 
 
-		Queue<Message> queue=new ConcurrentLinkedQueue<Message>();
+		Queue<Message> queue=new ConcurrentLinkedQueue<>();
 		queueMap.put(m,queue);
 		// TODO Auto-generated method stub
 
@@ -69,14 +67,20 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void unregister(MicroService m) {
+		queueMap.remove(m);
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public Message awaitMessage(MicroService m) throws InterruptedException {
+		synchronized(this.queueMap.get(m)){
+			while (queueMap.get(m).isEmpty()){
+				this.queueMap.get(m).wait();
+			}
+		}
 		// TODO Auto-generated method stub
-		return null;
+		return queueMap.get(m).poll();
 	}
 
 

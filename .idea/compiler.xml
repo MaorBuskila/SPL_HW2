@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="spl221ass2" />
         <module name="files" />
+        <module name="spl221ass2" />
       </profile>
     </annotationProcessing>
   </component>

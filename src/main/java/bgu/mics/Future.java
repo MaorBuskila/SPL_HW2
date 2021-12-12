@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Future<T> {
 	private boolean isDone = false;
-	private volatile T result=null;
+	private volatile T result = null;
 
 	/**
 	 * This should be the the only public constructor in this class.
@@ -37,7 +37,7 @@ public class Future<T> {
 			try {
 				wait();
 			} catch (InterruptedException e) {
-				e.printStackTrace(); //change InterruptedException
+				e.printStackTrace(); //Todo: check change InterruptedException
 			}
 		}
 		return result;
