@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class MessageBusImpl implements MessageBus {
 	private ConcurrentHashMap<MicroService, Queue<Message>> queueMap;
-
+// adir elda
 	//You are allowed to add the getInstance public method to the MessageBus impl in order to create the thread safe singleton.
 	private static MessageBusImpl msgBus = null;
 	public static MessageBusImpl getInstance() {
