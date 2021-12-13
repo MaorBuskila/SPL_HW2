@@ -6,7 +6,9 @@ package bgu.mics.application.objects;
  */
 public class Data {
 
-
+    private Type type;
+    private int processed;
+    private int size;
 
     public Data(Type type, int processed, int size) {
         this.type = type;
@@ -28,10 +30,6 @@ public class Data {
     public Type getType() {
         return type;
     }
-
-    private Type type;
-    private int processed;
-    private int size;
 
     public int getSize() {
         return size;

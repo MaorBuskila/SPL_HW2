@@ -58,6 +58,8 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
+        msgBus.subscribeEvent(type , this);
+        msgCallBackMap.put(type, callback);
         //TODO: implement this.
     }
 
@@ -82,7 +84,8 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     public final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-        //TODO: implement this.
+        msgBus.subscribeBroadcast(type , this);
+        msgCallBackMap.put(type, callback);
     }
 
     /**
@@ -98,8 +101,7 @@ public abstract class MicroService implements Runnable {
      * 	       			null in case no micro-service has subscribed to {@code e.getClass()}.
      */
     protected final <T> Future<T> sendEvent(Event<T> e) {
-        //TODO: implement this.
-        return null; //TODO: delete this line :)
+        return msgBus.sendEvent(e);
     }
 
     /**
@@ -109,6 +111,7 @@ public abstract class MicroService implements Runnable {
      * @param b The broadcast message to send
      */
     protected final void sendBroadcast(Broadcast b) {
+        msgBus.sendBroadcast(b);
         //TODO: implement this.
     }
 
@@ -123,6 +126,7 @@ public abstract class MicroService implements Runnable {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
+        msgBus.complete(e , result);
         //TODO: implement this.
     }
 
@@ -165,6 +169,8 @@ public abstract class MicroService implements Runnable {
             }
             System.out.println("NOT IMPLEMENTED!!"); //TODO: you should delete this line :)
         }
+        msgBus.unregister(this);
+
     }
 
 }

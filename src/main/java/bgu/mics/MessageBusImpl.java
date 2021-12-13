@@ -63,7 +63,7 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
-		Future f =eventsToFuture.get(e);
+		Future f = eventsToFuture.get(e);
 		f.resolve(result);
 		eventsToFuture.remove(e);
 		// TODO Auto-generated method stub
