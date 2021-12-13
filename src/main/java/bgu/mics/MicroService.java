@@ -163,7 +163,7 @@ public abstract class MicroService implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
+            System.out.println("NOT IMPLEMENTED!!"); //TODO: you should delete this line :)
         }
     }
 
