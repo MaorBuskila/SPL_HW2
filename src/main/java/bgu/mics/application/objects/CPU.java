@@ -1,10 +1,8 @@
 package bgu.mics.application.objects;
 
-import bgu.mics.Event;
 import bgu.mics.application.services.CPUService;
 
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Passive object representing a single CPU.
@@ -53,9 +51,8 @@ public class CPU extends CPUService{
 //        if(dataBatch.getData().getType().equals("Images")){
 //            CPUService.
 //        }
-
         dataBatch.process();
-        dataBatch.getData().updateProccessed();
+        dataBatch.getData().updateProcessed();
     //    isBusy = false;
 
     }

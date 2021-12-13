@@ -22,7 +22,7 @@ class CPUTest {
     @BeforeEach
     public void setUp() {
         msgbus = MessageBusImpl.getInstance();
-        Data data=new Data();
+        Data data=new Data(Data.Type.Images , 10000);
         db = new DataBatch(data,0);
         queue = new LinkedList<DataBatch>();
         queue.add(db);
@@ -47,11 +47,11 @@ class CPUTest {
 
     @Test
     void testprocess() {
-        int x=db.getData().getProccessed();
+        int x=db.getData().getProcessed();
         assertFalse(db.isProcessed());
         cpu.process(db);
         assertTrue(db.isProcessed());
-        assertEquals(db.getData().getProccessed()-x,1000);
+        assertEquals(db.getData().getProcessed()-x,1000);
         //  assertThrows("Should throw exception (DataBatch is already Processed)",Exception.class, () -> cpu.process(db));
     }
 

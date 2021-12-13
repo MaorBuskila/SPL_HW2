@@ -24,7 +24,7 @@ public class GPU extends GPUService {
     private Model model;
     private Cluster cluster;
     private ConcurrentHashMap <Event, Model >  modelEvents;
-    private ConcurrentHashMap<Integer,Vector<DataBatch>> dataMap; //seprated model data to databatch
+    private ConcurrentHashMap<String,Vector<DataBatch>> dataMap; //seprated model data to databatch
 
 
     public GPU(String sType, Model model, Cluster cluster, String name){
@@ -46,15 +46,15 @@ public class GPU extends GPUService {
      * @return
      */
     public void separateData(Data data){
-        int id = model.getId();
+        String name = model.getName();
         Vector<DataBatch> v1= new Vector<>();
         for (int i = 0 ; i<data.getSize() ; i+=1000){
             DataBatch db = new DataBatch(data,i);
             v1.add(db);
 
         }
-        dataMap.put(id,v1);
-//        int size = data.getSize()/1000; //Todo: check if we can to assume its only divine in 1000
+        dataMap.put(name,v1);
+        int size = data.getSize()/1000; //Todo: check if we can to assume its only divine in 1000
 
 
     }
@@ -64,7 +64,7 @@ public class GPU extends GPUService {
      * @return
      */
     public void sendUnprocessedDataBatchToCluster(DataBatch db){
-        //fuction to decide how to send
+        //fucntion to decide how to send - partition
         cluster.addToUnprocessedBatch(db);
     }
     /**

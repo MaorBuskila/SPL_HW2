@@ -10,14 +10,19 @@ public class Data {
     private int processed;
     private int size;
 
-    public Data(Type type, int processed, int size) {
+    public Data(Type type, int size) {
         this.type = type;
-        this.processed = processed;
         this.size = size;
+        this.processed = 0;
     }
 
-    public int getProccessed() {
+    public int getProcessed() {
         return processed;
+    }
+
+    public void updateProcessed() {
+        processed += 1000;
+
     }
 
     /**

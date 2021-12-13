@@ -8,6 +8,11 @@ package bgu.mics.application.objects;
 public class Model {
     private String name;
     private Student student1;
+
+    public String getName() {
+        return name;
+    }
+
     enum Status {
         PreTrained, Training,Trained,Tested
     }
