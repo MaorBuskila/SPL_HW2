@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class MicroService implements Runnable {
 
-    private boolean terminated = false;
+    private boolean terminated;
     private final String name;
     private MessageBus msgBus;
     private ConcurrentHashMap <Class<? extends Message>, Callback> msgCallBackMap;
@@ -33,6 +33,7 @@ public abstract class MicroService implements Runnable {
      */
     public MicroService(String name) {
         this.name = name;
+        this.terminated = false;
         msgBus = MessageBusImpl.getInstance();
     }
 
@@ -135,7 +136,8 @@ public abstract class MicroService implements Runnable {
      * Signals the event loop that it must terminate after handling the current
      * message.
      */
-    protected final void terminate() {
+    protected final void terminate()
+    {
         this.terminated = true;
     }
 
@@ -143,7 +145,8 @@ public abstract class MicroService implements Runnable {
      * @return the name of the service - the service name is given to it in the
      *         construction time and is used mainly for debugging purposes.
      */
-    public final String getName() {
+    public final String getName()
+    {
         return name;
     }
 
@@ -163,7 +166,7 @@ public abstract class MicroService implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("NOT IMPLEMENTED!!"); //TODO: you should delete this line :)
+            System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
         }
     }
 
