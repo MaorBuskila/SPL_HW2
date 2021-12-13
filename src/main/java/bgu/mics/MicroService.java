@@ -1,5 +1,7 @@
 package bgu.mics;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * The MicroService is an abstract class that any micro-service in the system
  * must extend. The abstract MicroService class is responsible to get and
@@ -22,6 +24,8 @@ public abstract class MicroService implements Runnable {
 
     private boolean terminated = false;
     private final String name;
+    private MessageBus msgBus;
+    private ConcurrentHashMap <Class<? extends Message>, Callback> msgCallBackMap;
 
     /**
      * @param name the micro-service name (used mainly for debugging purposes -
@@ -29,6 +33,7 @@ public abstract class MicroService implements Runnable {
      */
     public MicroService(String name) {
         this.name = name;
+        msgBus = MessageBusImpl.getInstance();
     }
 
     /**
@@ -148,8 +153,16 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
+        msgBus.register(this);
         initialize();
         while (!terminated) {
+            try {
+                Message msg = msgBus.awaitMessage(this);
+                msgCallBackMap.get(msg).call(msg);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
         }
     }
