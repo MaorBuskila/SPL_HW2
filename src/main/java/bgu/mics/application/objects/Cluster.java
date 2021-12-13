@@ -1,6 +1,8 @@
 package bgu.mics.application.objects;
 
 
+import bgu.mics.MessageBusImpl;
+
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,14 +19,52 @@ public class Cluster {
 	private Vector<CPU> cpus;
 	private Queue<DataBatch> UnprocessedBatch;
 	private Queue<DataBatch> processedBatch;
+	private Vector<String> trainedModels;
+	private int totalDataBatchProccessedbyCpu;
+	private ConcurrentHashMap<CPU,Integer> cpuTimeUnitUsed;
+	private ConcurrentHashMap<GPU,Integer> gpuTimeUnitUsed;
+	private static Cluster cluster = null;
+
 
 
 	/**
+	 *
      * Retrieves the single instance of this class.
      */
 	public static Cluster getInstance() {
-		//TODO: Implement this
-		return null;
+			if (cluster == null) {
+				cluster =new Cluster();
+			}
+
+			return cluster;
+		}
+
+
+	public void updateTotalDataBatchProccessedbyCpu()
+	{
+		this.totalDataBatchProccessedbyCpu+=1;
+	}
+	public void addToTrainedModels(String name)
+	{
+		trainedModels.addElement(name);
+	}
+	public void addCpuTimeUnitUsed(CPU cpu1)
+	{
+
+			Integer x=cpuTimeUnitUsed.get(cpu1);
+			x++;
+			cpuTimeUnitUsed.replace(cpu1,x); // TODO Check how to simplify this
+
+
+	}
+	public void addGpuTimeUnitUsed(GPU gpu1)
+	{
+
+		Integer x=gpuTimeUnitUsed.get(gpu1);
+		x++;
+		gpuTimeUnitUsed.replace(gpu1,x); // TODO Check how to simplify this
+
+
 	}
 
 	public Queue<DataBatch> getProcessedDataBatch()
@@ -41,5 +81,15 @@ public class Cluster {
 	}
 	public void addToUnprocessedBatch(DataBatch dataBatch) {
 		UnprocessedBatch.add(dataBatch);
+	}
+
+	public void addToCPUS(CPU cpu) {
+		cpus.addElement(cpu);
+		cpuTimeUnitUsed.put(cpu,0);
+	}
+	public void addToGPUS(GPU gpu)
+	{
+		gpus.addElement(gpu);
+		gpuTimeUnitUsed.put(gpu,0);
 	}
 }

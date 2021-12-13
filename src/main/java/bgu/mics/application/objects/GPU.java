@@ -18,21 +18,7 @@ public class GPU extends GPUService {
      */
     enum Type {RTX3090, RTX2080, GTX1080}
 
-    public Type getType(String name) {
-        Type type = null;
-        switch (name){
-            case "RTX3090":
-                type =  Type.RTX3090;
-                break;
-            case "RTX2080":
-                type = Type.RTX2080;
-                break;
-            case "GTX1080":
-                type = Type.GTX1080;
-                break;
-        }
-        return type;
-    }
+
 
     private Type type;
     private Model model;
@@ -41,11 +27,17 @@ public class GPU extends GPUService {
     private ConcurrentHashMap<Integer,Vector<DataBatch>> dataMap; //seprated model data to databatch
 
 
-    public GPU(Type type, Model model, Cluster cluster, String name){
+    public GPU(String sType, Model model, Cluster cluster, String name){
         super(name);
-        this.type = type;
-        this.model = model;
+        if(sType=="RTX3090")
+            this.type = Type.RTX3090;
+        if(sType=="RTX2080")
+            this.type=Type.RTX2080;
+        if(sType=="GTX1080")
+            this.type=Type.GTX1080;
+        this.model = null;
         this.cluster = cluster;
+        cluster.addToGPUS(this);
 
     }
     /**

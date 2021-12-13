@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CPU extends CPUService{
 
-    private int numberOFCores;
+    private int numberOfCores;
     private Queue <DataBatch> unprocessedQueue;
     private Cluster cluster;
     private boolean isBusy = false;
@@ -24,9 +24,10 @@ public class CPU extends CPUService{
 
     public CPU(int numberOFCores, Queue <DataBatch> queue, Cluster cluster,String name) {
         super(name);
-        this.numberOFCores = numberOFCores;
+        this.numberOfCores = numberOfCores;
         this.unprocessedQueue = queue;
         this.cluster = cluster;
+        cluster.addToCPUS(this);
     }
 
     /**

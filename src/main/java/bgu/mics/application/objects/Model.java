@@ -6,19 +6,33 @@ package bgu.mics.application.objects;
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
 public class Model {
-    private int id;
+    private String name;
+    private Student student1;
+    enum Status {
+        PreTrained, Training,Trained,Tested
+    }
+    enum Result {
+        None,Good,Bad
+    }
     private Data data;
+    private Result res;
+    private Status status;
 
-    public Model(int id, Data data) {
-        this.id = id;
+    public Model(String name, Data data,Student student1) {
+        this.name=name;
         this.data = data;
+        this.student1=student1;
+        this.res=Result.None;
+        this.status=Status.PreTrained;
+
     }
 
-
-    public int getId() {
-        return id;
-    }
     public Data getData() {
         return data;
     }
+
+    // private int id;
+   // public int getId() {
+    //    return id;
+    //}
 }
