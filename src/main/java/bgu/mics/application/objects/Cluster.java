@@ -1,11 +1,12 @@
 package bgu.mics.application.objects;
 
 
+import java.util.Iterator;
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Passive object representing the cluster.
@@ -20,10 +21,10 @@ public class Cluster {
 	//private Queue<DataBatch> UnprocessedBatch;
 
 	private ConcurrentHashMap<DataBatch,GPU> dataBatchToGpu;
+	private ConcurrentHashMap<CPU,BlockingQueue<DataBatch> > unProcessedQueues;
+//	private BlockingQueue<DataBatch> processedBatch;
 
-	private BlockingQueue<DataBatch> unProcessedBatch;
-	private BlockingQueue<DataBatch> processedBatch;
-
+	//**Statitics***************************
 	private Vector<String> trainedModels;
 	private int totalDataBatchProcessedCpu; // TODO: CHECK
 	private ConcurrentHashMap<CPU,Integer> cpuTimeUnitUsed;
@@ -36,8 +37,8 @@ public class Cluster {
 		gpus = new Vector<>();
 		cpus = new Vector<>();
 		dataBatchToGpu=new ConcurrentHashMap<>();
-		unProcessedBatch=new LinkedBlockingDeque<>();
-		processedBatch=new LinkedBlockingDeque<>();
+		unProcessedQueues=new ConcurrentHashMap<>();
+	//	processedBatch=new LinkedBlockingQueue<>();
 		trainedModels=new Vector<>();
 		cpuTimeUnitUsed = new ConcurrentHashMap<>();
 		gpuTimeUnitUsed = new ConcurrentHashMap<>();
@@ -80,43 +81,70 @@ public class Cluster {
 
 	}
 
-	public Queue<DataBatch> sendProcessedToGPU()
-	{
-		while(!processedBatch.isEmpty()) // DataBatchim - data - name - GPU
-		{
-			DataBatch tmpDB = processedBatch.poll();
-			dataBatchToGpu.get(tmpDB).reciveProcessedDataBatch(tmpDB); //send to desired GPU the db
-			//(GPU)(processedBatch.poll().getKey()).;
 
 
-		}
-		return null; //TODO: delete
-	}
-
-	public Queue<DataBatch> getUnProcessedDataBatch()
+	public Queue<DataBatch> getUnProcessedQueue()
 	{
 		return this.unProcessedBatch;
 	}
 
-	public void addToUnprocessedBatch(DataBatch dataBatch, GPU gpu) {
-		unProcessedBatch.add(dataBatch);
+	public void addToUnprocessedMap(DataBatch dataBatch, GPU gpu) {
 		dataBatchToGpu.put(dataBatch,gpu);
+		unProcessedQueues.get(minFutureTime()).add(dataBatch);
+
 //		if(dataBatchToGpu.containsKey(gpu)) {
 //			dataBatchToGpu.get(gpu).addElement
 //		}
 // 		GPUtoModels.put(gpu, )
 	}
-	public void addToProcessed(DataBatch dataBatch) {
-		processedBatch.add(dataBatch);
+	public void sendToGPU(DataBatch dataBatch) {
+		synchronized (this.dataBatchToGpu) {
+
+			dataBatchToGpu.get(dataBatch).reciveProcessedDataBatch(dataBatch);
+			dataBatchToGpu.remove(dataBatch);
+		}
 		//send back to GPU ? ?because  we must to send to the fit GPU
 	}
 
+	public CPU minFutureTime()
+	{
+		int sum;
+		int min=Integer.MAX_VALUE;
+		CPU minTimeWork=null;
+		synchronized (unProcessedQueues) {
+			for (CPU key : unProcessedQueues.keySet()) {
+				Queue q = unProcessedQueues.get(key);
+				int numberOfCores = key.getNumberOfCores();
+				Iterator<DataBatch> itr=q.iterator();
+				sum=0;
+				while(itr.hasNext())
+				{
+					DataBatch db=itr.next();
+					if(db.getType()=="Images")
+						sum+=(32/numberOfCores)*4;
+					if(db.getType()=="Text")
+						sum+=(32/numberOfCores)*2;
+					if(db.getType()=="Tabular")
+						sum+=(32/numberOfCores);
+				}
+				if(sum<min) {
+					min = sum;
+					minTimeWork=key;
+				}
 
+			}
+
+		}
+		return minTimeWork;
+
+	}
 
 
 	public void addToCPUS(CPU cpu) {
 		cpus.addElement(cpu);
 		cpuTimeUnitUsed.put(cpu,0);
+		BlockingQueue<DataBatch> q=new LinkedBlockingQueue<>();
+		unProcessedQueues.put(cpu,q);
 	}
 	public void addToGPUS(GPU gpu)
 	{

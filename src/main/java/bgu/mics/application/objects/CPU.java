@@ -1,7 +1,5 @@
 package bgu.mics.application.objects;
 
-import java.util.Queue;
-
 /**
  * Passive object representing a single CPU.
  * Add all the fields described in the assignment as private fields.
@@ -10,18 +8,16 @@ import java.util.Queue;
 public class CPU {
 
     private int numberOfCores;
-    private Queue<DataBatch> unprocessedQueue;
+
     private Cluster cluster;
     private boolean isBusy = false;
     //private DataBatch dataBatch;
-    private Queue<DataBatch> processedQueue;
 
 
     public CPU(int numberOfCores /**, Cluster cluster */) {
         //super(name);
 
         this.numberOfCores = numberOfCores;
-        this.unprocessedQueue = null;
         this.cluster = Cluster.getInstance();
         cluster.addToCPUS(this);
     }
@@ -46,7 +42,7 @@ public class CPU {
      * @pre: dataBatch.isProcessed == false
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
-    public DataBatch process(DataBatch dataBatch) {
+    public void process(DataBatch dataBatch) {
 //        int x=CPUService.getTicks(); // x=0
         //process... ticks...
         //       isBusy =true;
@@ -57,7 +53,7 @@ public class CPU {
 //        dataBatch.getData().updateProcessed();
         //    isBusy = false;
 
-        return dataBatch;
+        sendToCluster(dataBatch);
     }
 
     /**
@@ -67,8 +63,9 @@ public class CPU {
      */
 
     public void sendToCluster(DataBatch processedDataBatch) {
-        this.cluster.addToProcessed(processedDataBatch);
+        this.cluster.sendToGPU(processedDataBatch);
     }
+
 
 
     /**
