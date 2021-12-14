@@ -44,6 +44,7 @@ public class Cluster {
 		totalDataBatchProcessedCpu =0;
 
 	}
+
 	/**
 	 *
      * Retrieves the single instance of this class.
@@ -107,6 +108,7 @@ public class Cluster {
 	}
 	public void addToProcessed(DataBatch dataBatch) {
 		processedBatch.add(dataBatch);
+		//send back to GPU ? ?because  we must to send to the fit GPU
 	}
 
 

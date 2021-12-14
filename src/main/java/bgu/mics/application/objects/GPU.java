@@ -1,6 +1,8 @@
 package bgu.mics.application.objects;
 
 import bgu.mics.Event;
+import bgu.mics.MessageBus;
+import bgu.mics.MessageBusImpl;
 import bgu.mics.application.services.GPUService;
 
 import java.util.Vector;
@@ -102,11 +104,14 @@ public class GPU {
      */
     public void reciveProcessedDataBatch(DataBatch ProDB){
         //TODO: check if we need to check if vram have space or send unpro db when only we have space in vram like in tigbur.
+
         vRam.add(ProDB);
         currentProInVram+=1;
+        notifyAll();
 
 
     }
+
     /**
      * @pre:the databatch is untrained and processed
      * @post: databatch is trained .
@@ -114,12 +119,28 @@ public class GPU {
      */
     //train
     // we will get the databatch from the vram
-    public void trainDataBatchModel(DataBatch dataBatch){
-        //training ...
-        dataBatch.train();
-        dataBatch.getData().updateProcessed();
-        vRam.remove(dataBatch);
-        currentProInVram-=1;
+
+    public void trainDataBatchModel(){
+
+        while(model.getData().getProcessed()<model.getData().getSize())
+        {
+            //need to synchorized vRAM ?
+            //try to take nonstop
+            while(vRam.isEmpty()) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            DataBatch dataBatch=vRam.remove(0);
+            //training...
+            dataBatch.train();
+            dataBatch.getData().updateProcessed();
+            currentProInVram-=1;
+
+
+        }
 
 
 
