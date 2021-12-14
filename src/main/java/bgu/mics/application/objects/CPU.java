@@ -25,9 +25,8 @@ public class CPU extends CPUService{
 
         this.numberOfCores = numberOfCores;
         this.unprocessedQueue = null;
-        this.cluster = cluster;
-        //CPUs.add(this);
-        //cluster.addToCPUS(this);
+        this.cluster = Cluster.getInstance();
+        cluster.addToCPUS(this);
     }
 
     /**
@@ -54,7 +53,7 @@ public class CPU extends CPUService{
 //            CPUService.
 //        }
         dataBatch.process();
-        dataBatch.getData().updateProcessed();
+//        dataBatch.getData().updateProcessed();
     //    isBusy = false;
 
     }
@@ -66,7 +65,7 @@ public class CPU extends CPUService{
      * @param processedDataBatch
      */
 
-    public void sendToCluster (DataBatch processedDataBatch){
+    public void sendToCluster (DataBatch processedDataBatch) {
         this.cluster.addToProcessed(processedDataBatch);
     }
 

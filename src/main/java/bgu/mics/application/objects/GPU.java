@@ -35,7 +35,7 @@ public class GPU extends GPUService {
     private Model model;
     private Cluster cluster;
    // private ConcurrentHashMap <Event, Model >  modelEvents;
-    private ConcurrentHashMap<Model,Vector<DataBatch>> dataMap; //seprated model data to databatch
+    private Vector<DataBatch> allDataBatches; //seprated model data to databatch
     private Vector<DataBatch> vRam;
 
 
@@ -68,15 +68,15 @@ public class GPU extends GPUService {
      * @return
      */
     public void divide(Data data){
-        Vector<DataBatch> v1= new Vector<>();
+        allDataBatches= new Vector<>();
 
-        for (int i = 0 ; i<data.getSize() ; i+=1000){
-            DataBatch db = new DataBatch(data,i);
-            v1.add(db);
+        for (int i = 0 ; i<data.getSize() ; i+=1000) {
+            DataBatch db = new DataBatch(data, i);
+            allDataBatches.addElement(db);
+
         }
-
-        dataMap.put(model,v1);
         int size = data.getSize()/1000; //Todo: check if we can to assume its only divine in 1000
+
    }
     /**
      * @pre: none
@@ -108,6 +108,7 @@ public class GPU extends GPUService {
     public void trainDataBatchModel(DataBatch dataBatch){
         //training
         dataBatch.train();
+        dataBatch.getData().updateProcessed();
         vRam.remove(dataBatch);
 
 
