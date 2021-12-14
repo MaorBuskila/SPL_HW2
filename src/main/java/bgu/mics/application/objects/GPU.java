@@ -33,7 +33,6 @@ public class GPU extends GPUService {
         if(sType=="RTX3090") {
             this.type = Type.RTX3090;
             vRam.setSize(32);
-
         }
         if(sType=="RTX2080") {
             this.type = Type.RTX2080;
@@ -54,14 +53,14 @@ public class GPU extends GPUService {
      * @return
      */
     public void separateData(Data data){
-        int id = model.getId();
+        //int id = model.getId();
         Vector<DataBatch> v1= new Vector<>();
         for (int i = 0 ; i<data.getSize() ; i+=1000){
             DataBatch db = new DataBatch(data,i);
             v1.add(db);
 
         }
-        dataMap.put(id,v1);
+       // dataMap.put(id,v1);
 //        int size = data.getSize()/1000; //Todo: check if we can to assume its only divine in 1000
 
 
@@ -73,8 +72,7 @@ public class GPU extends GPUService {
      */
     public void sendUnprocessedDataBatchToCluster(DataBatch db){
         //fuction to decide how to send
-        cluster.addToUnprocessedBatch(db);
-        cluster
+    //    cluster.addToUnprocessedBatch(db);
     }
     /**
      * @pre: cluster.getProcessDataBatch != null

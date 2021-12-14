@@ -21,7 +21,7 @@ public class CPUService extends MicroService {
 
     public CPUService(String name,Vector<CPU> CPUs) {
         super("Change_This_Name");
-        this.ticks = ticks;
+        this.ticks = 0;
         this.CPUs = CPUs;
         // TODO Implement this
     }

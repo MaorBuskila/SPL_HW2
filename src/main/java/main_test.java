@@ -1,5 +1,4 @@
 import bgu.mics.*;
-import bgu.mics.application.messages.TrainModelEvent;
 import bgu.mics.application.objects.*;
 
 import java.util.concurrent.TimeUnit;

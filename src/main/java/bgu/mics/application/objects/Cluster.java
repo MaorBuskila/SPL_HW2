@@ -80,10 +80,11 @@ public class Cluster {
 	{
 		while(!processedBatch.isEmpty()) // DataBatchim - data - name - GPU
 		{
-			(GPU)(processedBatch.poll().getKey()).;
+			//(GPU)(processedBatch.poll().getKey()).;
 
 
 		}
+		return null; //TODO: delete
 	}
 
 	public Queue<DataBatch> getUnProcessedDataBatch()
@@ -98,9 +99,9 @@ public class Cluster {
 		unProcessedBatch.add(dataBatch);
 		if(GPUtoModels.containsKey(gpu))
 		{
-			GPUtoModels.get(gpu).addElement(dataBatch.getData().getModel().getName());
+		//	GPUtoModels.get(gpu).addElement(dataBatch.getData().getModel().getName());
 		}
-		GPUtoModels.put(gpu, )
+	//	GPUtoModels.put(gpu, )
 	}
 
 	public void addToCPUS(CPU cpu) {

@@ -17,10 +17,5 @@ public class  CRMSRunner {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
-//        Data data = new Data( Data.Type.Images  , 10000);
-//        Model m =new Model(1, data);
-//        Cluster c = new Cluster();
-//
-//        GPU gpu = new GPU(GPU.Type.RTX3090,m, c, "Gpu1" );
     }
 }
