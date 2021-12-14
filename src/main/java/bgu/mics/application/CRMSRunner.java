@@ -17,15 +17,10 @@ public class  CRMSRunner {
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
-        try {
-            Class<GPU> enumElement = (Class<GPU>) Class.forName("com.bgu.mics.application.objects.enum");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        Data data = new Data(, 0  , 10000);
-        Model m =new Model(1, data);
-        Cluster c = new Cluster();
-
-        GPU gpu = new GPU(,m, c, "Gpu1" );
+//        Data data = new Data( Data.Type.Images  , 10000);
+//        Model m =new Model(1, data);
+//        Cluster c = new Cluster();
+//
+//        GPU gpu = new GPU(GPU.Type.RTX3090,m, c, "Gpu1" );
     }
 }

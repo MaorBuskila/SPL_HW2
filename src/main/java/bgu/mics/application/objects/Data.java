@@ -1,7 +1,5 @@
 package bgu.mics.application.objects;
 
-import bgu.mics.MicroService;
-
 /**
  * Passive object representing a data used by a model.
  * Add fields and methods to this class as you see fit (including public methods and constructors).
@@ -20,6 +18,11 @@ public class Data {
 
     public int getProccessed() {
         return processed;
+    }
+
+    public void updateProcessed() {
+        processed += 1000;
+
     }
 
 

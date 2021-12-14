@@ -13,10 +13,8 @@ public class DataBatch {
 
 
     public DataBatch(Data data, int start_index) {
-
         this.data = data;
         this.start_index = start_index;
-
     }
 
     public boolean isProcessed() {
@@ -26,7 +24,6 @@ public class DataBatch {
     public Data getData() {
         return data;
     }
-
 
     public void process() {
         if (!processed) {

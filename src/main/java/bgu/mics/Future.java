@@ -84,7 +84,7 @@ public class Future<T> {
 			return result;
 		} else {
 			try {
-				unit.wait(timeout);
+				unit.sleep(timeout);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

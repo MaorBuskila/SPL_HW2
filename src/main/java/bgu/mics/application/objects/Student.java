@@ -9,9 +9,19 @@ import bgu.mics.application.services.StudentService;
  */
 public class Student extends StudentService {
 
-    public Student(String name,String department, Degree status,int publications,int papersRead) {
+    private int name;
+    private String department;
+    private Degree status;
+    private int publications;
+    private int papersRead;
+
+    public Student(String name,String department, String sStatus ,int publications,int papersRead) {
         super(name);
         this.department=department;
+        if (sStatus.equals("MSc"))
+            this.status = Degree.MSc;
+        if (sStatus.equals("PhD"))
+            this.status = Degree.PhD;
         this.status=status;
         this.publications=publications;
         this.papersRead=papersRead;
@@ -24,11 +34,7 @@ public class Student extends StudentService {
         MSc, PhD
     }
 
-    private int name;
-    private String department;
-    private Degree status;
-    private int publications;
-    private int papersRead;
+
 
 
 
