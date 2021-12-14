@@ -1,10 +1,6 @@
 package bgu.mics.application.objects;
 
 
-import bgu.mics.MessageBusImpl;
-import javafx.util.Pair;
-
-import java.util.HashMap;
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,21 +13,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
 public class Cluster {
-	private Vector<GPU> gpus;
-	private Vector<CPU> cpus;
+	private Vector<GPU> gpus = new Vector<>();
+	private Vector<CPU> cpus = new Vector<>();
 	//private Queue<DataBatch> UnprocessedBatch;
 
-	private ConcurrentHashMap<GPU,Vector<String>> GPUtoModels;
+	private ConcurrentHashMap<DataBatch,GPU> dataBatchToGpu;
 
-
-	//private Pair<GPU,DataBatch> pair1;
 	private Queue<DataBatch> unProcessedBatch;
 	private Queue<DataBatch> processedBatch;
 
 	private Vector<String> trainedModels;
 	private int totalDataBatchProccessedbyCpu;
-	private ConcurrentHashMap<CPU,Integer> cpuTimeUnitUsed;
-	private ConcurrentHashMap<GPU,Integer> gpuTimeUnitUsed;
+	private ConcurrentHashMap<CPU,Integer> cpuTimeUnitUsed = new ConcurrentHashMap<>();
+	private ConcurrentHashMap<GPU,Integer> gpuTimeUnitUsed = new ConcurrentHashMap<>();
 	private static Cluster cluster = null;
 
 
@@ -44,7 +38,6 @@ public class Cluster {
 			if (cluster == null) {
 				cluster =new Cluster();
 			}
-
 			return cluster;
 		}
 
@@ -59,20 +52,16 @@ public class Cluster {
 	}
 	public void addCpuTimeUnitUsed(CPU cpu1)
 	{
-
 			Integer x=cpuTimeUnitUsed.get(cpu1);
 			x++;
 			cpuTimeUnitUsed.replace(cpu1,x); // TODO Check how to simplify this
-
-
 	}
-	public void addGpuTimeUnitUsed(GPU gpu1)
-	{
+
+	public void addGpuTimeUnitUsed(GPU gpu1) {
 
 		Integer x=gpuTimeUnitUsed.get(gpu1);
 		x++;
 		gpuTimeUnitUsed.replace(gpu1,x); // TODO Check how to simplify this
-
 
 	}
 
@@ -80,6 +69,8 @@ public class Cluster {
 	{
 		while(!processedBatch.isEmpty()) // DataBatchim - data - name - GPU
 		{
+			DataBatch tmpDB = processedBatch.poll();
+			dataBatchToGpu.get(tmpDB).reciveProcessedDataBatch(tmpDB); //send to desired GPU the db
 			//(GPU)(processedBatch.poll().getKey()).;
 
 
@@ -92,17 +83,20 @@ public class Cluster {
 		return this.unProcessedBatch;
 	}
 
+	public void addToUnprocessedBatch(DataBatch dataBatch, GPU gpu) {
+		unProcessedBatch.add(dataBatch);
+		dataBatchToGpu.put(dataBatch,gpu);
+//		if(dataBatchToGpu.containsKey(gpu)) {
+//			dataBatchToGpu.get(gpu).addElement
+//		}
+// 		GPUtoModels.put(gpu, )
+	}
 	public void addToProcessed(DataBatch dataBatch) {
 		processedBatch.add(dataBatch);
 	}
-	public void addToUnprocessedBatch(DataBatch dataBatch, GPU gpu) {
-		unProcessedBatch.add(dataBatch);
-		if(GPUtoModels.containsKey(gpu))
-		{
-		//	GPUtoModels.get(gpu).addElement(dataBatch.getData().getModel().getName());
-		}
-	//	GPUtoModels.put(gpu, )
-	}
+
+
+
 
 	public void addToCPUS(CPU cpu) {
 		cpus.addElement(cpu);

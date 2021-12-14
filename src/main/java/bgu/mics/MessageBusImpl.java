@@ -21,6 +21,14 @@ public class MessageBusImpl implements MessageBus {
 
 
 	//You are allowed to add the getInstance public method to the MessageBus impl in order to create the thread safe singleton.
+
+
+	public MessageBusImpl() {
+		this.queueMap = new ConcurrentHashMap<>();
+		this.interestedEvents = new ConcurrentHashMap<>();
+		this.interestedBroadcast = new ConcurrentHashMap<>();
+		this.eventsToFuture = new ConcurrentHashMap<>();
+	}
 	private static MessageBusImpl msgBus = null;
 	public static MessageBusImpl getInstance() {
 		if (msgBus == null) {

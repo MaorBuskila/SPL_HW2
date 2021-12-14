@@ -20,13 +20,14 @@ public class CPU extends CPUService{
 
 
 
-    public CPU(int numberOFCores, Cluster cluster,String name) {
-        super(name);
-        CPUs.add(this);
+    public CPU(int numberOfCores /**, Cluster cluster */) {
+        //super(name);
+
         this.numberOfCores = numberOfCores;
         this.unprocessedQueue = null;
         this.cluster = cluster;
-        cluster.addToCPUS(this);
+        //CPUs.add(this);
+        //cluster.addToCPUS(this);
     }
 
     /**
@@ -77,6 +78,14 @@ public class CPU extends CPUService{
      */
     public boolean checkIfBusy (){
         return isBusy;
+    }
+
+    public void setCluster(Cluster cluster) {
+        this.cluster = cluster;
+    }
+
+    public int getNumberOfCores() {
+        return numberOfCores;
     }
 }
 

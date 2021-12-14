@@ -15,7 +15,7 @@ public class Student extends StudentService {
     private int publications;
     private int papersRead;
 
-    public Student(String name,String department, String sStatus ,int publications,int papersRead) {
+    public Student(String name,String department, String sStatus) {
         super(name);
         this.department=department;
         if (sStatus.equals("MSc"))
@@ -23,8 +23,8 @@ public class Student extends StudentService {
         if (sStatus.equals("PhD"))
             this.status = Degree.PhD;
         this.status=status;
-        this.publications=publications;
-        this.papersRead=papersRead;
+        this.publications=0;
+        this.papersRead=0;
     }
 
     /**

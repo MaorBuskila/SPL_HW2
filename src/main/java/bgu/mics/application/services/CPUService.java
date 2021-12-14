@@ -19,7 +19,7 @@ public class CPUService extends MicroService {
     protected Vector<CPU> CPUs;
 
 
-    public CPUService(String name,Vector<CPU> CPUs) {
+    public CPUService(/**String name , Vector<CPU> CPUs**/) {
         super("Change_This_Name");
         this.ticks = 0;
         this.CPUs = CPUs;
