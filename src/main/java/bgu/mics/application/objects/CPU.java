@@ -1,7 +1,5 @@
 package bgu.mics.application.objects;
 
-import bgu.mics.application.services.CPUService;
-
 import java.util.Queue;
 
 /**
@@ -9,15 +7,14 @@ import java.util.Queue;
  * Add all the fields described in the assignment as private fields.
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
-public class CPU extends CPUService{
+public class CPU {
 
     private int numberOfCores;
-    private Queue <DataBatch> unprocessedQueue;
+    private Queue<DataBatch> unprocessedQueue;
     private Cluster cluster;
     private boolean isBusy = false;
-    private DataBatch dataBatch;
-    private Queue <DataBatch> processedQueue;
-
+    //private DataBatch dataBatch;
+    private Queue<DataBatch> processedQueue;
 
 
     public CPU(int numberOfCores /**, Cluster cluster */) {
@@ -30,52 +27,55 @@ public class CPU extends CPUService{
     }
 
     /**
+     * @return
      * @pre:none
      * @post: return value = @pre head of queue
-     * @return
      */
     public DataBatch getUnprocessed() {
-        if (!unprocessedQueue.isEmpty()) {
-            return unprocessedQueue.remove();
-            //    ProcessAndSendToCluster(dataBatch);
+        synchronized (unprocessedQueue) {
+            if (!unprocessedQueue.isEmpty()) {
+                return unprocessedQueue.poll();
+            }
         }
         return null;
     }
+
     /**
+     * @return
      * @pre: dataBatch.isProcessed == false
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
-    public void process( DataBatch dataBatch) {
+    public DataBatch process(DataBatch dataBatch) {
 //        int x=CPUService.getTicks(); // x=0
         //process... ticks...
- //       isBusy =true;
+        //       isBusy =true;
 //        if(dataBatch.getData().getType().equals("Images")){
 //            CPUService.
 //        }
         dataBatch.process();
 //        dataBatch.getData().updateProcessed();
-    //    isBusy = false;
+        //    isBusy = false;
 
+        return dataBatch;
     }
 
     /**
-     *
+     * @param processedDataBatch
      * @pre: dataBatch.isProcessed == true
      * @post: cluster.processedBatch != null
-     * @param processedDataBatch
      */
 
-    public void sendToCluster (DataBatch processedDataBatch) {
+    public void sendToCluster(DataBatch processedDataBatch) {
         this.cluster.addToProcessed(processedDataBatch);
     }
 
 
     /**
+     * @return
      * @pre:
      * @post:
-     * @return
      */
-    public boolean checkIfBusy (){
+    public boolean checkIfBusy() {
         return isBusy;
     }
 

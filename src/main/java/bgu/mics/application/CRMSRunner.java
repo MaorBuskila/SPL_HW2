@@ -34,15 +34,15 @@ public class  CRMSRunner {
         MessageBusImpl msgBus = MessageBusImpl.getInstance();
 
      //   Cluster cluster = Cluster.getInstance();
-        Student student = s[0];
-        CPU cpu = c[0];
-        GPU gpu = g[0];
-        Model model = m.get(0)[0];
-        TrainModelEvent ev = new TrainModelEvent(model,student.getName());
-        MicroService m1 =  new GPUService("GPU1" , gpu );
+//        Student student = s[0];
+//        CPU cpu = c[0];
+//        GPU gpu = g[0];
+//        Model model = m.get(0)[0];
+//        TrainModelEvent ev = new TrainModelEvent(model,student.getName());
+//        MicroService m1 =  new GPUService("GPU1" , gpu );
     //    cpu.setCluster(cluster);
-        msgBus.register(student);
-        msgBus.register(cpu);
+    //    msgBus.register(student);
+      //  msgBus.register(cpu);
 //        Callback<TrainModelEvent> callback = new Callback<TrainModelEvent>() {
 //            @Override
 //            public void call(TrainModelEvent c) {

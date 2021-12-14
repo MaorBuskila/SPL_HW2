@@ -1,5 +1,7 @@
 import bgu.mics.*;
+import bgu.mics.application.messages.TrainModelEvent;
 import bgu.mics.application.objects.*;
+import bgu.mics.application.services.CPUService;
 import bgu.mics.application.services.GPUService;
 
 import java.util.concurrent.Callable;
@@ -52,23 +54,38 @@ public class main_test {
 //        t1.start();
 //        t3.start();
 //        //*************************** TrainModelEvent Test ***************************************
-//        MessageBusImpl msgbus = MessageBusImpl.getInstance();
-//        Cluster cluster = Cluster.getInstance();
-//        Data data = new Data("Images",20000);
-//        Student student = new Student("1", "bgu" , "PhD");
+        MessageBusImpl msgbus = MessageBusImpl.getInstance();
+        Data data = new Data("Images",20000);
+        Student student = new Student("1", "bgu" , "PhD");
         GPU gpu = new GPU("RTX3090");
         GPUService gpuService = new GPUService("Gpu1" , gpu);
-//        CPU cpu = new CPU(32);
-//        msgbus.register(gpu);
-//        msgbus.register(cpu);
-//        Model model = new Model("name", data,student);
-       // Event<Model> trainModelEvent = new TrainModelEvent(model,"maor");
+        CPU cpu = new CPU(32);
+        CPUService cpuService = new CPUService("CPu1", cpu);
+        msgbus.register(gpuService);
+        msgbus.register(cpuService);
+        Model model = new Model("name", data,student);
+        Event<Model> trainModelEvent = new TrainModelEvent(model,"maor");
 
 
          Thread t1 = new Thread(() ->{
               gpuService.run();
          });
-         t1.start();
+
+        Thread t2 = new Thread(() ->{
+            cpuService.run();
+        });
+        Thread t3 = new Thread(() ->{
+            msgbus.sendEvent(trainModelEvent);
+            try {
+                Message mess =  msgbus.awaitMessage(gpuService);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        t1.start();
+        t2.start();
+        t3.start();
 
 //******************************************************************
 //        Callable<Integer> call = ()->

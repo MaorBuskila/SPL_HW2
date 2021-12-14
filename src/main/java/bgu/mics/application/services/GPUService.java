@@ -40,8 +40,6 @@ public class GPUService extends MicroService {
                 {
                     gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0));
                 }
-
-
             }
         });
         subscribeEvent(TestModelEvent.class , c -> {});

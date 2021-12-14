@@ -107,7 +107,7 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void register(MicroService m) {
-		Queue<Message> queue=new ConcurrentLinkedQueue<>();
+		Queue<Message> queue = new ConcurrentLinkedQueue<>();
 		queueMap.put(m,queue);
 	}
 

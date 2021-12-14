@@ -1,4 +1,5 @@
 package bgu.mics;
+import bgu.mics.application.objects.CPU;
 import bgu.mics.application.objects.DataBatch;
 import bgu.mics.application.objects.GPU;
 import bgu.mics.application.services.CPUService;
@@ -17,15 +18,16 @@ class MessageBusImplTest {
         private MessageBusImpl msgbus;
         private MicroService m1;
         private MicroService m2;
+        private CPU cpu;
 
 
         @BeforeEach
         public void setUp() {
             msgbus = MessageBusImpl.getInstance();
-            m1 = new CPUService( );
+            m1 = new CPUService("cpu1" ,cpu );
           //  m2 = new GPUService();
             msgbus.register(m1);
-            msgbus.register(m2);
+           // msgbus.register(m2);
         }
 
         @After
