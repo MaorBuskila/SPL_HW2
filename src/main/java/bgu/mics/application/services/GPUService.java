@@ -32,9 +32,15 @@ public class GPUService extends MicroService {
             Model model = trainModelEvent.getModel();
             Data data = model.getData();
             gpu.divide((data));
-            int freeSpace = gpu.getvRam().size()-
+            while(model.getData().getProcessed()<model.getData().getSize()) {
+                int freeSpace = gpu.getvRam().size() - gpu.getCurrentProInVram();
+                for (int i = 0; i<freeSpace;i++)
+                {
+                    gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0));
+                }
 
 
+            }
         });
         subscribeEvent(TestModelEvent.class , c -> {});
 
