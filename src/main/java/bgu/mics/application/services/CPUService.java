@@ -2,6 +2,10 @@ package bgu.mics.application.services;
 
 import bgu.mics.Broadcast;
 import bgu.mics.MicroService;
+import bgu.mics.application.objects.CPU;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * CPU service is responsible for handling the {@link DataPreProcessEvent}.
@@ -12,17 +16,15 @@ import bgu.mics.MicroService;
  */
 public class CPUService extends MicroService {
     protected static int ticks;
+    protected Vector<CPU> CPUs;
 
 
-    public CPUService(String name) {
+    public CPUService(String name,Vector<CPU> CPUs) {
         super("Change_This_Name");
         this.ticks = ticks;
+        this.CPUs = CPUs;
         // TODO Implement this
     }
-//
-//    public static int getTicks() {
-//        return ticks;
-//    }
     public void updateTick(Broadcast ticks)
     {
        // this.ticks=ticks.getInt;
@@ -30,7 +32,11 @@ public class CPUService extends MicroService {
 
     @Override
     protected void initialize() {
-        // TODO Implement this
+        Iterator<CPU> vi= CPUs.iterator();
+        while(vi.hasNext())
+        {
+
+        }
 
     }
 

@@ -10,8 +10,13 @@ public class Data {
     private int processed;
     private int size;
 
-    public Data(Type type, int size) {
-        this.type = type;
+    public Data(String sType, int size) {
+        if (sType.equals("Images"))
+            this.type = Type.Images;
+        if (sType.equals("Text"))
+            this.type = Type.Text;
+        if (sType.equals("Tabular"))
+            this.type = Type.Tabular;
         this.size = size;
         this.processed = 0;
     }

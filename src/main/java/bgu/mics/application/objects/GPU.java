@@ -27,7 +27,7 @@ public class GPU extends GPUService {
     private ConcurrentHashMap<String,Vector<DataBatch>> dataMap; //seprated model data to databatch
 
 
-    public GPU(String sType, Model model, Cluster cluster, String name){
+    public GPU(String sType, Cluster cluster, String name){
         super(name);
         if(sType=="RTX3090")
             this.type = Type.RTX3090;

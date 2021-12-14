@@ -20,10 +20,11 @@ public class CPU extends CPUService{
 
 
 
-    public CPU(int numberOFCores, Queue <DataBatch> queue, Cluster cluster,String name) {
+    public CPU(int numberOFCores, Cluster cluster,String name) {
         super(name);
+        CPUs.add(this);
         this.numberOfCores = numberOfCores;
-        this.unprocessedQueue = queue;
+        this.unprocessedQueue = null;
         this.cluster = cluster;
         cluster.addToCPUS(this);
     }
