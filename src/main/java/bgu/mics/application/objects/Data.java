@@ -10,13 +10,18 @@ public class Data {
     private int processed;
     private int size;
 
-    public Data(Type type, int processed, int size) {
-        this.type = type;
-        this.processed = processed;
+    public Data(String sType, int size) {
+        if (sType.equals("Images"))
+            this.type = Type.Images;
+        if (sType.equals("Text"))
+            this.type = Type.Text;
+        if (sType.equals("Tabular"))
+            this.type = Type.Tabular;
         this.size = size;
+        this.processed = 0;
     }
 
-    public int getProccessed() {
+    public int getProcessed() {
         return processed;
     }
 
@@ -24,8 +29,6 @@ public class Data {
         processed += 1000;
 
     }
-
-
 
     /**
      * Enum representing the Data type.
