@@ -18,6 +18,10 @@ public class GPU extends GPUService {
         return vRam;
     }
 
+    public int getCurrentProInVram() {
+        return currentProInVram;
+    }
+
     /**
      * Enum representing the type of the GPU.
      */
@@ -34,6 +38,7 @@ public class GPU extends GPUService {
    // private ConcurrentHashMap <Event, Model >  modelEvents;
     private Vector<DataBatch> allDataBatches; //seprated model data to databatch
     private Vector<DataBatch> vRam;
+    private int currentProInVram;
 
 
     public GPU(String sType){
@@ -54,6 +59,7 @@ public class GPU extends GPUService {
         this.model = null;
         this.cluster = Cluster.getInstance();
         cluster.addToGPUS(this);
+        currentProInVram=0;
 
     }
 
@@ -96,6 +102,7 @@ public class GPU extends GPUService {
     public void reciveProcessedDataBatch(DataBatch ProDB){
         //TODO: check if we need to check if vram have space or send unpro db when only we have space in vram like in tigbur.
         vRam.add(ProDB);
+        currentProInVram+=1;
 
 
     }
@@ -107,10 +114,12 @@ public class GPU extends GPUService {
     //train
     // we will get the databatch from the vram
     public void trainDataBatchModel(DataBatch dataBatch){
-        //training
+        //training ...
         dataBatch.train();
         dataBatch.getData().updateProcessed();
         vRam.remove(dataBatch);
+        currentProInVram-=1;
+
 
 
     }
