@@ -23,18 +23,26 @@ public class GPU extends GPUService {
     private Type type;
     private Model model;
     private Cluster cluster;
-    private ConcurrentHashMap <Event, Model >  modelEvents;
+   // private ConcurrentHashMap <Event, Model >  modelEvents;
     private ConcurrentHashMap<Integer,Vector<DataBatch>> dataMap; //seprated model data to databatch
+    private Vector<DataBatch> vRam;
 
 
     public GPU(String sType, Model model, Cluster cluster, String name){
         super(name);
-        if(sType=="RTX3090")
+        if(sType=="RTX3090") {
             this.type = Type.RTX3090;
-        if(sType=="RTX2080")
-            this.type=Type.RTX2080;
-        if(sType=="GTX1080")
-            this.type=Type.GTX1080;
+            vRam.setSize(32);
+
+        }
+        if(sType=="RTX2080") {
+            this.type = Type.RTX2080;
+            vRam.setSize(16);
+        }
+        if(sType=="GTX1080") {
+            this.type = Type.GTX1080;
+            vRam.setSize(8);
+        }
         this.model = null;
         this.cluster = cluster;
         cluster.addToGPUS(this);
@@ -66,19 +74,20 @@ public class GPU extends GPUService {
     public void sendUnprocessedDataBatchToCluster(DataBatch db){
         //fuction to decide how to send
         cluster.addToUnprocessedBatch(db);
+        cluster
     }
     /**
      * @pre: cluster.getProcessDataBatch != null
      * @post:  vram contains @pre head of queue.
      * @return
      */
-    public void reciveProcessedDataBatch(){
-        if(cluster.getProcessedDataBatch()!=null){
-
-        //VRAM.add(databatch)
-        }
-
-    }
+//    public void reciveProcessedDataBatch(){
+//        if(cluster.getProcessedDataBatch()!=null){
+//
+//        //VRAM.add(databatch)
+//        }
+//
+//    }
     /**
      * @pre:the databatch is untrained and processed
      * @post: databatch is trained .

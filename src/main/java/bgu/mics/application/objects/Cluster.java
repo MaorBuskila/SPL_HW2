@@ -2,7 +2,9 @@ package bgu.mics.application.objects;
 
 
 import bgu.mics.MessageBusImpl;
+import javafx.util.Pair;
 
+import java.util.HashMap;
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,8 +19,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Cluster {
 	private Vector<GPU> gpus;
 	private Vector<CPU> cpus;
-	private Queue<DataBatch> UnprocessedBatch;
+	//private Queue<DataBatch> UnprocessedBatch;
+
+	private ConcurrentHashMap<GPU,Vector<String>> GPUtoModels;
+
+
+	//private Pair<GPU,DataBatch> pair1;
+	private Queue<DataBatch> unProcessedBatch;
 	private Queue<DataBatch> processedBatch;
+
 	private Vector<String> trainedModels;
 	private int totalDataBatchProccessedbyCpu;
 	private ConcurrentHashMap<CPU,Integer> cpuTimeUnitUsed;
@@ -67,20 +76,31 @@ public class Cluster {
 
 	}
 
-	public Queue<DataBatch> getProcessedDataBatch()
+	public Queue<DataBatch> sendProcessedToGPU()
 	{
-		return this.processedBatch;
+		while(!processedBatch.isEmpty()) // DataBatchim - data - name - GPU
+		{
+			(GPU)(processedBatch.poll().getKey()).;
+
+
+		}
 	}
+
 	public Queue<DataBatch> getUnProcessedDataBatch()
 	{
-		return this.UnprocessedBatch;
+		return this.unProcessedBatch;
 	}
 
 	public void addToProcessed(DataBatch dataBatch) {
 		processedBatch.add(dataBatch);
 	}
-	public void addToUnprocessedBatch(DataBatch dataBatch) {
-		UnprocessedBatch.add(dataBatch);
+	public void addToUnprocessedBatch(DataBatch dataBatch, GPU gpu) {
+		unProcessedBatch.add(dataBatch);
+		if(GPUtoModels.containsKey(gpu))
+		{
+			GPUtoModels.get(gpu).addElement(dataBatch.getData().getModel().getName());
+		}
+		GPUtoModels.put(gpu, )
 	}
 
 	public void addToCPUS(CPU cpu) {
