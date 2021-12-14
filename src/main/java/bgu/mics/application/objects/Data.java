@@ -27,7 +27,6 @@ public class Data {
 
     public void updateProcessed() {
         processed += 1000;
-
     }
 
     /**

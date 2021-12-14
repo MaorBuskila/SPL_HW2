@@ -9,6 +9,8 @@ public class DataBatch {
     private int start_index;
     private Data data;
     private boolean processed = false;
+
+
     private boolean trained = false;
 
 
@@ -40,5 +42,9 @@ public class DataBatch {
             System.out.println("already trained!");
         }
 
+    }
+
+    public boolean isTrained() {
+        return trained;
     }
 }

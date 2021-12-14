@@ -61,7 +61,6 @@ public abstract class MicroService implements Runnable {
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
         msgBus.subscribeEvent(type , this);
         msgCallBackMap.put(type, callback);
-        //TODO: implement this.
     }
 
     /**
@@ -113,7 +112,6 @@ public abstract class MicroService implements Runnable {
      */
     protected final void sendBroadcast(Broadcast b) {
         msgBus.sendBroadcast(b);
-        //TODO: implement this.
     }
 
     /**
@@ -128,7 +126,6 @@ public abstract class MicroService implements Runnable {
      */
     protected final <T> void complete(Event<T> e, T result) {
         msgBus.complete(e , result);
-        //TODO: implement this.
     }
 
     /**
@@ -155,7 +152,7 @@ public abstract class MicroService implements Runnable {
     }
 
     /**
-     * The entry point of the micro-service. TODO: you must complete this code
+     * The entry point of the micro-service.
      * otherwise you will end up in an infinite loop.
      */
     @Override

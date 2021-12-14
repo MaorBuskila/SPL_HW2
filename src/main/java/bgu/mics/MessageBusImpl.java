@@ -56,7 +56,6 @@ public class MessageBusImpl implements MessageBus {
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, MicroService m) {
-		// TODO Auto-generated method stub
 		if(interestedBroadcast.containsKey(type))
 			interestedBroadcast.get(type).addElement((m));
 		else {
@@ -74,8 +73,6 @@ public class MessageBusImpl implements MessageBus {
 		Future f = eventsToFuture.get(e);
 		f.resolve(result);
 		eventsToFuture.remove(e);
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -112,15 +109,11 @@ public class MessageBusImpl implements MessageBus {
 	public void register(MicroService m) {
 		Queue<Message> queue=new ConcurrentLinkedQueue<>();
 		queueMap.put(m,queue);
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void unregister(MicroService m) {
 		queueMap.remove(m);
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -130,7 +123,6 @@ public class MessageBusImpl implements MessageBus {
 				this.queueMap.get(m).wait();
 			}
 		}
-		// TODO Auto-generated method stub
 		return queueMap.get(m).poll();
 	}
 

@@ -13,9 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GPU extends GPUService {
 
-    public ConcurrentHashMap<Model, Vector<DataBatch>> getDataMap() {
-        return dataMap;
-    }
 
     public Vector<DataBatch> getvRam() {
         return vRam;
@@ -58,6 +55,10 @@ public class GPU extends GPUService {
         this.cluster = Cluster.getInstance();
         cluster.addToGPUS(this);
 
+    }
+
+    public Vector<DataBatch> getAllDataBatches() {
+        return allDataBatches;
     }
 //    public void setCluster(Cluster cluster) {
 //        this.cluster = cluster;

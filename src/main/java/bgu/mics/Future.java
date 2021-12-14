@@ -19,9 +19,7 @@ public class Future<T> {
 	 */
 	public Future() {
 		result = null;
-		isDone=false;
-
-		//TODO: implement this
+		isDone = false;
 	}
 
 	/**
@@ -33,7 +31,6 @@ public class Future<T> {
 	 *
 	 */
 	public synchronized T get() {
-		//TODO: implement this.
 		while(result == null) {
 			try {
 				wait();
@@ -48,22 +45,17 @@ public class Future<T> {
 	 * Resolves the result of this Future object.
 	 */
 	public synchronized void resolve (T result)  {
-		//TODO: implement this.
-		if(isDone == false){
+		if(isDone == false) {
 			this.result = result;
 			this.isDone = true;
 			notifyAll();
 		}
-//		else {
-//			throw new Exception("Already Resolve!");
-//		}
 	}
 
 	/**
 	 * @return true if this object has been resolved, false otherwise
 	 */
 	public boolean isDone() {
-		//TODO: implement this.
 		return isDone;
 	}
 
@@ -79,7 +71,6 @@ public class Future<T> {
 	 *         elapsed, return null.
 	 */
 	public synchronized T get(long timeout, TimeUnit unit) {
-		//TODO: implement this.
 		if (result != null) {
 			return result;
 		} else {

@@ -36,7 +36,7 @@ class GPUTest {
     void divide() {
         //Data data=  new Data("Images" , 20000);
         gpu.divide(data);
-        int x = gpu.getDataMap().get(model).size();
+        int x = gpu.getAllDataBatches().size();
         assertEquals(x*1000,data.getSize());
     }
 
@@ -51,37 +51,32 @@ class GPUTest {
     }
 
     @Test
-    void getProcessedDataBatch() {
-        //assertThrows()
+    void reciveProcessedDataBatch() {
         DataBatch dataBatch = new DataBatch(model.getData(),0);
         dataBatch.process();
         cluster.addToProcessed(dataBatch);
+        gpu.reciveProcessedDataBatch(dataBatch);
         assertTrue(gpu.getvRam().contains(dataBatch));
-
-    }
-
-//    @Test
-//    void trainDataBatchModel() {
-//        assertTrue(gpu.getvRam().isEmpty());
-//        DataBatch dataBatch = new DataBatch(model.getData(),0);
-//        dataBatch.process();
-//        cluster.addToProcessed(dataBatch);
-//        gpu.reciveProcessedDataBatch();
-//        gpu.trainDataBatch(dataBatch);
-//        assertFalse(VRAMArray.contains(dataBatch));
-//
-//    }
-
-
-    @Test
-    void testSendUnprocessedDataBatchToCluster() {
     }
 
     @Test
-    void reciveProcessedDataBatch() {
+    void trainDataBatchModel() {
+        for (int i = 0 ; i < gpu.getvRam().size() ; i++){
+            assertNull(gpu.getvRam().get(i));
+        }
+        DataBatch dataBatch = new DataBatch(model.getData(),0);
+        dataBatch.process();
+        cluster.addToProcessed(dataBatch);
+        gpu.reciveProcessedDataBatch(dataBatch);
+        gpu.trainDataBatchModel(dataBatch);
+        assertFalse(gpu.getvRam().contains(dataBatch));
     }
 
     @Test
     void testTrainDataBatchModel() {
+        DataBatch dataBatch = new DataBatch(model.getData(),0);
+        assertFalse(dataBatch.isTrained());
+        dataBatch.train();
+        assertTrue();
     }
 }

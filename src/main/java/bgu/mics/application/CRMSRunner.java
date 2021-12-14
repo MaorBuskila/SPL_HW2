@@ -33,24 +33,22 @@ public class  CRMSRunner {
 
         MessageBusImpl msgBus = MessageBusImpl.getInstance();
 
-        Cluster cluster = Cluster.getInstance();
+     //   Cluster cluster = Cluster.getInstance();
         Student student = s[0];
         CPU cpu = c[0];
         GPU gpu = g[0];
         Model model = m.get(0)[0];
-
         TrainModelEvent ev = new TrainModelEvent(model,student.getName());
         MicroService m1 =  new GPUService();
-        gpu.setCluster(cluster);
-        cpu.setCluster(cluster);
+    //    cpu.setCluster(cluster);
         msgBus.register(student);
         msgBus.register(cpu);
-        Callback<TrainModelEvent> callback = new Callback<TrainModelEvent>() {
-            @Override
-            public void call(TrainModelEvent c) {
-            msgBus.sendEvent(ev);
-            }
-        };
+//        Callback<TrainModelEvent> callback = new Callback<TrainModelEvent>() {
+//            @Override
+//            public void call(TrainModelEvent c) {
+//            msgBus.sendEvent(ev);
+//            }
+//        };
 
        // cpu.subscribeEvent(TrainModelEvent.class,callback);
 
