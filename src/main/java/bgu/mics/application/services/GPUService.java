@@ -19,11 +19,13 @@ import bgu.mics.application.objects.Model;
 public class GPUService extends MicroService {
     private GPU gpu;
 
-    public GPUService(GPU gpu /**String name*/) {
-        super("Change_This_Name");
+    public GPUService(String name , GPU gpu) {
+        super(name);
         this.gpu = gpu;
         // TODO Implement this
     }
+
+
 
 
     @Override

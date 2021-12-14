@@ -23,7 +23,7 @@ class MessageBusImplTest {
         public void setUp() {
             msgbus = MessageBusImpl.getInstance();
             m1 = new CPUService( );
-            m2 = new GPUService();
+          //  m2 = new GPUService();
             msgbus.register(m1);
             msgbus.register(m2);
         }

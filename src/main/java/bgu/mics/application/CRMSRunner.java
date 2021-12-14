@@ -39,7 +39,7 @@ public class  CRMSRunner {
         GPU gpu = g[0];
         Model model = m.get(0)[0];
         TrainModelEvent ev = new TrainModelEvent(model,student.getName());
-        MicroService m1 =  new GPUService();
+        MicroService m1 =  new GPUService("GPU1" , gpu );
     //    cpu.setCluster(cluster);
         msgBus.register(student);
         msgBus.register(cpu);

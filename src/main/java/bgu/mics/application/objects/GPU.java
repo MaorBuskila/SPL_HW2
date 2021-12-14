@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Add all the fields described in the assignment as private fields.
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
-public class GPU extends GPUService {
+public class GPU {
 
 
     public Vector<DataBatch> getvRam() {
@@ -42,7 +42,8 @@ public class GPU extends GPUService {
 
 
     public GPU(String sType){
-       // super(name);
+
+        super();
         vRam = new Vector<>();
         if(sType.equals("RTX3090")) {
             this.type = Type.RTX3090;

@@ -38,6 +38,8 @@ public abstract class MicroService implements Runnable {
         msgCallBackMap=new ConcurrentHashMap<>();
     }
 
+
+
     /**
      * Subscribes to events of type {@code type} with the callback
      * {@code callback}. This means two things:
