@@ -1,6 +1,11 @@
 package bgu.mics.application.services;
 
 import bgu.mics.MicroService;
+import bgu.mics.application.messages.TestModelEvent;
+import bgu.mics.application.messages.TrainModelEvent;
+import bgu.mics.application.objects.Data;
+import bgu.mics.application.objects.GPU;
+import bgu.mics.application.objects.Model;
 
 /**
  * GPU service is responsible for handling the
@@ -12,16 +17,26 @@ import bgu.mics.MicroService;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class GPUService extends MicroService {
+    private GPU gpu;
 
-    public GPUService(/**String name*/) {
+    public GPUService(GPU gpu /**String name*/) {
         super("Change_This_Name");
+        this.gpu = gpu;
         // TODO Implement this
     }
 
 
     @Override
     protected void initialize() { // just need to take responsibilty on time
-        // TODO Implement this
+        subscribeEvent(TrainModelEvent.class , (TrainModelEvent trainModelEvent) -> {
+            Model model = trainModelEvent.getModel();
+            Data data = model.getData();
+            gpu.divide((data));
+            int freeSpace = gpu.getvRam().size()-
+
+
+        });
+        subscribeEvent(TestModelEvent.class , c -> {});
 
     }
 }

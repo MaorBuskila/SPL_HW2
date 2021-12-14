@@ -77,6 +77,6 @@ class GPUTest {
         DataBatch dataBatch = new DataBatch(model.getData(),0);
         assertFalse(dataBatch.isTrained());
         dataBatch.train();
-        assertTrue();
+//        assertTrue();
     }
 }
