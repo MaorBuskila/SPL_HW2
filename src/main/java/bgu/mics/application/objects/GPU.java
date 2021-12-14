@@ -55,13 +55,13 @@ public class GPU extends GPUService {
             vRam.setSize(8);
         }
         this.model = null;
-        //this.cluster = cluster;
-        //cluster.addToGPUS(this);
+        this.cluster = Cluster.getInstance();
+        cluster.addToGPUS(this);
 
     }
-    public void setCluster(Cluster cluster) {
-        this.cluster = cluster;
-    }
+//    public void setCluster(Cluster cluster) {
+//        this.cluster = cluster;
+//    }
     /**
      * @pre:none
      * @post: size.Vector<DataBatch>*1000  = Data.size

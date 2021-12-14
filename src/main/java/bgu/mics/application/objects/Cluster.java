@@ -3,7 +3,9 @@ package bgu.mics.application.objects;
 
 import java.util.Queue;
 import java.util.Vector;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Passive object representing the cluster.
@@ -13,23 +15,35 @@ import java.util.concurrent.ConcurrentHashMap;
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
 public class Cluster {
-	private Vector<GPU> gpus = new Vector<>();
-	private Vector<CPU> cpus = new Vector<>();
+	private Vector<GPU> gpus;
+	private Vector<CPU> cpus ;
 	//private Queue<DataBatch> UnprocessedBatch;
 
 	private ConcurrentHashMap<DataBatch,GPU> dataBatchToGpu;
 
-	private Queue<DataBatch> unProcessedBatch;
-	private Queue<DataBatch> processedBatch;
+	private BlockingQueue<DataBatch> unProcessedBatch;
+	private BlockingQueue<DataBatch> processedBatch;
 
 	private Vector<String> trainedModels;
-	private int totalDataBatchProccessedbyCpu;
-	private ConcurrentHashMap<CPU,Integer> cpuTimeUnitUsed = new ConcurrentHashMap<>();
-	private ConcurrentHashMap<GPU,Integer> gpuTimeUnitUsed = new ConcurrentHashMap<>();
+	private int totalDataBatchProcessedCpu; // TODO: CHECK
+	private ConcurrentHashMap<CPU,Integer> cpuTimeUnitUsed;
+	private ConcurrentHashMap<GPU,Integer> gpuTimeUnitUsed ;
 	private static Cluster cluster = null;
 
 
+	public Cluster()
+	{
+		gpus = new Vector<>();
+		cpus = new Vector<>();
+		dataBatchToGpu=new ConcurrentHashMap<>();
+		unProcessedBatch=new LinkedBlockingDeque<>();
+		processedBatch=new LinkedBlockingDeque<>();
+		trainedModels=new Vector<>();
+		cpuTimeUnitUsed = new ConcurrentHashMap<>();
+		gpuTimeUnitUsed = new ConcurrentHashMap<>();
+		totalDataBatchProcessedCpu =0;
 
+	}
 	/**
 	 *
      * Retrieves the single instance of this class.
@@ -44,7 +58,7 @@ public class Cluster {
 
 	public void updateTotalDataBatchProccessedbyCpu()
 	{
-		this.totalDataBatchProccessedbyCpu+=1;
+		this.totalDataBatchProcessedCpu +=1;
 	}
 	public void addToTrainedModels(String name)
 	{
