@@ -15,25 +15,23 @@ public class Student extends StudentService {
     private int publications;
     private int papersRead;
 
-    public Student(String name,String department, String sStatus) {
-        super(name);
-        this.department=department;
-        if (sStatus.equals("MSc"))
-            this.status = Degree.MSc;
-        if (sStatus.equals("PhD"))
-            this.status = Degree.PhD;
-        this.status=status;
-        this.publications=0;
-        this.papersRead=0;
-    }
 
-    /**
-     * Enum representing the Degree the student is studying for.
-     */
+    // Enum representing the Degree the student is studying for.
     enum Degree {
         MSc, PhD
     }
 
+    //Constructor
+    public Student(String name, String department, String sStatus) {
+        super(name);
+        this.department = department;
+        if (sStatus.equals("MSc"))
+            this.status = Degree.MSc;
+        if (sStatus.equals("PhD"))
+            this.status = Degree.PhD;
+        this.publications = 0;
+        this.papersRead = 0;
+    }
 
 
 

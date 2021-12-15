@@ -33,7 +33,7 @@ public class CPUService extends MicroService {
 
     @Override
     protected void initialize() {
-        subscribeBroadcast(TickBroadCast.class , (TickBroadCast tickBroadCast) -> {
+        subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             updateTick();
         });
         System.out.println("CPU service running");
@@ -57,7 +57,7 @@ public class CPUService extends MicroService {
 
     public void updateTick() {
         cpu.updateTick();
-    ticks++;
+        ticks++;
     }
 
 
