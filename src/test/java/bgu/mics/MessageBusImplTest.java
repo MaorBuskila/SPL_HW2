@@ -1,4 +1,5 @@
 package bgu.mics;
+import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.objects.CPU;
 import bgu.mics.application.objects.DataBatch;
 import bgu.mics.application.objects.GPU;
@@ -19,15 +20,16 @@ class MessageBusImplTest {
         private MicroService m1;
         private MicroService m2;
         private CPU cpu;
+        private GPU gpu;
 
 
         @BeforeEach
         public void setUp() {
             msgbus = MessageBusImpl.getInstance();
             m1 = new CPUService("cpu1" ,cpu );
-          //  m2 = new GPUService();
+            m2 = new GPUService("Gpu1" ,gpu );
             msgbus.register(m1);
-           // msgbus.register(m2);
+            msgbus.register(m2);
         }
 
         @After
@@ -57,8 +59,8 @@ class MessageBusImplTest {
 
     @Test
     void testsubscribeBroadcast() {
-        ExampleBroadcast exampleBroadcast = new ExampleBroadcast("0");
-        m1.subscribeBroadcast(ExampleBroadcast.class, exmBroad -> {});
+        TickBroadCast exampleBroadcast = new TickBroadCast(8);
+        m1.subscribeBroadcast(TickBroadCast.class, exmBroad -> {});
         msgbus.sendBroadcast(exampleBroadcast);
         try {
             ExampleBroadcast exp1 = (ExampleBroadcast) msgbus.awaitMessage(m1);
@@ -103,12 +105,10 @@ class MessageBusImplTest {
         try{
             ExampleEvent exp1 = (ExampleEvent) msgbus.awaitMessage(m1);
             assertEquals(exp1, exampleEvent);
-
         }
         catch (Exception w){
             System.out.println("problem in awaitMessage from testsubscribeEvent");
         }
-
     }
 
     @Test
@@ -122,10 +122,8 @@ class MessageBusImplTest {
         msgbus.unregister(m1);
         assertNull(msgbus.getQueueMap(m1));
     }
-
     @Test
     void awaitMessage()  {
-
         ExampleEvent exampleEvent = new ExampleEvent("exm");
         m1.subscribeEvent(ExampleEvent.class, message -> {});
         msgbus.sendEvent(exampleEvent);
@@ -136,7 +134,6 @@ class MessageBusImplTest {
             e.printStackTrace();
         }
         assertNotNull(mess);
-
     }
 
 }

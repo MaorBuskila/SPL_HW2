@@ -8,35 +8,18 @@ package bgu.mics.application.objects;
 public class CPU {
 
     private int numberOfCores;
-
     private Cluster cluster;
     private boolean isBusy = false;
-    //private DataBatch dataBatch;
+    private DataBatch db = null;
+    private int ticksFromService = 0;
+    private int processingTick;
 
 
     public CPU(int numberOfCores /**, Cluster cluster */) {
-        //super(name);
-
         this.numberOfCores = numberOfCores;
         this.cluster = Cluster.getInstance();
-        cluster.addToCPUS(this);
-    }
-
-    //////////////
-
-    /**
-     * @return
-     * @pre:none
-     * @post: return value = @pre head of queue
-     */
-
-    public DataBatch getUnprocessed() {
-        synchronized (unprocessedQueue) {
-            if (!unprocessedQueue.isEmpty()) {
-                return unprocessedQueue.poll();
-            }
-        }
-        return null;
+        this.processingTick = 0;
+        cluster.addToCPUs(this);
     }
 
     /**
@@ -44,47 +27,73 @@ public class CPU {
      * @pre: dataBatch.isProcessed == false
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
-    public void process(DataBatch dataBatch) {
-//        int x=CPUService.getTicks(); // x=0
-        //process... ticks...
-        //       isBusy =true;
-//        if(dataBatch.getData().getType().equals("Images")){
-//            CPUService.
-//        }
-        dataBatch.process();
-//        dataBatch.getData().updateProcessed();
-        //    isBusy = false;
+    public DataBatch process(DataBatch dataBatch) {
+        this.db = dataBatch;
+        switch (db.getData().getType()) {
+            case Images:
+                processingTick = 32 / numberOfCores * 4 - ticksFromService;
+                if (processingTick == 0) {
+                    ticksFromService = 0;
+                    dataBatch.process();
+                }
+                break;
+            case Text:
+                processingTick = 32 / numberOfCores * 2 - ticksFromService;
+                if (processingTick == 0) {
+                    ticksFromService = 0;
+                    dataBatch.process();
 
-        sendToCluster(dataBatch);
+                }
+                break;
+            case Tabular:
+                processingTick = 32 / numberOfCores - ticksFromService;
+                if (processingTick == 0) {
+                    ticksFromService = 0;
+                    dataBatch.process();
+                }
+                break;
+        }
+        dataBatch.getData().updateProcessed();
+        this.db = null;
+        isBusy = false;
+        return dataBatch;
     }
+
+    //////////// Getters ///////////
+
+    public Cluster getCluster() {
+        return cluster;
+    }
+
+    public int getNumberOfCores() {
+        return numberOfCores;
+    }
+
+    ////////////////////////////////
 
     /**
      * @param processedDataBatch
      * @pre: dataBatch.isProcessed == true
      * @post: cluster.processedBatch != null
      */
-
     public void sendToCluster(DataBatch processedDataBatch) {
         this.cluster.sendToGPU(processedDataBatch);
     }
 
-
-
-    /**
-     * @return
-     * @pre:
-     * @post:
-     */
     public boolean checkIfBusy() {
+        if (db != null)
+            isBusy = true;
+        else
+            isBusy = false;
         return isBusy;
     }
 
-    public void setCluster(Cluster cluster) {
-        this.cluster = cluster;
+    public void updateTick() {
+        this.ticksFromService++;
     }
 
-    public int getNumberOfCores() {
-        return numberOfCores;
+    public void updateProcessingTick() {
+        processingTick++;
     }
 }
 

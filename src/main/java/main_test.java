@@ -1,13 +1,11 @@
 import bgu.mics.*;
+import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.messages.TrainModelEvent;
 import bgu.mics.application.objects.*;
 import bgu.mics.application.services.CPUService;
 import bgu.mics.application.services.GPUService;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class main_test {
     public static void main(String []args) throws InterruptedException {
@@ -61,31 +59,41 @@ public class main_test {
         GPUService gpuService = new GPUService("Gpu1" , gpu);
         CPU cpu = new CPU(32);
         CPUService cpuService = new CPUService("CPu1", cpu);
-        msgbus.register(gpuService);
-        msgbus.register(cpuService);
         Model model = new Model("name", data,student);
         Event<Model> trainModelEvent = new TrainModelEvent(model,"maor");
+//        Broadcast<TickBroadCast>
+//        msgbus.sendEvent(trainModelEvent);
 
 
-         Thread t1 = new Thread(() ->{
-              gpuService.run();
-         });
+//
+//         Thread t1 = new Thread(() ->{
+//              gpuService.run();
+//         });
+//
+//        Thread t2 = new Thread(() ->{
+//            cpuService.run();
+//        });
+//        Thread t3 = new Thread(() ->{
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            msgbus.sendEvent(trainModelEvent);
+//        });
+//        Thread t4 = new Thread(() ->{
+//            try {
+//                msgbus.awaitMessage(gpuService);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        t1.start();
+//        t2.start();
+//        t3.start();
 
-        Thread t2 = new Thread(() ->{
-            cpuService.run();
-        });
-        Thread t3 = new Thread(() ->{
-            msgbus.sendEvent(trainModelEvent);
-            try {
-                Message mess =  msgbus.awaitMessage(gpuService);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
 
-        t1.start();
-        t2.start();
-        t3.start();
 
 //******************************************************************
 //        Callable<Integer> call = ()->

@@ -54,7 +54,10 @@ public class GPUService extends MicroService {
                 MessageBusImpl.getInstance().complete(trainModelEvent,model);
 
         });
+        System.out.println("GPU service running");
+        //TODO: implement lambda
         subscribeEvent(TestModelEvent.class , c -> {});
+
 
     }
 }

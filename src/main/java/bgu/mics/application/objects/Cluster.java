@@ -17,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class Cluster {
 	private Vector<GPU> gpus;
-	private Vector<CPU> cpus ;
+	private Vector<CPU> CPUs;
 	//private Queue<DataBatch> UnprocessedBatch;
 
 	private ConcurrentHashMap<DataBatch,GPU> dataBatchToGpu;
@@ -35,7 +35,7 @@ public class Cluster {
 	public Cluster()
 	{
 		gpus = new Vector<>();
-		cpus = new Vector<>();
+		CPUs = new Vector<>();
 		dataBatchToGpu=new ConcurrentHashMap<>();
 		unProcessedQueues=new ConcurrentHashMap<>();
 	//	processedBatch=new LinkedBlockingQueue<>();
@@ -56,6 +56,12 @@ public class Cluster {
 			}
 			return cluster;
 		}
+
+		//////////////// Getters ////////////////
+
+
+
+	/////////////////////////////////////
 
 ///////////////////// Statistics //////////////////////////////
 	public void updateTotalDataBatchProccessedbyCpu()
@@ -94,14 +100,16 @@ public class Cluster {
 // 		GPUtoModels.put(gpu, )
 	}
 
+
+
 	////////////////////////////////////////////////////////////
 
 
 
-//	public Queue<DataBatch> getUnProcessedQueue()
-//	{
-//		return this.unProcessedBatch;
-//	}
+	public BlockingQueue<DataBatch> getUnProcessedQueue(CPU cpu)
+	{
+		return unProcessedQueues.get(cpu);
+	}
 
 
 	public void sendToGPU(DataBatch dataBatch) {
@@ -113,11 +121,14 @@ public class Cluster {
 		//send back to GPU ? ?because  we must to send to the fit GPU
 	}
 /////////////////////////// Function to find the best CPU /////////////////////////////////////
+	//TODO : impliment twice this func for mistake
 	public CPU minFutureTime()
 	{
 		int sum;
 		int min=Integer.MAX_VALUE;
-		CPU minTimeWork=null;
+		if(cluster.CPUs.isEmpty())
+			return null;
+		CPU minTimeWork =cluster.CPUs.firstElement() ;
 		synchronized (unProcessedQueues) {
 			for (CPU key : unProcessedQueues.keySet()) {
 				Queue q = unProcessedQueues.get(key);
@@ -144,11 +155,12 @@ public class Cluster {
 	}
 	///////////////////////////////////////////////////////
 
-	/////Initialize queue for each CPU
-	public void addToCPUS(CPU cpu) {
-		cpus.addElement(cpu);
-		cpuTimeUnitUsed.put(cpu,0);
-		BlockingQueue<DataBatch> q=new LinkedBlockingQueue<>();
+	///
+	//
+	public void addToCPUs(CPU cpu) {
+		CPUs.addElement(cpu); // add Cpu to vector CPUs
+		cpuTimeUnitUsed.put(cpu,0); //Initialize time unit used for CPU
+		BlockingQueue<DataBatch> q = new LinkedBlockingQueue<>(); //Initialize queue for each CPU
 		unProcessedQueues.put(cpu,q);
 	}
 	public void addToGPUS(GPU gpu)

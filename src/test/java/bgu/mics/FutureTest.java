@@ -17,11 +17,13 @@ public class FutureTest extends TestCase {
 
     @Before
     public void setUp() throws Exception {
-        future =new Future<String>();
+        future = new Future<String>();
     }
+
     @After
     public void tearDown() throws Exception {
     }
+
     @Test
     public void testGet() {
         assertFalse(future.isDone());
@@ -29,32 +31,61 @@ public class FutureTest extends TestCase {
         assertTrue(future.isDone());
         assertEquals("test", future.get());
     }
+
     @Test
     public void testResolve() {
-        assertNull(future.get());
         String str = "Somthing";
-        future.resolve(str);
-        assertEquals(future.get() , str);
+        Thread t1 = new Thread(() -> {
+            future.get();
+        });
+
+        Thread t2 = new Thread(() -> {
+            future.resolve(str);
+        });
+        t1.start();
+        t2.start();
+        assertEquals(future.get(), str);
     }
+
     @Test
     public void testIsDone() {
         assertFalse(future.isDone());
         future.resolve("result");
         assertTrue(future.isDone());
     }
+
     @Test
     public void testGetWithTime() { //Todo: need to change!
-        assertNull(future.get(100, TimeUnit.MILLISECONDS));
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String str = "Somthing";
+        Thread t1 = new Thread(() -> {
+            future.get(1000, TimeUnit.MILLISECONDS);
+        });
 
-        assertFalse(future.isDone());
+        Thread t2 = new Thread(() -> {
+            try {
+                assertFalse(future.isDone());
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            future.resolve(str);
+            try {
+                Thread.sleep(2000);
+                assertTrue(future.isDone());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-        assertTrue(future.isDone());
-        ;
+        });
+
+        Thread t3 = new Thread(() -> {
+            future.get(2000, TimeUnit.MILLISECONDS);
+        });
+        t1.start();
+        t2.start();
+        t3.start();
+
+
 
     }
 }

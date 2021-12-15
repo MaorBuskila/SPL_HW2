@@ -2,9 +2,12 @@ package bgu.mics.application.services;
 
 import bgu.mics.Broadcast;
 import bgu.mics.MicroService;
+import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.objects.CPU;
+import bgu.mics.application.objects.DataBatch;
 
 import java.util.Iterator;
+import java.util.Queue;
 import java.util.Vector;
 
 /**
@@ -15,14 +18,14 @@ import java.util.Vector;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class CPUService extends MicroService {
-    protected static int ticks;
+    protected int ticks;
     private CPU cpu;
 
 
     public CPUService(String name, CPU cpu) {
         super(name);
-        //this.cpu = cpu;
-        //this.ticks = 0;
+        this.cpu = cpu;
+        ticks = 0;
 
         // TODO Implement this
     }
@@ -30,15 +33,35 @@ public class CPUService extends MicroService {
 
     @Override
     protected void initialize() {
+        subscribeBroadcast(TickBroadCast.class , (TickBroadCast tickBroadCast) -> {
+            updateTick();
+        });
+        System.out.println("CPU service running");
         while (!cpu.checkIfBusy()) {
-            cpu.sendToCluster(cpu.process(cpu.getUnprocessed()));
+            DataBatch tmpDataBatch = null;
+
+            try {
+                //TODO : check sync
+                synchronized (this) {
+                    Object q = cpu.getCluster().getUnProcessedQueue(cpu);
+                    tmpDataBatch = cpu.getCluster().getUnProcessedQueue(cpu).take();
+                    cpu.process(tmpDataBatch);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            cpu.sendToCluster(cpu.process(tmpDataBatch));
         }
+
     }
-//    public void updateTick(Broadcast ticks)
-//    {
-//        // this.ticks=ticks.getInt;
-//    }
-    //  protected int getTick(){
-    //  return tick;
-    //  } // for each cpu send tick and add to his time
+
+    public void updateTick() {
+        cpu.updateTick();
+    ticks++;
+    }
+
+
+//    protected int getTick() {
+//        return ticks;
+//    } // for each cpu send tick and add to his time
 }
