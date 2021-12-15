@@ -57,7 +57,7 @@ public class Cluster {
 			return cluster;
 		}
 
-
+///////////////////// Statistics //////////////////////////////
 	public void updateTotalDataBatchProccessedbyCpu()
 	{
 		this.totalDataBatchProcessedCpu +=1;
@@ -80,23 +80,30 @@ public class Cluster {
 		gpuTimeUnitUsed.replace(gpu1,x); // TODO Check how to simplify this
 
 	}
+	//////////////////////////////////////////////////////////////
 
-
-
-	public Queue<DataBatch> getUnProcessedQueue()
-	{
-		return this.unProcessedBatch;
-	}
+	/////////////////////// Send to CPU ///////////////////////
 
 	public void addToUnprocessedMap(DataBatch dataBatch, GPU gpu) {
-		dataBatchToGpu.put(dataBatch,gpu);
-		unProcessedQueues.get(minFutureTime()).add(dataBatch);
+		dataBatchToGpu.put(dataBatch,gpu); // add to hashmap to know who to return.
+		unProcessedQueues.get(minFutureTime()).add(dataBatch); // add to best time cpu the databatch
 
 //		if(dataBatchToGpu.containsKey(gpu)) {
 //			dataBatchToGpu.get(gpu).addElement
 //		}
 // 		GPUtoModels.put(gpu, )
 	}
+
+	////////////////////////////////////////////////////////////
+
+
+
+//	public Queue<DataBatch> getUnProcessedQueue()
+//	{
+//		return this.unProcessedBatch;
+//	}
+
+
 	public void sendToGPU(DataBatch dataBatch) {
 		synchronized (this.dataBatchToGpu) {
 
@@ -105,7 +112,7 @@ public class Cluster {
 		}
 		//send back to GPU ? ?because  we must to send to the fit GPU
 	}
-
+/////////////////////////// Function to find the best CPU /////////////////////////////////////
 	public CPU minFutureTime()
 	{
 		int sum;
@@ -120,26 +127,24 @@ public class Cluster {
 				while(itr.hasNext())
 				{
 					DataBatch db=itr.next();
-					if(db.getType()=="Images")
+					if(db.getData().getType() == Data.Type.Images)
 						sum+=(32/numberOfCores)*4;
-					if(db.getType()=="Text")
+					if(db.getData().getType() == Data.Type.Text)
 						sum+=(32/numberOfCores)*2;
-					if(db.getType()=="Tabular")
+					if(db.getData().getType() == Data.Type.Tabular)
 						sum+=(32/numberOfCores);
 				}
 				if(sum<min) {
 					min = sum;
 					minTimeWork=key;
 				}
-
 			}
-
 		}
 		return minTimeWork;
-
 	}
+	///////////////////////////////////////////////////////
 
-
+	/////Initialize queue for each CPU
 	public void addToCPUS(CPU cpu) {
 		cpus.addElement(cpu);
 		cpuTimeUnitUsed.put(cpu,0);

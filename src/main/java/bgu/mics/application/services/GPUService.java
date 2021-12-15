@@ -37,7 +37,7 @@ public class GPUService extends MicroService {
             gpu.divide((data));
             Thread t1=new Thread(()->{
                 while(!gpu.getAllDataBatches().isEmpty()) {
-                    int freeSpace = gpu.getvRam().size() - gpu.getCurrentProInVram();
+                    int freeSpace = gpu.getvRam().size() - gpu.getCurrentProcessInVram();
                     for (int i = 0; i<freeSpace;i++)
                     {
                         gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0)); // TODO CHECK IF REMOVEWORK

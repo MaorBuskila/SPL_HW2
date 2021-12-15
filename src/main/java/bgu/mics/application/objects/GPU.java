@@ -1,12 +1,6 @@
 package bgu.mics.application.objects;
 
-import bgu.mics.Event;
-import bgu.mics.MessageBus;
-import bgu.mics.MessageBusImpl;
-import bgu.mics.application.services.GPUService;
-
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Passive object representing a single GPU.
@@ -15,14 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GPU {
 
-
-    public Vector<DataBatch> getvRam() {
-        return vRam;
-    }
-
-    public int getCurrentProInVram() {
-        return currentProInVram;
-    }
 
     /**
      * Enum representing the type of the GPU.
@@ -40,7 +26,7 @@ public class GPU {
    // private ConcurrentHashMap <Event, Model >  modelEvents;
     private Vector<DataBatch> allDataBatches; //seprated model data to databatch
     private Vector<DataBatch> vRam;
-    private int currentProInVram;
+    private int currentProcessInVram;
 
 
     public GPU(String sType){
@@ -62,16 +48,26 @@ public class GPU {
         this.model = null;
         this.cluster = Cluster.getInstance();
         cluster.addToGPUS(this);
-        currentProInVram=0;
+        currentProcessInVram =0;
 
     }
+
+    /////////////////Getters///////////////////
 
     public Vector<DataBatch> getAllDataBatches() {
         return allDataBatches;
     }
-//    public void setCluster(Cluster cluster) {
-//        this.cluster = cluster;
-//    }
+
+    public Vector<DataBatch> getvRam() {
+        return vRam;
+    }
+
+    public int getCurrentProcessInVram() {
+        return currentProcessInVram;
+    }
+
+    ////////////////////////////////////////////
+
     /**
      * @pre:none
      * @post: size.Vector<DataBatch>*1000  = Data.size
@@ -86,40 +82,43 @@ public class GPU {
 
         }
         int size = data.getSize()/1000; //Todo: check if we can to assume its only divine in 1000
-
    }
+
+
+   //////////////// Send to Cluster ///////////
     /**
      * @pre: none
      * @post: cluster.unProcessedData.contain()
      * @return
      */
     public void sendUnprocessedDataBatchToCluster(DataBatch db){
-//        fuction to decide how to send
-        cluster.addToUnprocessedBatch(db,this);
+//      Decide how to send - ALREADY DONE IN GPU SERVICE!
+        cluster.addToUnprocessedMap(db,this);
     }
+
+    ////////////////////////////////////////////
+
+    /////////////// Get Processed DataBatch to VRAM ////////////////////
     /**
      * @pre: cluster.getProcessDataBatch != null
      * @post:  vram contains @pre head of queue.
      * @return
      */
-    public void reciveProcessedDataBatch(DataBatch ProDB){
-        //TODO: check if we need to check if vram have space or send unpro db when only we have space in vram like in tigbur.
-
-        vRam.add(ProDB);
-        currentProInVram+=1;
+    public void reciveProcessedDataBatch(DataBatch proDB){
+        vRam.add(proDB);
+        currentProcessInVram +=1;
         notifyAll();
-
-
     }
 
+    /////////////////////////////////////////////////////////////////
+
+
+    ////////////////////////Train the processed Databatch ////////////
     /**
      * @pre:the databatch is untrained and processed
      * @post: databatch is trained .
      * @return
      */
-    //train
-    // we will get the databatch from the vram
-
     public void trainDataBatchModel(){
 
         while(model.getData().getProcessed()<model.getData().getSize())
@@ -137,14 +136,10 @@ public class GPU {
             //training...
             dataBatch.train();
             dataBatch.getData().updateProcessed();
-            currentProInVram-=1;
-
-
+            currentProcessInVram -=1;
         }
-
-
-
     }
+    ///////////////////////////////////////////////////////////////////
 
 
 
