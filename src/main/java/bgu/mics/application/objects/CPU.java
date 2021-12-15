@@ -11,7 +11,7 @@ public class CPU {
     private Cluster cluster;
     private boolean isBusy = false;
     private DataBatch db = null;
-    private int ticksFromService = 0;
+    private int ticksFromService;
     private int processingTick;
 
     //Constructor
@@ -96,8 +96,8 @@ public class CPU {
         return isBusy;
     }
 
-    public void updateTick() {
-        this.ticksFromService++;
+    public void updateTick(int tick) {
+        this.ticksFromService = tick;
     }
 
     public void updateProcessingTick() {
