@@ -10,6 +10,12 @@ public class Data {
     private int processed;
     private int size;
 
+    // Enum representing the Data type.
+    enum Type {
+        Images, Text, Tabular
+    }
+
+    //Constructor
     public Data(String sType, int size) {
         if (sType.equals("Images"))
             this.type = Type.Images;
@@ -21,21 +27,12 @@ public class Data {
         this.processed = 0;
     }
 
-    public int getProcessed() {
-        return processed;
-    }
 
     public void updateProcessed() {
         processed += 1000;
     }
 
-    /**
-     * Enum representing the Data type.
-     */
-    enum Type {
-        Images, Text, Tabular
-    }
-
+    //////////////// Getters //////////////
     public Type getType() {
         return type;
     }
@@ -43,4 +40,9 @@ public class Data {
     public int getSize() {
         return size;
     }
+
+    public int getProcessed() {
+        return processed;
+    }
+    ///////////////////////////////////////
 }

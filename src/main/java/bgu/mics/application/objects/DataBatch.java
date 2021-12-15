@@ -9,19 +9,14 @@ public class DataBatch {
     private int start_index;
     private Data data;
     private boolean processed = false;
-
-
     private boolean trained = false;
 
-
+    //Constructor
     public DataBatch(Data data, int start_index) {
         this.data = data;
         this.start_index = start_index;
     }
 
-    public boolean isProcessed() {
-        return processed;
-    }
 
     public Data getData() {
         return data;
@@ -42,6 +37,10 @@ public class DataBatch {
             System.out.println("already trained!");
         }
 
+    }
+
+    public boolean isProcessed() {
+        return processed;
     }
 
     public boolean isTrained() {

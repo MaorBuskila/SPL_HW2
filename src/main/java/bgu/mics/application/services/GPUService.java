@@ -28,7 +28,7 @@ public class GPUService extends MicroService {
 
 
 
-    // to do bo zmanit : sendTocluster,getFromCluster,Train on Vram
+    // to do simultaneity : sendToCluster,getFromCluster,Train on vRAM
     @Override
     protected void initialize() { // just need to take responsibilty on time
         subscribeEvent(TrainModelEvent.class , (TrainModelEvent trainModelEvent) -> {
@@ -55,9 +55,8 @@ public class GPUService extends MicroService {
 
         });
         System.out.println("GPU service running");
-        //TODO: implement lambda
+
         subscribeEvent(TestModelEvent.class , c -> {});
-
-
+        //TODO: implement lambda
     }
 }

@@ -14,7 +14,7 @@ public class CPU {
     private int ticksFromService = 0;
     private int processingTick;
 
-
+    //Constructor
     public CPU(int numberOfCores /**, Cluster cluster */) {
         this.numberOfCores = numberOfCores;
         this.cluster = Cluster.getInstance();
@@ -27,8 +27,9 @@ public class CPU {
      * @pre: dataBatch.isProcessed == false
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
+    //////// MAIN FUNCTION: process the databatch with ticks ////////
     public DataBatch process(DataBatch dataBatch) {
-        this.db = dataBatch;
+        this.db = dataBatch; //set the db the cpu currently working on
         switch (db.getData().getType()) {
             case Images:
                 processingTick = 32 / numberOfCores * 4 - ticksFromService;
@@ -59,6 +60,8 @@ public class CPU {
         return dataBatch;
     }
 
+    /////////////////////////////////////////////////////////////////////
+
     //////////// Getters ///////////
 
     public Cluster getCluster() {
@@ -71,6 +74,9 @@ public class CPU {
 
     ////////////////////////////////
 
+
+    // send to cluster processed databatch and then send to relevant GPU //
+
     /**
      * @param processedDataBatch
      * @pre: dataBatch.isProcessed == true
@@ -79,6 +85,8 @@ public class CPU {
     public void sendToCluster(DataBatch processedDataBatch) {
         this.cluster.sendToGPU(processedDataBatch);
     }
+    ///////////////////////////////////////////////////////////
+
 
     public boolean checkIfBusy() {
         if (db != null)
