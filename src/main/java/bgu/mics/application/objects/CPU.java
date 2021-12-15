@@ -38,7 +38,7 @@ public class CPU {
                 }
                 break;
             case Text:
-                processingTick = 32 / numberOfCores * 2 - ticksFromService;
+                processingTick = 32 / numberOfCores * 2 - ticksFromService; //TODO Start Tick,not stop checkc
                 if (processingTick == 0) {
                     ticksFromService = 0;
                     dataBatch.process();
