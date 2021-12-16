@@ -18,7 +18,7 @@ import java.util.Vector;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class CPUService extends MicroService {
-    protected int ticks;
+    private int ticks;
     private CPU cpu;
 
 
@@ -34,7 +34,7 @@ public class CPUService extends MicroService {
     @Override
     protected void initialize() {
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
-            updateTick();
+            updateTick(tickBroadCast);
         });
         System.out.println("CPU service running");
         while (!cpu.checkIfBusy()) {
@@ -50,14 +50,14 @@ public class CPUService extends MicroService {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            cpu.sendToCluster(cpu.process(tmpDataBatch));
+            //cpu.sendToCluster(cpu.process(tmpDataBatch));
         }
 
     }
 
-    public void updateTick() {
-        cpu.updateTick();
-        ticks++;
+    public void updateTick(TickBroadCast t) {
+        cpu.updateTick(t.getTick());
+        //ticks++;
     }
 
 
