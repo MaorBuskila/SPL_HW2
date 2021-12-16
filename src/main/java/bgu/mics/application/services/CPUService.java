@@ -60,7 +60,7 @@ public class CPUService extends MicroService {
         //ticks++;
     }
 
-
+//
 //    protected int getTick() {
 //        return ticks;
 //    } // for each cpu send tick and add to his time
