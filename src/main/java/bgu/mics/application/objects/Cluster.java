@@ -20,7 +20,11 @@ public class Cluster {
     private ConcurrentHashMap<DataBatch, GPU> dataBatchToGpu;
     private ConcurrentHashMap<CPU, BlockingQueue<DataBatch>> unProcessedQueues;
 
-
+   // private Vector<DataBatch> unProccessedData;
+    //public Vector<DataBatch> getNotProccesedData()
+   //{
+    //   return unProccessedData;
+   // }
     ///////////////////////////Statitics////////////////////////////////
 
     private Vector<String> trainedModels;

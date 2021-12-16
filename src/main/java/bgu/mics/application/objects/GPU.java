@@ -27,7 +27,7 @@ public class GPU {
     private Vector<DataBatch> allDataBatches; //seprated model data to databatch
     private Vector<DataBatch> vRam;
     private int currentProcessInVram;
-
+    private int ticksFromService;
 
     public GPU(String sType) {
 
@@ -49,7 +49,7 @@ public class GPU {
         this.cluster = Cluster.getInstance();
         cluster.addToGPUS(this);
         currentProcessInVram = 0;
-
+        ticksFromService=0;
     }
 
     /////////////////Getters///////////////////
@@ -110,6 +110,9 @@ public class GPU {
         vRam.add(proDB);
         currentProcessInVram += 1;
         notifyAll();
+    }
+    public void updateTick(int tick) {
+        this.ticksFromService = tick;
     }
 
     /////////////////////////////////////////////////////////////////

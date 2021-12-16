@@ -3,6 +3,7 @@ package bgu.mics.application.services;
 import bgu.mics.MessageBusImpl;
 import bgu.mics.MicroService;
 import bgu.mics.application.messages.TestModelEvent;
+import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.messages.TrainModelEvent;
 import bgu.mics.application.objects.Data;
 import bgu.mics.application.objects.GPU;
@@ -26,6 +27,10 @@ public class GPUService extends MicroService {
         super(name);
         this.gpu = gpu;
         // TODO Implement this
+    }
+    public void updateTick(TickBroadCast t) {
+        gpu.updateTick(t.getTick());
+        //ticks++;
     }
 
 
@@ -57,6 +62,9 @@ public class GPUService extends MicroService {
 
         });
         System.out.println("GPU service running");
+        subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
+            updateTick(tickBroadCast);
+        });
 
         subscribeEvent(TestModelEvent.class , (TestModelEvent testModelEvent) ->{
            //process instanly

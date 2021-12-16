@@ -88,6 +88,23 @@ public class CPU {
     ///////////////////////////////////////////////////////////
 
 
+    /**
+     * take databatch from cluster
+     *
+     * public void takeDataBatchCluster()
+     * {
+     *     if(cluster.
+     * }
+     *
+     */
+
+  //  {
+    //    if(!cluster.getNotProccesedData.isEmpty())
+     //       DataBatch db=cluster.getNotProccesedData.remove(0);
+      //      db.process();
+    //}
+
+
     public boolean checkIfBusy() {
         if (db != null)
             isBusy = true;
