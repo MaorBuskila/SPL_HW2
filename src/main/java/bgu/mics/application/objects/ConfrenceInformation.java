@@ -10,17 +10,26 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConfrenceInformation {
 
     private int ticksFromService;
-    private Vector<String> successfulEvents;
+    private Vector<Model> models;
     private String name;
     private int setDate;
 
-
+    //TODO Need Events Or NOT ??????????
     public ConfrenceInformation(String name, int setDate) {
         this.name = name;
         this.setDate = setDate;
         ticksFromService=0;
 
     }
+    public void addModel(Model model) // TODO Check when to add model
+    {
+        models.addElement(model);
+    }
+
+    public Vector<Model> getModels() {
+        return models;
+    }
+
     public void updateTick(int tick) {
         this.ticksFromService = tick;
     }

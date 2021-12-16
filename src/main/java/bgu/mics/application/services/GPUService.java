@@ -5,6 +5,7 @@ import bgu.mics.MicroService;
 import bgu.mics.application.messages.TestModelEvent;
 import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.messages.TrainModelEvent;
+import bgu.mics.application.objects.ConfrenceInformation;
 import bgu.mics.application.objects.Data;
 import bgu.mics.application.objects.GPU;
 import bgu.mics.application.objects.Model;
@@ -41,6 +42,7 @@ public class GPUService extends MicroService {
         subscribeEvent(TrainModelEvent.class , (TrainModelEvent trainModelEvent) -> {
             Model model = trainModelEvent.getModel();
             Data data = model.getData();
+            ConfrenceInformation.addModel(trainModelEvent.getFutureModel());
             gpu.divide((data));
             Thread t1=new Thread(()->{
                 while(!gpu.getAllDataBatches().isEmpty()) {

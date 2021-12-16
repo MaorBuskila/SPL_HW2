@@ -43,6 +43,11 @@ public class Model {
         this.status = Status.PreTrained;
 
     }
+    public boolean isGood()
+    {
+        return this.res==Result.Good;
+    }
+
 
     public String getName() {
         return name;
