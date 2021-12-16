@@ -36,7 +36,7 @@ public class GPUService extends MicroService {
 
 
 
-    // to do simultaneity : sendToCluster,getFromCluster,Train on vRAM
+    // to doo simultaneity : sendToCluster,getFromCluster,Train on vRAM
     @Override
     protected void initialize() { // just need to take responsibilty on time
         subscribeEvent(TrainModelEvent.class , (TrainModelEvent trainModelEvent) -> {
