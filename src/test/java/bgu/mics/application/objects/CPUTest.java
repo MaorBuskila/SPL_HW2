@@ -58,7 +58,6 @@ class CPUTest {
 
     @Test
     void testprocess() {
-
         Thread t1 = new Thread(() -> {
             cpuService.run();
         });

@@ -12,6 +12,19 @@ public class Model {
     private Result res;
     private Status status;
 
+    public Result getRes() {
+        return res;
+    }
+
+    public void setRes(String res) {
+        if(res=="Good")
+            this.res = Result.Good;
+        else if (res=="Bad")
+            this.res=Result.Bad;
+        else
+            this.res=Result.None;
+    }
+
     enum Status {
         PreTrained, Training, Trained, Tested
     }

@@ -15,6 +15,10 @@ public class Student extends StudentService {
     private int publications;
     private int papersRead;
 
+    public Degree getStatus() {
+        return status;
+    }
+
 
     // Enum representing the Degree the student is studying for.
     enum Degree {

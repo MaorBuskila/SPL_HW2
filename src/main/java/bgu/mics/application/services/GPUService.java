@@ -8,6 +8,8 @@ import bgu.mics.application.objects.Data;
 import bgu.mics.application.objects.GPU;
 import bgu.mics.application.objects.Model;
 
+impo
+
 /**
  * GPU service is responsible for handling the
  * {@link TrainModelEvent} and {@link TestModelEvent},
@@ -56,7 +58,27 @@ public class GPUService extends MicroService {
         });
         System.out.println("GPU service running");
 
-        subscribeEvent(TestModelEvent.class , c -> {});
+        subscribeEvent(TestModelEvent.class , (TestModelEvent testModelEvent) ->{
+           //process instanly
+
+            Model model=testModelEvent.getModel();
+            double x=Math.random();
+            //0.6 MSC
+            if(model.getStudent().getStatus()==MSc)
+            {
+                if(x<=0.6)
+                    model.setRes("Good");
+            }
+            else
+            {
+                if(x<=0.8)
+                    model.setRes("Good");
+            }
+            model.setStatus("Tested");
+            MessageBusImpl.getInstance().complete(testModelEvent,model.getRes());
+                }
+
+        );
         //TODO: implement lambda
     }
 }
