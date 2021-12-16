@@ -40,7 +40,7 @@ public class ConferenceService extends MicroService {
     protected void initialize() {
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             updateTick(tickBroadCast);
-            ticks++;
+
         });
 
         subscribeBroadcast(PublishResultEvent.class, (PublishResultEvent publishResultEvent) -> {

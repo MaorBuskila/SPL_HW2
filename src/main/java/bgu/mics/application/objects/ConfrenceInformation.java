@@ -12,14 +12,21 @@ public class ConfrenceInformation {
     private int ticksFromService;
     private Vector<String> successfulEvents;
     private String name;
-    private int date;
+    private int setDate;
 
-    public ConfrenceInformation(String name, int date) {
+
+    public ConfrenceInformation(String name, int setDate) {
         this.name = name;
-        this.date = date;
+        this.setDate = setDate;
         ticksFromService=0;
+
     }
     public void updateTick(int tick) {
         this.ticksFromService = tick;
+    }
+
+    public boolean needToPublish()
+    {
+        return this.setDate==ticksFromService;
     }
 }
