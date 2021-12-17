@@ -150,7 +150,7 @@ public class GPU {
             {
                 int trainingTime=4;
             }
-            this.ticksFromService=0
+            this.ticksFromService=0;
             dataBatch.train();
             dataBatch.getData().updateProcessed();
             currentProcessInVram -= 1;

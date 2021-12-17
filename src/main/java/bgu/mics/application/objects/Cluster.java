@@ -29,10 +29,8 @@ public class Cluster {
 
     private Vector<String> trainedModels;
     private int totalDataBatchProcessedCpu; // TODO: CHECK
-    //private ConcurrentHashMap<CPU, Integer> cpuTimeUnitUsed;
     private int cpuTimeUnitUsed;
     private int gpuTimeUnitUsed;
-    //private ConcurrentHashMap<GPU, Integer> gpuTimeUnitUsed;
     private static Cluster cluster = null;
 
     //Constructor
@@ -43,8 +41,6 @@ public class Cluster {
         unProcessedQueues = new ConcurrentHashMap<>();
         //	processedBatch=new LinkedBlockingQueue<>();
         trainedModels = new Vector<>();
-       // cpuTimeUnitUsed = new ConcurrentHashMap<>();
-        //gpuTimeUnitUsed = new ConcurrentHashMap<>();
         cpuTimeUnitUsed=0;
         gpuTimeUnitUsed=0;
         totalDataBatchProcessedCpu = 0;
