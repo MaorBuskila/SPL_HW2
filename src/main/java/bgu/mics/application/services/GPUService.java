@@ -62,6 +62,9 @@ public class GPUService extends MicroService {
                 complete(trainModelEvent,model);
 
         });
+        subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
+            this.terminate();
+        });
         System.out.println("GPU service running");
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             updateTick(tickBroadCast);

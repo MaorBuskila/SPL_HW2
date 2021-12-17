@@ -25,7 +25,6 @@ public class TimeService extends MicroService{
 		this.speed=speed;
 		this.duration=duration;
 	}
-
 	@Override
 	protected void initialize() {
 		while(time < duration) {
@@ -34,10 +33,10 @@ public class TimeService extends MicroService{
 			try {
 				wait(speed);
 			} catch (InterruptedException e) {
-
 			}
 		}
 		MessageBusImpl.getInstance().sendBroadcast(new TerminateBroadcast());
+		terminate();
 	}
 
 }

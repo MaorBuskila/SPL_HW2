@@ -1,6 +1,8 @@
 package bgu.mics.application.messages;
 
-public class PublishConferenceBroadcast {
+import bgu.mics.Broadcast;
+
+public class PublishConferenceBroadcast implements Broadcast {
     private String senderName;
     private static int priority = 2;
     public PublishConferenceBroadcast(String senderName){
@@ -9,5 +11,10 @@ public class PublishConferenceBroadcast {
     }
     public String getSenderName() {
         return senderName;
+    }
+
+    @Override
+    public int getPriority() {
+        return priority;
     }
 }

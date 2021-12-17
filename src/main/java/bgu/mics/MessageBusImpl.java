@@ -99,13 +99,12 @@ public class MessageBusImpl implements MessageBus {
                 //TODO: check if we need to change the order
                 //the roundrubin work for all MicroSerivec
                 MicroService m = subscribedEvents.get(e.getClass()).firstElement();
-                queueMap.get(m).add(e);
+                queueMap.get(m).put(e);
                 subscribedEvents.get(e.getClass()).addElement(m);
                 subscribedEvents.get(e.getClass()).remove(0);
 
                 return future;
             }
-
     }
 
     @Override
