@@ -13,7 +13,7 @@ import java.util.Queue;
 import java.util.Vector;
 
 /**
- * CPU service is responsible for handling the {@link DataPreProcessEvent}.
+ * CPU service is responsible for handling the
  * This class may not hold references for objects which it is not responsible for.
  * <p>
  * You can add private fields and public methods to this class.
@@ -39,7 +39,7 @@ public class CPUService extends MicroService {
             updateTick(tickBroadCast);
         });
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
-            Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
+      //      Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
             this.terminate();
         });
         System.out.println( cpu.getName() + " Service Running");

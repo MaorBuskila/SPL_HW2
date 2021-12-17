@@ -9,9 +9,9 @@ import java.util.Vector;
  * Passive object representing single student.
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
-public class Student extends StudentService {
+public class Student {
 
-    private int name;
+    private String name;
     private String department;
     private Degree status;
     private int publications;
@@ -33,7 +33,7 @@ public class Student extends StudentService {
 
     //Constructor
     public Student(String name, String department, String sStatus, Model[] models) {
-        super(name);
+        this.name=name;
         this.department = department;
         if (sStatus.equals("MSc"))
             this.status = Degree.MSc;
@@ -46,6 +46,10 @@ public class Student extends StudentService {
     public Model[] getModels()
     {
         return models;
+    }
+    public String getName()
+    {
+        return name;
     }
 
 

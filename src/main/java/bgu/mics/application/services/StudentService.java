@@ -7,7 +7,7 @@ import bgu.mics.application.objects.Student;
 
 /**
  * Student is responsible for sending the {@link TrainModelEvent},
- * {@link TestModelEvent} and {@link PublishResultsEvent}.
+ * {@link TestModelEvent} and
  * In addition, it must sign up for the conference publication broadcasts.
  * This class may not hold references for objects which it is not responsible for.
  *
@@ -34,7 +34,7 @@ public class StudentService extends MicroService {
             while(student.getModels()[i].getStatus()!="Trained")
             {}
            // if(student.getModels()[i].getStatus()=="Trained")
-            MessageBusImpl.getInstance().sendEvent(new TestModelEvent(student.getModels()[i], "TestModel" + String.valueOf(i))));
+            MessageBusImpl.getInstance().sendEvent(new TestModelEvent(student.getModels()[i], "TestModel" + String.valueOf(i)));
             while(student.getModels()[i].getStatus()!="Tested")
             {}
             //if(student.getModels()[i].getStatus()=="Tested" && student.getModels()[i].isGood()) // TODO WHILE OR IF

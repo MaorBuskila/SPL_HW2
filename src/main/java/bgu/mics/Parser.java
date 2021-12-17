@@ -101,9 +101,10 @@ public class Parser {
 
             for(JsonElement CPUElement : JsonArrayOfCpu){
                 int cores = CPUElement.getAsInt();
-                CPU cpu=new CPU(cores);
-                String cName="CPUSERVICE" + String.valueOf(counterOfCPU);
-                CPUService cps=new CPUService(cName,cpu);
+                String cName= "CPU" +String.valueOf(counterOfCPU);
+                CPU cpu=new CPU(cName,cores);
+                String cServiceName="CPUSERVICE" + String.valueOf(counterOfCPU);
+                CPUService cps=new CPUService(cServiceName,cpu);
                CPUArray[counterOfCPU] = cpu;
                 counterOfCPU++;
             }

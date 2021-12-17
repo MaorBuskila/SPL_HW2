@@ -44,4 +44,8 @@ public class ConfrenceInformation {
     public int getSetDate() {
         return setDate;
     }
+    public String getName()
+    {
+        return name;
+    }
 }

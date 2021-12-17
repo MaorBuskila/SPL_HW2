@@ -160,14 +160,14 @@ public class Cluster {
 
     public void addToCPUs(CPU cpu) {
         CPUs.addElement(cpu); // add Cpu to vector CPUs
-        cpuTimeUnitUsed.put(cpu, 0); //Initialize time unit used for CPU
+     //   cpuTimeUnitUsed.put(cpu, 0); //Initialize time unit used for CPU
         BlockingQueue<DataBatch> q = new LinkedBlockingQueue<>(); //Initialize queue for each CPU
         unProcessedQueues.put(cpu, q);
     }
 
     public void addToGPUS(GPU gpu) {
         gpus.addElement(gpu);
-        gpuTimeUnitUsed.put(gpu, 0);
+      //  gpuTimeUnitUsed.put(gpu, 0);
     }
     ///////////////////////////////////////////////////////////
 }
