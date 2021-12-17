@@ -28,14 +28,15 @@ public class CPU {
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
     //////// MAIN FUNCTION: process the databatch with ticks ////////
-    public DataBatch process(DataBatch dataBatch) {
+    public DataBatch process(DataBatch dataBatch) { // TODO CHANGE TICKINGS
         this.db = dataBatch; //set the db the cpu currently working on
-        switch (db.getData().getType()) {
+        switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
             case Images:
                 processingTick = 32 / numberOfCores * 4 - ticksFromService;
                 if (processingTick == 0) {
                     ticksFromService = 0;
                     dataBatch.process();
+                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
                 }
                 break;
             case Text:
@@ -43,6 +44,8 @@ public class CPU {
                 if (processingTick == 0) {
                     ticksFromService = 0;
                     dataBatch.process();
+                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
+
 
                 }
                 break;
@@ -51,6 +54,8 @@ public class CPU {
                 if (processingTick == 0) {
                     ticksFromService = 0;
                     dataBatch.process();
+                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
+
                 }
                 break;
         }
@@ -87,7 +92,6 @@ public class CPU {
     }
     ///////////////////////////////////////////////////////////
 
-
     /**
      * take databatch from cluster
      *
@@ -100,11 +104,9 @@ public class CPU {
 
   //  {
     //    if(!cluster.getNotProccesedData.isEmpty())
-     //       DataBatch db=cluster.getNotProccesedData.remove(0);
-      //      db.process();
+   //         DataBatch db=cluster.getNotProccesedData.remove(0);
+     //       db.process();
     //}
-
-
     public boolean checkIfBusy() {
         if (db != null)
             isBusy = true;
@@ -117,9 +119,9 @@ public class CPU {
         this.ticksFromService = tick;
     }
 
-    public void updateProcessingTick() {
-        processingTick++;
-    }
+//    public void updateProcessingTick() {
+//        processingTick++;
+//    }
 }
 
 

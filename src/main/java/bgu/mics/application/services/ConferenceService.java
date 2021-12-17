@@ -22,13 +22,11 @@ import java.util.Vector;
  */
 public class ConferenceService extends MicroService {
 
-    Vector<String> successfulEvents;
     private ConfrenceInformation conf;
     private int ticks;
     public ConferenceService(String name,ConfrenceInformation conf) {
         super(name);
         this.conf=conf;
-        successfulEvents=new Vector<>();
         ticks=0;
         // TODO Implement this
     }
@@ -48,10 +46,9 @@ public class ConferenceService extends MicroService {
             this.terminate();
         });
 
-//        subscribeBroadcast(PublishResultEvent.class, (PublishResultEvent publishResultEvent) -> {
-//            MessageBus msgbus= MessageBusImpl.getInstance();
-//            successfulEvents=msgbus.getSuccessfulEvents(); // TODO : JUST 1 STUDENT OR ALL
-//        });
+        subscribeEvent(PublishResultEvent.class, (PublishResultEvent publishResultEvent) -> {
+            conf.addModel(publishResultEvent.getModel());
+        });
         // TODO Implement this
 
     }

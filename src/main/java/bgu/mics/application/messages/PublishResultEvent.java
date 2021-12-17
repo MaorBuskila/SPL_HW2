@@ -9,5 +9,9 @@ public class PublishResultEvent{
     {
         this.m=m;
     }
+    public Model getModel()
+    {
+        return this.m;
+    }
 
 }

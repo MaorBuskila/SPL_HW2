@@ -9,6 +9,8 @@ import bgu.mics.application.objects.*;
 import bgu.mics.application.services.GPUService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 
@@ -70,5 +72,61 @@ public class  CRMSRunner {
 //                System.out.println(z2.getData().getSize());
 //            }
 //        }
+
+        /*
+        Outputs ::
+         */
+
+
+        File output = new File("output.txt");//
+        FileWriter myWriter = null;
+        try {
+            myWriter = new FileWriter(output);
+
+            //writing the students into the output output
+            myWriter.write("{\n\t\"students\": [");
+            for (int i = 0; i < reader.getStudents().length; i++) {
+                myWriter.write("\n\t\t{\n\t\t");
+                myWriter.write(reader.getStudents().get(i).toString());
+                myWriter.write("\n\t\t");
+                if ( i < reader.getStudents().size() - 1 )
+                    myWriter.write(",");
+                myWriter.write("\n");
+            }
+            myWriter.write("\n\t],\n");
+
+            //writing the conferences into the output output
+            myWriter.write("\t\"conferences\": [\n");
+            for (int i = 0; i < reader.getConfrenceInformations().length(); i++){
+                myWriter.write("\t{\n\t\t");
+                myWriter.write(reader.getConfrenceInformations().get(i).toString());
+                myWriter.write("\n\t}");
+                if ( i < reader.getConfrenceInformations().size() - 1 )
+                    myWriter.write(",");
+                myWriter.write("\n");
+            }
+            myWriter.write("\t],\n");
+
+            //writing the entire data
+            myWriter.write("\t\"cpuTimeUsed\": ");
+            myWriter.write(Integer.toString(cpuTimeUsed));
+            myWriter.write(",\n");
+
+            myWriter.write("\t\"gpuTimeUsed\": ");
+            myWriter.write(Integer.toString(gpuTimeUsed));
+            myWriter.write(",\n");
+
+            myWriter.write("\t\"batchesProcessed\": ");
+            myWriter.write(Integer.toString(batchesProcessed));
+            myWriter.write(",\n");
+
+            myWriter.write("}");
+
+            myWriter.flush();
+            myWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     }
 }

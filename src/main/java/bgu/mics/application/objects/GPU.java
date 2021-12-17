@@ -28,6 +28,7 @@ public class GPU {
     private Vector<DataBatch> vRam;
     private int currentProcessInVram;
     private int ticksFromService;
+    private int totalTicks;
 
     public GPU(String sType) {
 
@@ -139,6 +140,18 @@ public class GPU {
             }
             DataBatch dataBatch = vRam.remove(0);
             //training...
+            if(this.getType()==Type.RTX3090)
+            {
+                int trainingTime=1;
+            }
+            else if (this.getType()==Type.RTX2080) {
+                int trainingTime=2;
+            }
+            else
+            {
+                int trainingTime=4;
+            }
+            this.ticksFromService=0
             dataBatch.train();
             dataBatch.getData().updateProcessed();
             currentProcessInVram -= 1;
