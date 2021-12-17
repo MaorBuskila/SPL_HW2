@@ -59,7 +59,7 @@ public class GPUService extends MicroService {
            t1.start();
            t2.start();
 
-           if(!t1.isAlive() && !t2.isAlive())
+           if(gpu.finishTrain())
                 complete(trainModelEvent,model);
 
         });
@@ -70,6 +70,7 @@ public class GPUService extends MicroService {
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             updateTick(tickBroadCast);
         });
+
 
         subscribeEvent(TestModelEvent.class , (TestModelEvent testModelEvent) ->{
            //process instanly
@@ -96,6 +97,7 @@ public class GPUService extends MicroService {
                 }
 
         );
-        //TODO: implement lambda
+
+
     }
 }

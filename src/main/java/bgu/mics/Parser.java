@@ -84,7 +84,7 @@ public class Parser {
             }
             //*********************** getting GPUs ***********************
             JsonArray JsonArrayOfGpu = fileObject.get("GPUS").getAsJsonArray();
-            GPU[] Array = new GPU[JsonArrayOfGpu.size()];
+            GPUArray = new GPU[JsonArrayOfGpu.size()];
 
             for(JsonElement GPUElement : JsonArrayOfGpu){
                 String type = GPUElement.getAsString();

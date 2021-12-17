@@ -23,8 +23,9 @@ public class GPU {
     private Type type;
     private Model model;
     private Cluster cluster;
-    // private ConcurrentHashMap <Event, Model >  modelEvents;
+    private int trainingTime;
     private Vector<DataBatch> allDataBatches; //seprated model data to databatch
+    private int totalCurrentModelTrained;
     private Vector<DataBatch> vRam;
     private int currentProcessInVram;
     private int ticksFromService;
@@ -50,6 +51,7 @@ public class GPU {
         cluster.addToGPUS(this);
         currentProcessInVram = 0;
         ticksFromService=0;
+        totalCurrentModelTrained = 0;
     }
 
     /////////////////Getters///////////////////
@@ -129,7 +131,6 @@ public class GPU {
 
         while (model.getData().getProcessed() < model.getData().getSize()) {
             //need to synchorized vRAM ?
-            //try to take nonstop
             while (vRam.isEmpty()) {
                 try {
                     wait();
@@ -138,27 +139,62 @@ public class GPU {
                 }
             }
             DataBatch dataBatch = vRam.remove(0);
+            switch (this.type){
+                case RTX3090:
+                    trainingTime = 1 - ticksFromService;
+                    if (trainingTime == 0){
+                        trainFunction(dataBatch);
+                    }
+                case RTX2080:
+                    trainingTime = 2 - ticksFromService;
+                    if (trainingTime == 0){
+                        trainFunction(dataBatch);
+                    }
+                case GTX1080:
+                    trainingTime = 4 - ticksFromService;
+                    if (trainingTime == 0){
+                        trainFunction(dataBatch);
+                    }
+
+
+
+            }
+
+
 
             //training...
-            if(model.getStatus()=="PreTrained")
-                model.setStatus("Training");
-            if(this.getType()==Type.RTX3090)
-            {
-                int trainingTime=1;
-            }
-            else if (this.getType()==Type.RTX2080) {
-                int trainingTime=2;
-            }
-            else
-            {
-                int trainingTime=4;
-            }
-            this.ticksFromService=0;
-            dataBatch.train();
-            dataBatch.getData().updateProcessed();
-            currentProcessInVram -= 1;
+//            if(model.getStatus()=="PreTrained")
+//                model.setStatus("Training");
+//            if(this.getType()==Type.RTX3090) {
+//                int trainingTime=1;
+//            }
+//            else if (this.getType()==Type.RTX2080) {
+//                int trainingTime=2;
+//            }
+//            else {
+//                int trainingTime=4;
+//            }
+//            this.ticksFromService=0;
+//            dataBatch.train();
         }
-        model.setStatus("Trained");
+
+    }
+    public void trainFunction(DataBatch dataBatch){
+        ticksFromService =0;
+        vRam.firstElement().train();
+        vRam.removeElementAt(0);
+        dataBatch.getData().updateProcessed();
+        currentProcessInVram -= 1;
+        totalCurrentModelTrained +=1;
+    }
+
+    public boolean finishTrain(){
+        if(totalCurrentModelTrained == allDataBatches.size()) {
+            totalCurrentModelTrained = 0;
+            return true;
+        }
+        else
+            return false;
     }
     ///////////////////////////////////////////////////////////////////
 
