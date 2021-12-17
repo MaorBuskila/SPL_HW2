@@ -2,6 +2,7 @@ package bgu.mics.application.services;
 
 import bgu.mics.MicroService;
 import bgu.mics.application.messages.PublishConferenceBroadcast;
+import bgu.mics.application.messages.TerminateBroadcast;
 import bgu.mics.application.objects.Student;
 
 /**

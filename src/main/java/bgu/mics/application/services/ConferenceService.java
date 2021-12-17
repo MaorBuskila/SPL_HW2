@@ -4,6 +4,7 @@ import bgu.mics.MessageBus;
 import bgu.mics.MessageBusImpl;
 import bgu.mics.MicroService;
 import bgu.mics.application.messages.PublishResultEvent;
+import bgu.mics.application.messages.TerminateBroadcast;
 import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.objects.ConfrenceInformation;
 
