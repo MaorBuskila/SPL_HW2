@@ -4,7 +4,7 @@ import bgu.mics.Event;
 import bgu.mics.Future;
 import bgu.mics.application.objects.Model;
 
-public class TestModelEvent  implements Event<Model> {
+public class TestModelEvent implements Event<Model> {
     private static int priority = 1;
     private Model m;
     private String name;
@@ -29,5 +29,10 @@ public class TestModelEvent  implements Event<Model> {
     }
     public Model getFutureModel() {
         return this.f.get();
+    }
+
+    @Override
+    public int getPriority() {
+        return priority;
     }
 }

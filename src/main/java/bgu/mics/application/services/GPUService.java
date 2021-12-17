@@ -10,7 +10,6 @@ import bgu.mics.application.objects.Data;
 import bgu.mics.application.objects.GPU;
 import bgu.mics.application.objects.Model;
 
-impo
 
 /**
  * GPU service is responsible for handling the
@@ -42,14 +41,14 @@ public class GPUService extends MicroService {
         subscribeEvent(TrainModelEvent.class , (TrainModelEvent trainModelEvent) -> {
             Model model = trainModelEvent.getModel();
             Data data = model.getData();
-            ConfrenceInformation.addModel(trainModelEvent.getFutureModel());
+           // ConfrenceInformation.addModel(trainModelEvent.getFutureModel()); //Todo : need change to static?
             gpu.divide((data));
             Thread t1=new Thread(()->{
                 while(!gpu.getAllDataBatches().isEmpty()) {
                     int freeSpace = gpu.getvRam().size() - gpu.getCurrentProcessInVram();
                     for (int i = 0; i<freeSpace;i++)
                     {
-                        gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0)); // TODO CHECK IF REMOVEWORK
+                        gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0)); // TODO CHECK IF REMOVE WORK?
                     }
                 }
             });

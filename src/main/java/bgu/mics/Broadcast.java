@@ -7,4 +7,5 @@ package bgu.mics;
  */
 public interface Broadcast extends Message {
 
+
 }

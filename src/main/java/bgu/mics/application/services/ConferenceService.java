@@ -43,12 +43,10 @@ public class ConferenceService extends MicroService {
 
         });
 
-        subscribeBroadcast(PublishResultEvent.class, (PublishResultEvent publishResultEvent) -> {
-
-
-            MessageBus msgbus= MessageBusImpl.getInstance();
-            successfulEvents=msgbus.getSuccessfulEvents(); // TODO : JUST 1 STUDENT OR ALL
-        });
+//        subscribeBroadcast(PublishResultEvent.class, (PublishResultEvent publishResultEvent) -> {
+//            MessageBus msgbus= MessageBusImpl.getInstance();
+//            successfulEvents=msgbus.getSuccessfulEvents(); // TODO : JUST 1 STUDENT OR ALL
+//        });
         // TODO Implement this
 
     }

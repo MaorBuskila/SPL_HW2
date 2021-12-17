@@ -22,9 +22,9 @@ public class StudentService extends MicroService {
     @Override
     protected void initialize() {
 
-        subscribeBroadcast(PublishConferenceBroadcast.class,(PublishConferenceBroadcast publish)->{
-            // TODO: Implement this
-        });
+//        subscribeBroadcast(PublishConferenceBroadcast.class,(PublishConferenceBroadcast publish)->{
+//            // TODO: Implement this
+//        });
 
     }
 }

@@ -2,7 +2,7 @@ package bgu.mics.example.messages;
 
 import bgu.mics.Event;
 
-public class ExampleEvent implements Event<String> {
+public class ExampleEvent {//implements Event<String> {
 
     private String senderName;
 
@@ -13,4 +13,9 @@ public class ExampleEvent implements Event<String> {
     public String getSenderName() {
         return senderName;
     }
+
+//    @Override
+//    public int getPriority() {
+//        return priority;
+//    }
 }

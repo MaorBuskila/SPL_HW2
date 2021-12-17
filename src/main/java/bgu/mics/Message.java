@@ -1,7 +1,5 @@
 package bgu.mics;
 
-import java.util.Comparator;
-
 /**
  * A message is a data-object which is passed between micro-services as a means
  * of communication. The Message interface is a "Marker" interface which means
@@ -10,17 +8,5 @@ import java.util.Comparator;
  * the {@link MessageBus}) must implement it.
  */
 public interface Message {
-    int priority;
-    class compareBypriortiy implements Comparator<Message> {
-
-    }
-
-        // Method
-        // Sorting in ascending order of roll number
-        public int compare(Message a, Message b)
-        {
-
-            return a.rollno - b.rollno;
-        }
-
+    int getPriority();
 }

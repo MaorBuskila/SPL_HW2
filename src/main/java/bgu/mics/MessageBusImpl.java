@@ -1,13 +1,8 @@
 package bgu.mics;
 
-import javafx.scene.layout.Priority;
-
-import java.util.Iterator;
 import java.util.Queue;
 import java.util.Vector;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /**
@@ -115,7 +110,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void register(MicroService m) {
-        PriorityBlockingQueue<Message> queue = new PriorityBlockingQueue<>();
+        PriorityBlockingQueue<Message> queue = new PriorityBlockingQueue<>(10, new MessageComparatorByPriority());
         queueMap.put(m, queue);
     }
 
