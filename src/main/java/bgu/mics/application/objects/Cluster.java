@@ -20,11 +20,6 @@ public class Cluster {
     private ConcurrentHashMap<DataBatch, GPU> dataBatchToGpu;
     private ConcurrentHashMap<CPU, BlockingQueue<DataBatch>> unProcessedQueues;
 
-   // private Vector<DataBatch> unProccessedData;
-    //public Vector<DataBatch> getNotProccesedData()
-   //{
-    //   return unProccessedData;
-   // }
     ///////////////////////////Statitics////////////////////////////////
 
     private Vector<String> trainedModels;
@@ -74,11 +69,7 @@ public class Cluster {
         trainedModels.addElement(name);
     }
 
-//    public void addCpuTimeUnitUsed(CPU cpu1) {
-//        Integer x = cpuTimeUnitUsed.get(cpu1);
-//        x++;
-//        cpuTimeUnitUsed.replace(cpu1, x); // TODO Check how to simplify this
-//    }
+
     public void addCpuTimeUnitUsed(int timeByCpu)
     {
         this.cpuTimeUnitUsed+=timeByCpu;
@@ -114,7 +105,6 @@ public class Cluster {
 
     public void sendToGPU(DataBatch dataBatch) {
         synchronized (this.dataBatchToGpu) {
-
             dataBatchToGpu.get(dataBatch).reciveProcessedDataBatch(dataBatch);
             dataBatchToGpu.remove(dataBatch);
         }
@@ -160,14 +150,12 @@ public class Cluster {
 
     public void addToCPUs(CPU cpu) {
         CPUs.addElement(cpu); // add Cpu to vector CPUs
-        cpuTimeUnitUsed.put(cpu, 0); //Initialize time unit used for CPU
         BlockingQueue<DataBatch> q = new LinkedBlockingQueue<>(); //Initialize queue for each CPU
         unProcessedQueues.put(cpu, q);
     }
 
     public void addToGPUS(GPU gpu) {
         gpus.addElement(gpu);
-        gpuTimeUnitUsed.put(gpu, 0);
     }
     ///////////////////////////////////////////////////////////
 }

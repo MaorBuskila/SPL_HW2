@@ -39,7 +39,7 @@ public class CPUService extends MicroService {
             updateTick(tickBroadCast);
         });
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
-            Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
+        //    Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
             this.terminate();
         });
         System.out.println( cpu.getName() + " Service Running");
