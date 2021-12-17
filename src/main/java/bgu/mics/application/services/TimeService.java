@@ -37,7 +37,7 @@ public class TimeService extends MicroService{
 
 			}
 		}
-		//MessageBusImpl.getInstance().sendBroadcast(new TerminateBroadcast());
+		MessageBusImpl.getInstance().sendBroadcast(new TerminateBroadcast());
 	}
 
 }

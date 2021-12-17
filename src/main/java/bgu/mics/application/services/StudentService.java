@@ -2,6 +2,7 @@ package bgu.mics.application.services;
 
 import bgu.mics.MicroService;
 import bgu.mics.application.messages.PublishConferenceBroadcast;
+import bgu.mics.application.objects.Student;
 
 /**
  * Student is responsible for sending the {@link TrainModelEvent},
@@ -14,8 +15,11 @@ import bgu.mics.application.messages.PublishConferenceBroadcast;
  */
 public class StudentService extends MicroService {
 
-    public StudentService(String name) {
+    private Student student;
+
+    public StudentService(String name,Student student) {
         super(name);
+        this.student=student;
         // TODO Implement this
     }
 
