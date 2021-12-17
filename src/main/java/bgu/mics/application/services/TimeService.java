@@ -25,8 +25,8 @@ public class TimeService extends MicroService{
 	private java.util.Timer timer;
 
 
-	public TimeService(String name, int speed, int duration) {
-		super(name);
+	public TimeService( int speed, int duration) {
+		super("TimeService");
 		time = 0;
 		this.speed=speed;
 		this.duration=duration;

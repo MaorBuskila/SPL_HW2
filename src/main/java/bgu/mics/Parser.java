@@ -1,6 +1,7 @@
 package bgu.mics;
 
 import bgu.mics.application.objects.*;
+import bgu.mics.application.services.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -73,27 +74,38 @@ public class Parser {
                     counterOfModel++;
                 }
                 counterOfModel = 0;
-                students[counterOfStudents]= (new Student(name,department,status,models));
+                Student student= new Student(name,department, status,models);
+                String sSname=name+" SERVICE";
+                StudentService studentService= new StudentService(sSname,student);
+                students[counterOfStudents]=student;
                 ListOfArraysOfModels.add(models);
                 counterOfStudents++;
 
             }
             //*********************** getting GPUs ***********************
             JsonArray JsonArrayOfGpu = fileObject.get("GPUS").getAsJsonArray();
-            GPUArray = new GPU[JsonArrayOfGpu.size()];
+            GPU[] Array = new GPU[JsonArrayOfGpu.size()];
 
             for(JsonElement GPUElement : JsonArrayOfGpu){
                 String type = GPUElement.getAsString();
-                GPUArray[counterOfGPU] = new GPU(type);
+                GPU gpu=new GPU(type);
+                String gName=type + " SERVICE";
+                GPUService gps=new GPUService(gName,gpu);
+                GPUArray[counterOfGPU] = gpu;
                 counterOfGPU++;
             }
             //****************** getting CPUs ***********************
             JsonArray JsonArrayOfCpu = fileObject.get("CPUS").getAsJsonArray();
+
             CPUArray = new CPU[JsonArrayOfCpu.size()];
 
             for(JsonElement CPUElement : JsonArrayOfCpu){
                 int cores = CPUElement.getAsInt();
-                CPUArray[counterOfCPU] = new CPU("CPU" + counterOfCPU , cores);
+                String cName= "CPU" +String.valueOf(counterOfCPU);
+                CPU cpu=new CPU(cName,cores);
+                String cServiceName="CPUSERVICE" + String.valueOf(counterOfCPU);
+                CPUService cps=new CPUService(cServiceName,cpu);
+               CPUArray[counterOfCPU] = cpu;
                 counterOfCPU++;
             }
             //*********************** getting Conferences***********************
@@ -103,12 +115,15 @@ public class Parser {
                 JsonObject ConferenceJsonObject = ConferenceElement.getAsJsonObject();
                 String name = ConferenceJsonObject.get("name").getAsString();
                 int date = Integer.parseInt(ConferenceJsonObject.get("date").getAsString());
-                confrenceInformations[counterOfConfernces] = new ConfrenceInformation(name,date);
+                ConfrenceInformation conf=new ConfrenceInformation(name,date);
+                confrenceInformations[counterOfConfernces] = conf;
+                ConferenceService confService=new ConferenceService(name +"Service",conf);
                 counterOfConfernces++;
             }
             //*********************** getting TickTime&Duration ***********************
             TickTime = Integer.parseInt(fileObject.get("TickTime").getAsString());
             Duration = Integer.parseInt(fileObject.get("Duration").getAsString());
+            TimeService timeService=new TimeService(50,5500);
         }catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -59,7 +59,7 @@ public class  CRMSRunner {
              * instantiating the micro - services
              */
 
-            MicroService timer = new TimeService("timer", TickTime , Duration);
+            MicroService timer = new TimeService(TickTime , Duration);
             for (int i=0 ;i< studentServices.length ; i++){
                 MicroService tmpservice = new StudentService(studentArray[i].getName() , studentArray[i]);
                 studentServices[i] = new Thread(tmpservice);

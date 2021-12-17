@@ -3,6 +3,7 @@ package bgu.mics.application.services;
 import bgu.mics.MessageBus;
 import bgu.mics.MessageBusImpl;
 import bgu.mics.MicroService;
+import bgu.mics.application.messages.PublishConferenceBroadcast;
 import bgu.mics.application.messages.PublishResultEvent;
 import bgu.mics.application.messages.TerminateBroadcast;
 import bgu.mics.application.messages.TickBroadCast;
@@ -46,9 +47,13 @@ public class ConferenceService extends MicroService {
             this.terminate();
         });
 
-//        subscribeEvent(PublishResultEvent.class, (PublishResultEvent publishResultEvent) -> {
-//            conf.addModel(publishResultEvent.getModel());
-//        });
+        subscribeEvent(PublishResultEvent.class, (PublishResultEvent publishResultEvent)-> {
+            conf.addModel(publishResultEvent.getModel());
+        });
+
+        if(ticks==conf.getSetDate())
+            MessageBusImpl.getInstance().sendBroadcast(new PublishConferenceBroadcast("Publish"));
+
         // TODO Implement this
 
     }

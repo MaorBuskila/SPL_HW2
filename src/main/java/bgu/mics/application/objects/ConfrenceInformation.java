@@ -19,6 +19,7 @@ public class ConfrenceInformation {
         this.name = name;
         this.setDate = setDate;
         ticksFromService=0;
+        models=new Vector<>();
 
     }
 
@@ -27,7 +28,7 @@ public class ConfrenceInformation {
        models.addElement(model);
     }
 
-    public Vector<Model> getSuccessfulModels() {
+    public Vector<Model> getModels() {
         return models;
     }
 
@@ -40,7 +41,11 @@ public class ConfrenceInformation {
         return this.setDate==ticksFromService;
     }
 
-    public String getName() {
+    public int getSetDate() {
+        return setDate;
+    }
+    public String getName()
+    {
         return name;
     }
 }

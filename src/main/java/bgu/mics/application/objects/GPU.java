@@ -138,7 +138,10 @@ public class GPU {
                 }
             }
             DataBatch dataBatch = vRam.remove(0);
+
             //training...
+            if(model.getStatus()=="PreTrained")
+                model.setStatus("Training");
             if(this.getType()==Type.RTX3090)
             {
                 int trainingTime=1;
@@ -155,6 +158,7 @@ public class GPU {
             dataBatch.getData().updateProcessed();
             currentProcessInVram -= 1;
         }
+        model.setStatus("Trained");
     }
     ///////////////////////////////////////////////////////////////////
 
