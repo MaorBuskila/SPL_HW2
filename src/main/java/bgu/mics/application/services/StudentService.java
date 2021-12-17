@@ -25,6 +25,9 @@ public class StudentService extends MicroService {
 //        subscribeBroadcast(PublishConferenceBroadcast.class,(PublishConferenceBroadcast publish)->{
 //            // TODO: Implement this
 //        });
+        subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
+            this.terminate();
+        });
 
     }
 }
