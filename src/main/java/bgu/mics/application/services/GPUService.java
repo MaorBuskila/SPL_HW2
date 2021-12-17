@@ -60,7 +60,7 @@ public class GPUService extends MicroService {
            t2.start();
 
            if(!t1.isAlive() && !t2.isAlive())
-                MessageBusImpl.getInstance().complete(trainModelEvent,model);
+                complete(trainModelEvent,model);
 
         });
         System.out.println("GPU service running");
@@ -74,7 +74,7 @@ public class GPUService extends MicroService {
             Model model=testModelEvent.getModel();
             double x=Math.random();
             //0.6 MSC
-            if(model.getStudent().getStatus()==MSc)
+            if(model.getStudent().getStatus().equals("Msc"))
             {
                 if(x<=0.6)
                     model.setRes("Good");
@@ -85,7 +85,7 @@ public class GPUService extends MicroService {
                     model.setRes("Good");
             }
             model.setStatus("Tested");
-            MessageBusImpl.getInstance().complete(testModelEvent,model.getRes());
+            complete(testModelEvent, model);
                 }
 
         );

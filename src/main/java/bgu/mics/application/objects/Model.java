@@ -25,8 +25,39 @@ public class Model {
             this.res=Result.None;
     }
 
+    public Student getStudent() {
+        return student;
+    }
+
     enum Status {
         PreTrained, Training, Trained, Tested
+    }
+
+    public String getStatus() {
+        if (status == Status.PreTrained)
+            return "PreTrained";
+
+        if (status == Status.Training)
+            return "PreTrained";
+
+        if (status == Status.Trained)
+            return "PreTrained";
+
+        else
+            return "Tested";
+    }
+
+    public void setStatus(String sStatus) {
+
+        if (sStatus.equals("PreTrained"))
+            status = Status.PreTrained;
+        if (sStatus.equals("Training"))
+            status = Status.Training;
+        if (sStatus.equals("Trained"))
+            status = Status.Trained;
+        else
+            status = Status.Tested;
+
     }
 
     enum Result {

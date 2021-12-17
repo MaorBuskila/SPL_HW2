@@ -5,7 +5,7 @@ import bgu.mics.Future;
 import bgu.mics.application.objects.Model;
 
 public class TrainModelEvent implements Event<Model> {
-
+    private static int priority = 2;
     private String senderName;
     private Model model;
     private Future<Model> future;

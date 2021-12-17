@@ -3,7 +3,7 @@ package bgu.mics.application.messages;
 import bgu.mics.Broadcast;
 
 public class TickBroadCast implements Broadcast {
-
+    private static int priority = 0;
     private int tick;
 
     public TickBroadCast(int tick) {

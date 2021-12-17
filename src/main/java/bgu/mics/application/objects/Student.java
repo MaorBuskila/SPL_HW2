@@ -15,8 +15,11 @@ public class Student extends StudentService {
     private int publications;
     private int papersRead;
 
-    public Degree getStatus() {
-        return status;
+    public String getStatus() {
+        if (status ==  Degree.MSc)
+                return "MSc";
+        else
+            return "PhD";
     }
 
 

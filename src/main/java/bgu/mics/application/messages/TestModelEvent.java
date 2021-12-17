@@ -5,29 +5,29 @@ import bgu.mics.Future;
 import bgu.mics.application.objects.Model;
 
 public class TestModelEvent  implements Event<Model> {
-
+    private static int priority = 1;
     private Model m;
     private String name;
     private Future<Model> f;
 
-    public TestModelEvent(Model model,String name)
-    {
+    public TestModelEvent(Model model,String name) {
         this.m=model;
         this.name=name;
         f=new Future<>();
-
     }
 
     public String getName() {
         return this.name;
     }
 
-    public Future<Model> getFuture()
-    {
+    public Model getModel() {
+        return m;
+    }
+
+    public Future<Model> getFuture() {
         return this.f;
     }
-    public Model getFutureModel()
-    {
+    public Model getFutureModel() {
         return this.f.get();
     }
 }

@@ -1,5 +1,7 @@
 package bgu.mics;
 
+import javafx.scene.layout.Priority;
+
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Vector;
@@ -15,7 +17,7 @@ import java.util.concurrent.PriorityBlockingQueue;
  */
 public class MessageBusImpl implements MessageBus {
     //queue of messages for every micro service
-    private ConcurrentHashMap<MicroService, BlockingQueue<Message>> queueMap;
+    private ConcurrentHashMap<MicroService, PriorityBlockingQueue<Message>> queueMap;
     //queue of MicroServices subscribed to a message type for every message type
     private ConcurrentHashMap<Class<? extends Event<?>>, Vector<MicroService>> subscribedEvents;
     private ConcurrentHashMap<Class<? extends Broadcast>, Vector<MicroService>> subscribedBroadcast;
@@ -83,11 +85,7 @@ public class MessageBusImpl implements MessageBus {
         Vector<MicroService> v = subscribedBroadcast.get(b.getClass());
             if (subscribedBroadcast.containsKey(b.getClass())) {
                 for (int i = 0; i < subscribedBroadcast.get(b.getClass()).size(); i++) {
-                    try {
-                        queueMap.get(subscribedBroadcast.get(b.getClass()).get(i)).put(b);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    queueMap.get(subscribedBroadcast.get(b.getClass()).get(i)).put(b);
                     System.out.println("debug");
                 }
         }
@@ -117,7 +115,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void register(MicroService m) {
-        BlockingQueue<Message> queue = new LinkedBlockingQueue<>();
+        PriorityBlockingQueue<Message> queue = new PriorityBlockingQueue<>();
         queueMap.put(m, queue);
     }
 
