@@ -5,6 +5,7 @@ import bgu.mics.MicroService;
 import bgu.mics.application.messages.TerminateBroadcast;
 import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.objects.CPU;
+import bgu.mics.application.objects.Cluster;
 import bgu.mics.application.objects.DataBatch;
 
 import java.util.Iterator;
@@ -38,6 +39,7 @@ public class CPUService extends MicroService {
             updateTick(tickBroadCast);
         });
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
+            Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
             this.terminate();
         });
         System.out.println( cpu.getName() + " Service Running");

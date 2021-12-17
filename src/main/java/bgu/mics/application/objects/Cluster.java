@@ -29,8 +29,10 @@ public class Cluster {
 
     private Vector<String> trainedModels;
     private int totalDataBatchProcessedCpu; // TODO: CHECK
-    private ConcurrentHashMap<CPU, Integer> cpuTimeUnitUsed;
-    private ConcurrentHashMap<GPU, Integer> gpuTimeUnitUsed;
+    //private ConcurrentHashMap<CPU, Integer> cpuTimeUnitUsed;
+    private int cpuTimeUnitUsed;
+    private int gpuTimeUnitUsed;
+    //private ConcurrentHashMap<GPU, Integer> gpuTimeUnitUsed;
     private static Cluster cluster = null;
 
     //Constructor
@@ -41,8 +43,10 @@ public class Cluster {
         unProcessedQueues = new ConcurrentHashMap<>();
         //	processedBatch=new LinkedBlockingQueue<>();
         trainedModels = new Vector<>();
-        cpuTimeUnitUsed = new ConcurrentHashMap<>();
-        gpuTimeUnitUsed = new ConcurrentHashMap<>();
+       // cpuTimeUnitUsed = new ConcurrentHashMap<>();
+        //gpuTimeUnitUsed = new ConcurrentHashMap<>();
+        cpuTimeUnitUsed=0;
+        gpuTimeUnitUsed=0;
         totalDataBatchProcessedCpu = 0;
 
     }
@@ -74,19 +78,27 @@ public class Cluster {
         trainedModels.addElement(name);
     }
 
-    public void addCpuTimeUnitUsed(CPU cpu1) {
-        Integer x = cpuTimeUnitUsed.get(cpu1);
-        x++;
-        cpuTimeUnitUsed.replace(cpu1, x); // TODO Check how to simplify this
+//    public void addCpuTimeUnitUsed(CPU cpu1) {
+//        Integer x = cpuTimeUnitUsed.get(cpu1);
+//        x++;
+//        cpuTimeUnitUsed.replace(cpu1, x); // TODO Check how to simplify this
+//    }
+    public void addCpuTimeUnitUsed(int timeByCpu)
+    {
+        this.cpuTimeUnitUsed+=timeByCpu;
+    }
+    public void addGpuTimeUnitUsed(int timeByGpu)
+    {
+        this.gpuTimeUnitUsed+=timeByGpu;
     }
 
-    public void addGpuTimeUnitUsed(GPU gpu1) {
-
-        Integer x = gpuTimeUnitUsed.get(gpu1);
-        x++;
-        gpuTimeUnitUsed.replace(gpu1, x); // TODO Check how to simplify this
-
-    }
+//    public void addGpuTimeUnitUsed(GPU gpu1) {
+//
+//        Integer x = gpuTimeUnitUsed.get(gpu1);
+//        x++;
+//        gpuTimeUnitUsed.replace(gpu1, x); // TODO Check how to simplify this
+//
+//    }
     ///////////////////////////////////////////////////////////
 
     /////////////////////// Send to CPU  unProcessed Databatch ///////////////////////
