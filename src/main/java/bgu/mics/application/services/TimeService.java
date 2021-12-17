@@ -5,6 +5,9 @@ import bgu.mics.MicroService;
 import bgu.mics.application.messages.TerminateBroadcast;
 import bgu.mics.application.messages.TickBroadCast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * TimeService is the global system timer There is only one instance of this micro-service.
  * It keeps track of the amount of ticks passed since initialization and notifies
@@ -18,6 +21,8 @@ public class TimeService extends MicroService{
 	private int time;
 	private int speed;
 	private int duration;
+	private TimerTask timerTask;
+	private java.util.Timer timer;
 
 
 	public TimeService(String name, int speed, int duration) {
@@ -25,19 +30,43 @@ public class TimeService extends MicroService{
 		time = 0;
 		this.speed=speed;
 		this.duration=duration;
+		timer = new Timer();
 	}
 	@Override
 	protected void initialize() {
-		while(time < duration) {
-			time++;
-			MessageBusImpl.getInstance().sendBroadcast(new TickBroadCast(time));
-			try {
-				wait(speed);
-			} catch (InterruptedException e) {
+		timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				time++;
+				System.out.println("Current Time: "+time);
+				sendBroadcast(new TickBroadCast(time));
 			}
+		};
+		timer.scheduleAtFixedRate(timerTask , 0 , speed);
+
+		try{
+			Thread.sleep(duration-50);}
+		catch(Exception e){
+			System.out.println("TimerException");
 		}
-		MessageBusImpl.getInstance().sendBroadcast(new TerminateBroadcast());
-		terminate();
+
+		timer.cancel();
+		sendBroadcast(new TerminateBroadcast());
+
 	}
 
 }
+//		while(time < duration) {
+//			time++;
+//			System.out.println("Time is " + time);
+//			MessageBusImpl.getInstance().sendBroadcast(new TickBroadCast(time));
+//			try {
+//				wait(speed);
+//			} catch (InterruptedException e) {
+//			}
+//		}
+//		MessageBusImpl.getInstance().sendBroadcast(new TerminateBroadcast());
+//		terminate();
+//	}
+
+//}

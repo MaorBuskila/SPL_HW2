@@ -24,6 +24,7 @@ public class StudentService extends MicroService {
         // TODO Implement this
     }
 
+
     @Override
     protected void initialize() {
 

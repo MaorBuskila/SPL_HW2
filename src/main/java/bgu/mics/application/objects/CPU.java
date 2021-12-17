@@ -7,6 +7,7 @@ package bgu.mics.application.objects;
  */
 public class CPU {
 
+    private String name;
     private int numberOfCores;
     private Cluster cluster;
     private boolean isBusy = false;
@@ -15,7 +16,8 @@ public class CPU {
     private int processingTick;
 
     //Constructor
-    public CPU(int numberOfCores /**, Cluster cluster */) {
+    public CPU(String name, int numberOfCores /**, Cluster cluster */) {
+        this.name = name;
         this.numberOfCores = numberOfCores;
         this.cluster = Cluster.getInstance();
         this.processingTick = 0;
@@ -119,6 +121,10 @@ public class CPU {
 
     public void updateProcessingTick() {
         processingTick++;
+    }
+
+    public String getName() {
+        return name;
     }
 }
 

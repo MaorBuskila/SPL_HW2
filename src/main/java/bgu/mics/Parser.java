@@ -73,10 +73,7 @@ public class Parser {
                     counterOfModel++;
                 }
                 counterOfModel = 0;
-
-                students[counterOfStudents]= (new Student(name,department, status));
-
-
+                students[counterOfStudents]= (new Student(name,department,status,models));
                 ListOfArraysOfModels.add(models);
                 counterOfStudents++;
 
@@ -96,7 +93,7 @@ public class Parser {
 
             for(JsonElement CPUElement : JsonArrayOfCpu){
                 int cores = CPUElement.getAsInt();
-                CPUArray[counterOfCPU] = new CPU(cores);
+                CPUArray[counterOfCPU] = new CPU("CPU" + counterOfCPU , cores);
                 counterOfCPU++;
             }
             //*********************** getting Conferences***********************

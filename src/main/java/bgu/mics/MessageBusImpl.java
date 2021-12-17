@@ -81,7 +81,6 @@ public class MessageBusImpl implements MessageBus {
             if (subscribedBroadcast.containsKey(b.getClass())) {
                 for (int i = 0; i < subscribedBroadcast.get(b.getClass()).size(); i++) {
                     queueMap.get(subscribedBroadcast.get(b.getClass()).get(i)).put(b);
-                    System.out.println("debug");
                 }
         }
     }

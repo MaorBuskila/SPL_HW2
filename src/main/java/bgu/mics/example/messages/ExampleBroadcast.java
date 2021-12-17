@@ -14,4 +14,7 @@ public class ExampleBroadcast implements Broadcast {
         return senderId;
     }
 
+    public int getPriority() {
+        return 0;
+    }
 }

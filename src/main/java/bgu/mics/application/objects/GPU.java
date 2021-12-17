@@ -30,7 +30,6 @@ public class GPU {
     private int ticksFromService;
 
     public GPU(String sType) {
-
         super();
         vRam = new Vector<>();
         if (sType.equals("RTX3090")) {

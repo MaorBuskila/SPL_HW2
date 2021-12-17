@@ -40,4 +40,8 @@ public class ConfrenceInformation {
     {
         return this.setDate==ticksFromService;
     }
+
+    public String getName() {
+        return name;
+    }
 }

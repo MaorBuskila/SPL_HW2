@@ -14,8 +14,7 @@ public class ExampleEvent {//implements Event<String> {
         return senderName;
     }
 
-//    @Override
-//    public int getPriority() {
-//        return priority;
-//    }
+    public int getPriority() {
+        return 0;
+    }
 }

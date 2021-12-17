@@ -35,7 +35,7 @@ class CPUTest {
         queue = new LinkedList<DataBatch>();
         queue.add(db);
         cluster = new Cluster();
-        cpu = new CPU(16);
+        cpu = new CPU("cpu1" ,16);
         cpuService = new CPUService("CPUSER" , cpu);
         gpu = new GPU("RTX3090");
         gpuService = new GPUService("gpu", gpu);

@@ -40,7 +40,7 @@ public class CPUService extends MicroService {
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
             this.terminate();
         });
-        System.out.println("CPU service running");
+        System.out.println( cpu.getName() + " Service Running");
         while (!cpu.checkIfBusy()) {
             DataBatch tmpDataBatch = null;
 

@@ -164,7 +164,7 @@ public abstract class MicroService implements Runnable {
         initialize();
         while (!terminated) {
             try {
-                System.out.println("trying await message");
+                System.out.println(this.getName()+ " Trying await message");
                 Message msg = msgBus.awaitMessage(this);
                 msgCallBackMap.get(msg).call(msg);
 
