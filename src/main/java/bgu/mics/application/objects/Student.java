@@ -3,22 +3,28 @@ package bgu.mics.application.objects;
 import bgu.mics.MicroService;
 import bgu.mics.application.services.StudentService;
 
+import java.util.Vector;
+
 /**
  * Passive object representing single student.
  * Add fields and methods to this class as you see fit (including public methods and constructors).
  */
-public class Student {
+public class Student extends StudentService {
 
-    private String name;
+    private int name;
     private String department;
     private Degree status;
     private int publications;
     private int papersRead;
     private Model[] models;
 
-    public String getName() {
-        return name;
+    public String getStatus() {
+        if (status ==  Degree.MSc)
+                return "MSc";
+        else
+            return "PhD";
     }
+
 
     // Enum representing the Degree the student is studying for.
     enum Degree {
@@ -27,7 +33,7 @@ public class Student {
 
     //Constructor
     public Student(String name, String department, String sStatus, Model[] models) {
-        this.name = name;
+        super(name);
         this.department = department;
         if (sStatus.equals("MSc"))
             this.status = Degree.MSc;
@@ -35,15 +41,14 @@ public class Student {
             this.status = Degree.PhD;
         this.publications = 0;
         this.papersRead = 0;
-        this.models = models;
+        this.models=models;
+    }
+    public Model[] getModels()
+    {
+        return models;
     }
 
-    public String getStatus() {
-        if (status == Degree.MSc)
-            return "MSc";
-        else
-            return "PhD";
-    }
+
 
 
 }

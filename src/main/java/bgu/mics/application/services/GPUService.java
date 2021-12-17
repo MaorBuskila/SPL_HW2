@@ -81,11 +81,15 @@ public class GPUService extends MicroService {
             {
                 if(x<=0.6)
                     model.setRes("Good");
+                else
+                    model.setRes("Bad");
             }
             else
             {
                 if(x<=0.8)
                     model.setRes("Good");
+                else
+                    model.setRes("Bad");
             }
             model.setStatus("Tested");
             complete(testModelEvent, model);

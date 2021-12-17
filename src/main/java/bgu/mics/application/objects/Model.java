@@ -21,8 +21,6 @@ public class Model {
             this.res = Result.Good;
         else if (res=="Bad")
             this.res=Result.Bad;
-        else
-            this.res=Result.None;
     }
 
     public Student getStudent() {

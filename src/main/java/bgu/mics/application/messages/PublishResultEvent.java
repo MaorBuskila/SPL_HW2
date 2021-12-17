@@ -1,8 +1,9 @@
 package bgu.mics.application.messages;
 
+import bgu.mics.Event;
 import bgu.mics.application.objects.Model;
 
-public class PublishResultEvent{
+public class PublishResultEvent implements Event<Model> {
     private static int priority = 2;
     private Model m;
     public PublishResultEvent(Model m)
@@ -14,4 +15,8 @@ public class PublishResultEvent{
         return this.m;
     }
 
+    @Override
+    public int getPriority() {
+        return priority;
+    }
 }
