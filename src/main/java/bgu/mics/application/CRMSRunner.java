@@ -21,7 +21,7 @@ public class  CRMSRunner {
 
     public static void main(String[] args) {
             Parser reader = new Parser();
-            reader.readInputFile("example_input2.json");  //the input path is starting from the folder of the project!
+            reader.readInputFile("example_input.json");  //the input path is starting from the folder of the project!
 
             /**
              * reading the input file
