@@ -42,6 +42,7 @@ public class GPUService extends MicroService {
         MessageBusImpl.getInstance().register(this);
         subscribeEvent(TrainModelEvent.class , (TrainModelEvent trainModelEvent) -> {
             Model model = trainModelEvent.getModel();
+            gpu.setModel(model); // add 13:08
             if (this.gpu.getModel() == null)
                 this.gpu.setModel(model);
             Data data = model.getData();
@@ -56,12 +57,14 @@ public class GPUService extends MicroService {
                 }
             });
             Thread t2=new Thread(()->{
-                gpu.trainDataBatchModel();
-                if(gpu.finishTrain()) {
-                    gpu.getModel().setStatus("Trained");
-                    gpu.setModel(null);
-                    complete(trainModelEvent, model);
-                }
+
+                    gpu.trainDataBatchModel();
+                    if (gpu.finishTrain()) {
+                        gpu.getModel().setStatus("Trained");
+                        gpu.setModel(null);
+                        complete(trainModelEvent, model);
+                    }
+
 
             });
            t1.start();
