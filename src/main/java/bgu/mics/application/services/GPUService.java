@@ -57,13 +57,17 @@ public class GPUService extends MicroService {
             });
             Thread t2=new Thread(()->{
                 gpu.trainDataBatchModel();
+                if(gpu.finishTrain()) {
+                    gpu.getModel().setStatus("Trained");
+                    gpu.setModel(null);
+                    complete(trainModelEvent, model);
+                }
+
             });
            t1.start();
            t2.start();
 
-           if(gpu.finishTrain())
-               gpu.setModel(null);
-                complete(trainModelEvent,model);
+
 
         });
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {

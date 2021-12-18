@@ -172,6 +172,8 @@ public class GPU {
 
     public void trainFunction(DataBatch dataBatch) {
         System.out.println("Training");
+        if (model.getStatus() == "PreTrained")
+            model.setStatus("Training");
         stratTrainTicks = 0;
         vRam.firstElement().train();
         vRam.removeElementAt(0);
