@@ -46,9 +46,6 @@ public class CPU {
                 if (processingTick == 0) {
                     processFunction(dataBatch);
                     Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 2);
-
-
-
                 }
                 break;
             case Tabular:

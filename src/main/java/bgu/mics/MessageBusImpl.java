@@ -119,7 +119,6 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public Message awaitMessage(MicroService m) throws InterruptedException {
-       // System.out.println("debug");
         if(queueMap.containsKey(m))
             return queueMap.get(m).take();
         else
