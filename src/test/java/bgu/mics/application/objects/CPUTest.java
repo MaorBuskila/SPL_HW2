@@ -69,7 +69,7 @@ class CPUTest {
                 e.printStackTrace();
             }
             msgbus.sendBroadcast(tickBroadCast);
-            cpuService.updateTick(tickBroadCast);
+            //cpuService.updateTick(tickBroadCast);
         });
         t1.start();
         t2.start();

@@ -116,7 +116,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void unregister(MicroService m) {
-      //  queueMap.remove(m);
+        queueMap.remove(m);
     }
 
     @Override

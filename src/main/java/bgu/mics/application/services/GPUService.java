@@ -49,8 +49,9 @@ public class GPUService extends MicroService {
            // ConfrenceInformation.addModel(trainModelEvent.getFutureModel()); //Todo : need change to static?
             gpu.divide((data));
             Thread t1=new Thread(()->{
-                while(!gpu.getAllDataBatches().isEmpty()) {
+                if(!gpu.getAllDataBatches().isEmpty()) {
                     int freeSpace = gpu.getvRam().size() - gpu.getCurrentProcessInVram();
+                    System.out.println(freeSpace);
                     for (int i = 0; i<freeSpace;i++) {
                         if(!gpu.getAllDataBatches().isEmpty())
                             gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0)); // TODO CHECK IF REMOVE WORK?

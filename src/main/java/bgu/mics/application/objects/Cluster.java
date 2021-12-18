@@ -92,8 +92,9 @@ public class Cluster {
 
     public void addToUnprocessedMap(DataBatch dataBatch, GPU gpu) {
         dataBatchToGpu.put(dataBatch, gpu); // add to hashmap to know who to return.
-        unProcessedQueues.get(minFutureTime()).add(dataBatch); // add to best time cpu the databatch
-        System.out.println("added");
+        CPU tmpMin = minFutureTime();
+        unProcessedQueues.get(tmpMin).add(dataBatch); // add to best time cpu the databatch
+        System.out.println("add unprocesses Databatch To " + tmpMin.getName() );
       //
         // notifyAll();
        // System.out.println("debug");

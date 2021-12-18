@@ -39,46 +39,17 @@ public class CPUService extends MicroService {
     protected void initialize() {
         MessageBusImpl.getInstance().register(this);
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
-            updateTick(tickBroadCast);
+            cpu.updateTick(tickBroadCast.getTick());
         });
+        // tmpDataBatch = cpu.getCluster().getUnProcessedQueue(cpu).take();
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
         //    Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
             this.terminate();
         });
         DoneSub=true;
         System.out.println( cpu.getName() + " Service Running");
-        while(true)
-        {
-        while (!cpu.checkIfBusy()) {
-          //  DataBatch tmpDataBatch = null;
-                DataBatch tmpDataBatch=cpu.process();
-//            try {
-                //TODO : check sync
-                   // tmpDataBatch = cpu.getCluster().getUnProcessedQueue(cpu).take();
-                    //cpu.process(tmpDataBatch);
-                    if(tmpDataBatch!=null)
-                    {    cpu.sendToCluster(tmpDataBatch);
-                        this.cpu.clearDataBatch(); }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-
-        }
-
     }
-    }
-
-    public void updateTick(TickBroadCast t) {
-        cpu.updateTick(t.getTick());
-        //ticks++;
-    }
-    public boolean DoneSubscribe()
-    {
+    public boolean DoneSubscribe() {
         return DoneSub;
     }
-
-//
-//    protected int getTick() {
-//        return ticks;
-//    } // for each cpu send tick and add to his time
 }
