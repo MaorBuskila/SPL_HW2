@@ -58,7 +58,7 @@ public class Parser {
                 String department = studentJsonObject.get("department").getAsString();
                 String status = studentJsonObject.get("status").getAsString();
 
-
+                Student student= new Student(name,department, status);
                 JsonArray jsonArrayOfModels = studentJsonObject.get("models").getAsJsonArray();
                 Model[] models = new Model[jsonArrayOfModels.size()];
                 for(JsonElement modelElement : jsonArrayOfModels){
@@ -70,11 +70,11 @@ public class Parser {
                     int data_size_int = Integer.parseInt(data_size);
                     Data data = new Data(data_type, data_size_int);
 
-                    models[counterOfModel] = new Model(modelName,data,students[counterOfStudents]);
+                    models[counterOfModel] = new Model(modelName,data,student);
                     counterOfModel++;
                 }
                 counterOfModel = 0;
-                Student student= new Student(name,department, status,models);
+
                 String sSname=name+" SERVICE";
                 StudentService studentService= new StudentService(sSname,student);
                 students[counterOfStudents]=student;

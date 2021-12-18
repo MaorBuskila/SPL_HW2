@@ -70,6 +70,7 @@ public class Model {
         this.student = student;
         this.res = Result.None;
         this.status = Status.PreTrained;
+        student.addModel(this);
 
     }
     public boolean isGood()

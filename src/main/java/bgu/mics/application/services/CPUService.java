@@ -14,7 +14,7 @@ import java.util.Queue;
 import java.util.Vector;
 
 /**
- * CPU service is responsible for handling the {@link DataPreProcessEvent}.
+ * CPU service is resp
  * This class may not hold references for objects which it is not responsible for.
  * <p>
  * You can add private fields and public methods to this class.
@@ -23,6 +23,7 @@ import java.util.Vector;
 public class CPUService extends MicroService {
     private int ticks;
     private CPU cpu;
+    private boolean DoneSub=false;
 
 
     public CPUService(String name, CPU cpu) {
@@ -44,25 +45,36 @@ public class CPUService extends MicroService {
         //    Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
             this.terminate();
         });
+        DoneSub=true;
         System.out.println( cpu.getName() + " Service Running");
+        while(true)
+        {
         while (!cpu.checkIfBusy()) {
-            DataBatch tmpDataBatch = null;
-
-            try {
+          //  DataBatch tmpDataBatch = null;
+                DataBatch tmpDataBatch=cpu.process();
+//            try {
                 //TODO : check sync
-                    tmpDataBatch = cpu.getCluster().getUnProcessedQueue(cpu).take();
-                    cpu.process(tmpDataBatch);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            //cpu.sendToCluster(cpu.process(tmpDataBatch));
+                   // tmpDataBatch = cpu.getCluster().getUnProcessedQueue(cpu).take();
+                    //cpu.process(tmpDataBatch);
+                    if(tmpDataBatch!=null)
+                    {    cpu.sendToCluster(tmpDataBatch);
+                        this.cpu.clearDataBatch(); }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+
         }
 
+    }
     }
 
     public void updateTick(TickBroadCast t) {
         cpu.updateTick(t.getTick());
         //ticks++;
+    }
+    public boolean DoneSubscribe()
+    {
+        return DoneSub;
     }
 
 //

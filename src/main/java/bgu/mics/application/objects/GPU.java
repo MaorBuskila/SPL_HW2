@@ -77,7 +77,7 @@ public class GPU {
     public void divide(Data data) {
         allDataBatches = new Vector<>();
 
-        for (int i = 0; i < data.getSize() / 1000; i += 1000) {
+        for (int i = 0; i < data.getSize(); i += 1000) {
             DataBatch db = new DataBatch(data, i);
             allDataBatches.addElement(db);
 
@@ -110,7 +110,7 @@ public class GPU {
     public void reciveProcessedDataBatch(DataBatch proDB) {
         vRam.add(proDB);
         currentProcessInVram += 1;
-        notifyAll();
+    //    notifyAll();
     }
 
     public void updateTick(int tick) {
@@ -166,7 +166,10 @@ public class GPU {
                 }
 
             }
+
         }
+        this.getModel().setStatus("Trained");
+        notifyAll();
 
     }
 
@@ -175,21 +178,15 @@ public class GPU {
         if (model.getStatus() == "PreTrained")
             model.setStatus("Training");
         stratTrainTicks = 0;
-        vRam.firstElement().train();
-        vRam.removeElementAt(0);
+//        vRam.firstElement().train();
+//        vRam.removeElementAt(0);
+        vRam.remove(0).train();
         dataBatch.getData().updateProcessed();
         currentProcessInVram -= 1;
-        totalCurrentModelTrained += 1;
+   //     totalCurrentModelTrained += 1;
     }
 
-    public boolean finishTrain() {
-        if (totalCurrentModelTrained == allDataBatches.size()) {
-            totalCurrentModelTrained = 0;
-            System.out.println("finish train");
-            return true;
-        } else
-            return false;
-    }
+
 
     public void setModel(Model model) {
         this.model = model;

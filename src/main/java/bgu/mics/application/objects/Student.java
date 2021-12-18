@@ -17,14 +17,19 @@ public class Student {
     private Degree status;
     private int publications;
     private int papersRead;
-    private Model[] models;
-    private Future<Model> future;
+    private Vector<Model> models;
+    private Vector<Model> trainedModels;
+     private Future<Model> future;
 
     public String getStatus() {
         if (status ==  Degree.MSc)
                 return "MSc";
         else
             return "PhD";
+    }
+
+    public void addToTrainedModel(Model model) {
+        this.trainedModels.addElement(model);
     }
 
 
@@ -34,7 +39,7 @@ public class Student {
     }
 
     //Constructor
-    public Student(String name, String department, String sStatus, Model[] models) {
+    public Student(String name, String department, String sStatus) {
         this.name=name;
         this.department = department;
         if (sStatus.equals("MSc"))
@@ -43,15 +48,20 @@ public class Student {
             this.status = Degree.PhD;
         this.publications = 0;
         this.papersRead = 0;
-        this.models=models;
+        models=new Vector<>();
+        trainedModels=new Vector<>();
     }
-    public Model[] getModels()
+    public Vector<Model> getModels()
     {
         return models;
     }
     public String getName()
     {
         return name;
+    }
+    public void addModel(Model model)
+    {
+        models.addElement(model);
     }
 
 
