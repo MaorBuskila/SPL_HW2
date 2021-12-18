@@ -53,12 +53,13 @@ public class main_test {
 //        t3.start();
 //        //*************************** TrainModelEvent Test ***************************************
 //        MessageBusImpl msgbus = MessageBusImpl.getInstance();
-//        Data data = new Data("Images",20000);
+//
 //        Student student = new Student("1", "bgu" , "PhD");
 //        GPU gpu = new GPU("RTX3090");
 //        GPUService gpuService = new GPUService("Gpu1" , gpu);
 //        CPU cpu = new CPU(32);
 //        CPUService cpuService = new CPUService("CPu1", cpu);
+//        Data data = new Data("Images",20000);
 //        Model model = new Model("name", data,student);
 //        Event<Model> trainModelEvent = new TrainModelEvent(model,"maor");
 //        Broadcast<TickBroadCast>

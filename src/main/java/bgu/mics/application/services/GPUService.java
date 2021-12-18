@@ -39,17 +39,19 @@ public class GPUService extends MicroService {
     // to doo simultaneity : sendToCluster,getFromCluster,Train on vRAM
     @Override
     protected void initialize() { // just need to take responsibilty on time
+        MessageBusImpl.getInstance().register(this);
         subscribeEvent(TrainModelEvent.class , (TrainModelEvent trainModelEvent) -> {
             Model model = trainModelEvent.getModel();
+            if (this.gpu.getModel() == null)
+                this.gpu.setModel(model);
             Data data = model.getData();
            // ConfrenceInformation.addModel(trainModelEvent.getFutureModel()); //Todo : need change to static?
             gpu.divide((data));
             Thread t1=new Thread(()->{
                 while(!gpu.getAllDataBatches().isEmpty()) {
                     int freeSpace = gpu.getvRam().size() - gpu.getCurrentProcessInVram();
-                    for (int i = 0; i<freeSpace;i++)
-                    {
-                        gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0)); // TODO CHECK IF REMOVE WORK?
+                    for (int i = 0; i<freeSpace;i++) {
+                        gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(i)); // TODO CHECK IF REMOVE WORK?
                     }
                 }
             });
@@ -60,13 +62,14 @@ public class GPUService extends MicroService {
            t2.start();
 
            if(gpu.finishTrain())
+               gpu.setModel(null);
                 complete(trainModelEvent,model);
 
         });
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
             this.terminate();
         });
-        System.out.println("GPU service running");
+        //System.out.println("GPU service running");
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             updateTick(tickBroadCast);
         });
@@ -97,6 +100,7 @@ public class GPUService extends MicroService {
                 }
 
         );
+
 
 
     }

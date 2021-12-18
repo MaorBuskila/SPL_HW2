@@ -1,6 +1,7 @@
 package bgu.mics.application.services;
 
 import bgu.mics.Broadcast;
+import bgu.mics.MessageBusImpl;
 import bgu.mics.MicroService;
 import bgu.mics.application.messages.TerminateBroadcast;
 import bgu.mics.application.messages.TickBroadCast;
@@ -35,6 +36,7 @@ public class CPUService extends MicroService {
 
     @Override
     protected void initialize() {
+        MessageBusImpl.getInstance().register(this);
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             updateTick(tickBroadCast);
         });
@@ -48,11 +50,8 @@ public class CPUService extends MicroService {
 
             try {
                 //TODO : check sync
-                synchronized (this) {
-                    Object q = cpu.getCluster().getUnProcessedQueue(cpu);
                     tmpDataBatch = cpu.getCluster().getUnProcessedQueue(cpu).take();
                     cpu.process(tmpDataBatch);
-                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -87,12 +87,11 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public <T> Future<T> sendEvent(Event<T> e) {
-       // System.out.println("Send event");
             if (!subscribedEvents.containsKey(e.getClass())) {
                 System.out.println("No one register for TrainModel yet!");
                 return null;
             } else {
-                //System.out.println("someone register for TrainModel!");
+                System.out.println("someone register for TrainModel!");
                 Future<T> future = new Future<>();
                 eventsToFuture.put(e, future);
                 //TODO: check if we need to change the order
@@ -107,25 +106,24 @@ public class MessageBusImpl implements MessageBus {
     }
 
     @Override
-    public void register(MicroService m) {
+    public synchronized void register(MicroService m) {
         PriorityBlockingQueue<Message> queue = new PriorityBlockingQueue<>(10, new MessageComparatorByPriority());
         queueMap.put(m, queue);
+        System.out.println(m.getName() + " Register");
     }
 
     @Override
     public void unregister(MicroService m) {
-        queueMap.remove(m);
+      //  queueMap.remove(m);
     }
 
     @Override
     public Message awaitMessage(MicroService m) throws InterruptedException {
-//        if (!queueMap.get(m).isEmpty()) {
-//            return queueMap.get(m).take();
-//        }
+       // System.out.println("debug");
         if(queueMap.containsKey(m))
             return queueMap.get(m).take();
         else
-            throw new NullPointerException("no such microService is registered");
+            throw new NullPointerException(m.getName() + " is not registered");
 
     }
 
@@ -134,4 +132,5 @@ public class MessageBusImpl implements MessageBus {
         //private ConcurrentMap<MicroService,Queue<T>> queueMap;
         return queueMap.get(m1);
     }
+
 }

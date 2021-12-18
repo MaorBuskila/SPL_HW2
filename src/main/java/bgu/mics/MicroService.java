@@ -62,6 +62,7 @@ public abstract class MicroService implements Runnable {
      *                 queue.
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
+        System.out.println(this.getName() + " Subsdcribing event");
         msgBus.subscribeEvent(type , this);
         msgCallBackMap.put(type, callback);
     }
@@ -160,20 +161,24 @@ public abstract class MicroService implements Runnable {
      */
     @Override
     public final void run() {
-        msgBus.register(this);
+
+
         initialize();
         while (!terminated) {
             try {
-                System.out.println(this.getName()+ " Trying await message");
+                //System.out.println(this.getName()+ " Trying await message");
                 Message msg = msgBus.awaitMessage(this);
-                msgCallBackMap.get(msg).call(msg);
+                msgCallBackMap.get(msg.getClass()).call(msg);
 
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println(getName() + "problem accured at run of: " + name);
             }
 
-            msgBus.unregister(this);
-
         }
+        msgBus.unregister(this);
     }
+
+    public ConcurrentHashMap<Class<? extends Message>, Callback> getMsgCallBackMap() {
+        return msgCallBackMap;
+    }//TODO: DELETE!!!!!!
 }

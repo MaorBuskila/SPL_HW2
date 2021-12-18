@@ -74,7 +74,7 @@ public class Parser {
                     counterOfModel++;
                 }
                 counterOfModel = 0;
-                Student student= new Student(name,department, status,models);
+                Student student= new Student(name,department, status, models);
                 String sSname=name+" SERVICE";
                 StudentService studentService= new StudentService(sSname,student);
                 students[counterOfStudents]=student;

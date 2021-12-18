@@ -1,5 +1,6 @@
 package bgu.mics.application.objects;
 
+import bgu.mics.Future;
 import bgu.mics.MicroService;
 import bgu.mics.application.services.StudentService;
 
@@ -17,6 +18,7 @@ public class Student {
     private int publications;
     private int papersRead;
     private Model[] models;
+    private Future<Model> future;
 
     public String getStatus() {
         if (status ==  Degree.MSc)
@@ -53,6 +55,11 @@ public class Student {
     }
 
 
+    public Future<Model> getFuture() {
+        return future;
+    }
 
-
+    public void setFuture(Future<Model> future) {
+        this.future = future;
+    }
 }

@@ -1,0 +1,42 @@
+{
+    "Students":
+    [
+        {
+            "name": "Nala",
+            "department": "Computer Science",            
+            "status": "PhD",
+            "models":
+            [
+                {
+                    "name": "YOLO9000",
+                    "type": "images",
+                    "size": 100000
+                },
+                {
+                    "name": "VIT2",
+                    "type": "images",
+                    "size": 1000000
+                },
+                {
+                    "name": "MuchMoreEfficientNet",
+                    "type": "images",
+                    "size": 20000
+                },
+                {
+                    "name": "DenserNet",
+                    "type": "images",
+                    "size": 10000
+                }
+            ]
+
+        }
+    ],
+    "GPUS": ["RTX2080","GTX1080"],
+    "CPUS": [32,32,16],
+    "Conferences":
+    [
+        {"name": "ICML", "date": 2000}
+    ],
+    "TickTime": 50,
+    "Duration": 5500
+}

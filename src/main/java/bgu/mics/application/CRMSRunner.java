@@ -21,7 +21,7 @@ public class  CRMSRunner {
 
     public static void main(String[] args) {
             Parser reader = new Parser();
-            reader.readInputFile("example_input.json");  //the input path is starting from the folder of the project!
+            reader.readInputFile("example_input2.json");  //the input path is starting from the folder of the project!
 
             /**
              * reading the input file
@@ -65,11 +65,11 @@ public class  CRMSRunner {
                 studentServices[i] = new Thread(tmpservice);
             }
             for (int i=0 ; i < CPUServices.length; i++){
-                MicroService tmpservice =new CPUService("CPU", cpuArray[i]);
+                MicroService tmpservice =new CPUService("CPU" + i, cpuArray[i]);
                 CPUServices[i] = new Thread(tmpservice);
             }
             for (int i=0 ; i < GPUServices.length; i++){
-                MicroService tmpservice = new GPUService("GPU", gpuArray[i]);
+                MicroService tmpservice = new GPUService("GPU" + i, gpuArray[i]);
                 GPUServices[i] = new Thread(tmpservice);
             }
             for (int i=0 ; i < confrencesServices.length; i++){
@@ -83,18 +83,23 @@ public class  CRMSRunner {
             Thread clock = new Thread(timer);
             clock.start();
 
-            for (int i=0 ;i< studentServices.length ; i++){
-                studentServices[i].start();
+        for (Thread studentService : studentServices) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            for (int i=0 ; i < CPUServices.length; i++){
-                CPUServices[i].start();
-            }
-            for (int i=0 ; i < GPUServices.length ; i++){
-                GPUServices[i].start();
-            }
-            for(int i=0 ; i < confrencesServices.length ; i++){
-                confrencesServices[i].start();
-            }
+            studentService.start();
+        }
+        for (Thread cpuService : CPUServices) {
+            cpuService.start();
+        }
+        for (Thread gpuService : GPUServices) {
+            gpuService.start();
+        }
+//        for (Thread confrencesService : confrencesServices) {
+//            confrencesService.start();
+//        }
 
         }
     }

@@ -1,5 +1,6 @@
 package bgu.mics.application.services;
 
+import bgu.mics.Future;
 import bgu.mics.MessageBusImpl;
 import bgu.mics.MicroService;
 import bgu.mics.application.messages.*;
@@ -27,19 +28,26 @@ public class StudentService extends MicroService {
 
     @Override
     protected void initialize() {
+        MessageBusImpl msgbus = MessageBusImpl.getInstance();
+        msgbus.register(this);
 
-        for(int i=0;i<student.getModels().length;i++)
-        {
-            MessageBusImpl.getInstance().sendEvent(new TrainModelEvent(student.getModels()[i], "TrainModel" + String.valueOf(i)));
-            while(student.getModels()[i].getStatus()!="Trained")
-            {}
-           // if(student.getModels()[i].getStatus()=="Trained")
-            MessageBusImpl.getInstance().sendEvent(new TestModelEvent(student.getModels()[i], "TestModel" + String.valueOf(i)));
-            while(student.getModels()[i].getStatus()!="Tested")
-            {}
-            //if(student.getModels()[i].getStatus()=="Tested" && student.getModels()[i].isGood()) // TODO WHILE OR IF
-            MessageBusImpl.getInstance().sendEvent(new PublishResultEvent(student.getModels()[i]));
-        }
+
+
+
+//        for(int i=0;i<student.getModels().length;i++)
+//        {
+//            System.out.println(student.getName() + " Sending Event");
+//            sendEvent(new TrainModelEvent(student.getModels()[i], "TrainModel" + String.valueOf(i)));
+//            //student.setFuture(f);
+////            while(student.getModels()[i].getStatus().equals"Trained")
+////            {}
+//           // if(student.getModels()[i].getStatus()=="Trained")
+//            MessageBusImpl.getInstance().sendEvent(new TestModelEvent(student.getModels()[i], "TestModel" + String.valueOf(i)));
+//            while(student.getModels()[i].getStatus()!="Tested")
+//            {}
+//            //if(student.getModels()[i].getStatus()=="Tested" && student.getModels()[i].isGood()) // TODO WHILE OR IF
+//            MessageBusImpl.getInstance().sendEvent(new PublishResultEvent(student.getModels()[i]));
+//        }
 
 //        subscribeBroadcast(PublishConferenceBroadcast.class,(PublishConferenceBroadcast publish)->{
 //            // TODO: Implement this
@@ -47,7 +55,18 @@ public class StudentService extends MicroService {
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
             this.terminate();
         });
-        subscribeBroadcast(PublishConferenceBroadcast.class,(PublishConferenceBroadcast pub)->{
+
+        subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
+            TrainModelEvent e = null;
+            if (student.getFuture() == null) {
+                e = new TrainModelEvent(student.getModels()[0], this.getName());
+                System.out.println(Thread.currentThread().getName() + " is sending: " + e.getClass());        ///////////////////////////////////////////////////////////////////////
+            }
+
+            student.setFuture(sendEvent(e));
+
+        });
+        subscribeBroadcast(PublishConferenceBroadcast.class, (PublishConferenceBroadcast pub) -> {
 
 
         });

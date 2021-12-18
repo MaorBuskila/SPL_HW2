@@ -28,7 +28,7 @@ public class GPU {
     private int totalCurrentModelTrained;
     private Vector<DataBatch> vRam;
     private int currentProcessInVram;
-    private int ticksFromService;
+    private int stratTrainTicks;
     private int totalTicks;
 
     public GPU(String sType) {
@@ -46,11 +46,10 @@ public class GPU {
             this.type = Type.GTX1080;
             vRam.setSize(8);
         }
-        this.model = null;
         this.cluster = Cluster.getInstance();
         cluster.addToGPUS(this);
         currentProcessInVram = 0;
-        ticksFromService=0;
+        stratTrainTicks = 0;
         totalCurrentModelTrained = 0;
     }
 
@@ -78,7 +77,7 @@ public class GPU {
     public void divide(Data data) {
         allDataBatches = new Vector<>();
 
-        for (int i = 0; i < data.getSize(); i += 1000) {
+        for (int i = 0; i < data.getSize() / 1000; i += 1000) {
             DataBatch db = new DataBatch(data, i);
             allDataBatches.addElement(db);
 
@@ -113,8 +112,9 @@ public class GPU {
         currentProcessInVram += 1;
         notifyAll();
     }
+
     public void updateTick(int tick) {
-        this.ticksFromService = tick;
+        this.stratTrainTicks = tick;
     }
 
     /////////////////////////////////////////////////////////////////
@@ -128,75 +128,75 @@ public class GPU {
      * @post: databatch is trained .
      */
     public void trainDataBatchModel() {
+        stratTrainTicks = 0;
 
+        //todo: fix this
         while (model.getData().getProcessed() < model.getData().getSize()) {
             //need to synchorized vRAM ?
-            while (vRam.isEmpty()) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+//            while (vRam.isEmpty()) {
+//                try {
+//                    wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+
+            //TODO: check how to train nonstop
+            if (!vRam.isEmpty()) {
+                DataBatch dataBatch = vRam.firstElement();
+                System.out.println("TRAINIG BATCH OF : " + model.getName());  ///////////////////////////
+                System.out.println("ALREADY PROCESSED DATA SIZE IS : " + dataBatch.getData().getProcessed());  ///////////////////////////
+                switch (this.type) {
+                    case RTX3090:
+                        trainingTime = 1 - stratTrainTicks;
+                        if (trainingTime == 0) {
+                            trainFunction(dataBatch);
+                        }
+                    case RTX2080:
+                        trainingTime = 2 - stratTrainTicks;
+                        if (trainingTime == 0) {
+                            trainFunction(dataBatch);
+                        }
+                    case GTX1080:
+                        trainingTime = 4 - stratTrainTicks;
+                        if (trainingTime == 0) {
+                            trainFunction(dataBatch);
+                        }
+
                 }
-            }
-            DataBatch dataBatch = vRam.remove(0);
-            switch (this.type){
-                case RTX3090:
-                    trainingTime = 1 - ticksFromService;
-                    if (trainingTime == 0){
-                        trainFunction(dataBatch);
-                    }
-                case RTX2080:
-                    trainingTime = 2 - ticksFromService;
-                    if (trainingTime == 0){
-                        trainFunction(dataBatch);
-                    }
-                case GTX1080:
-                    trainingTime = 4 - ticksFromService;
-                    if (trainingTime == 0){
-                        trainFunction(dataBatch);
-                    }
-
-
 
             }
-
-
-
-            //training...
-//            if(model.getStatus()=="PreTrained")
-//                model.setStatus("Training");
-//            if(this.getType()==Type.RTX3090) {
-//                int trainingTime=1;
-//            }
-//            else if (this.getType()==Type.RTX2080) {
-//                int trainingTime=2;
-//            }
-//            else {
-//                int trainingTime=4;
-//            }
-//            this.ticksFromService=0;
-//            dataBatch.train();
         }
 
     }
-    public void trainFunction(DataBatch dataBatch){
-        ticksFromService =0;
+
+    public void trainFunction(DataBatch dataBatch) {
+        System.out.println("Training");
+        stratTrainTicks = 0;
         vRam.firstElement().train();
         vRam.removeElementAt(0);
         dataBatch.getData().updateProcessed();
         currentProcessInVram -= 1;
-        totalCurrentModelTrained +=1;
+        totalCurrentModelTrained += 1;
     }
 
-    public boolean finishTrain(){
-        if(totalCurrentModelTrained == allDataBatches.size()) {
+    public boolean finishTrain() {
+        if (totalCurrentModelTrained == allDataBatches.size()) {
             totalCurrentModelTrained = 0;
+            System.out.println("finish train");
             return true;
-        }
-        else
+        } else
             return false;
     }
-    ///////////////////////////////////////////////////////////////////
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+///////////////////////////////////////////////////////////////////
 
 
 }

@@ -34,6 +34,7 @@ public class TimeService extends MicroService{
 	}
 	@Override
 	protected void initialize() {
+		MessageBusImpl.getInstance().register(this);
 		timerTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -51,7 +52,9 @@ public class TimeService extends MicroService{
 		}
 
 		timer.cancel();
-		sendBroadcast(new TerminateBroadcast());
+		//sendBroadcast(new TerminateBroadcast());
+		System.out.println("Terminate!");
+		terminate();
 
 	}
 
