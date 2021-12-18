@@ -31,22 +31,22 @@ public class CPU {
      */
     //////// MAIN FUNCTION: process the databatch with ticks ////////
     public DataBatch process(DataBatch dataBatch) { // TODO CHANGE TICKINGS
-        System.out.println("BEFORE PROCESS");
         this.db = dataBatch; //set the db the cpu currently working on
         switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
             case Images:
                 processingTick = 32 / numberOfCores * 4 - ticksFromService;
                 if (processingTick == 0) {
-                    processFunction(dataBatch);
+                    ticksFromService = 0;
+                    dataBatch.process();
                     Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
                 }
                 break;
             case Text:
                 processingTick = 32 / numberOfCores * 2 - ticksFromService; //TODO Start Tick,not stop checkcc
                 if (processingTick == 0) {
-                    processFunction(dataBatch);
-                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 2);
-
+                    ticksFromService = 0;
+                    dataBatch.process();
+                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
 
 
                 }
@@ -54,8 +54,10 @@ public class CPU {
             case Tabular:
                 processingTick = 32 / numberOfCores - ticksFromService;
                 if (processingTick == 0) {
-                    processFunction(dataBatch);
-                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores);
+                    ticksFromService = 0;
+                    dataBatch.process();
+                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
+
                 }
                 break;
         }
@@ -63,12 +65,6 @@ public class CPU {
         this.db = null;
         isBusy = false;
         return dataBatch;
-    }
-
-    private void processFunction (DataBatch dataBatch) {
-        System.out.println("PROCESS");
-        ticksFromService = 0;
-        dataBatch.process();
     }
 
     /////////////////////////////////////////////////////////////////////
