@@ -118,6 +118,7 @@ public class Cluster {
     public CPU minFutureTime() {
         int sum;
         int min = Integer.MAX_VALUE;
+
         if (cluster.CPUs.isEmpty())
             return null;
         CPU minTimeWork = cluster.CPUs.firstElement();

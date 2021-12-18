@@ -49,13 +49,14 @@ public class  CRMSRunner {
             Thread[] confrencesServices = new Thread[conferenceArray.length];
 
             /**
-             * instantiating the micro - services
+             * instantiating the micro - services and register them.
              */
 
             MicroService timer = new TimeService(TickTime , Duration);
             for (int i=0 ;i< studentServices.length ; i++){
                 MicroService tmpservice = new StudentService(studentArray[i].getName() , studentArray[i]);
                 studentServices[i] = new Thread(tmpservice);
+
             }
             for (int i=0 ; i < CPUServices.length; i++){
                 MicroService tmpservice =new CPUService("CPU" + i, cpuArray[i]);
@@ -75,15 +76,15 @@ public class  CRMSRunner {
              */
             Thread clock = new Thread(timer);
 
-//        for (Thread studentService : studentServices) {
-//            studentService.start();
-//        }
+        for (Thread studentService : studentServices) {
+            studentService.start();
+        }
         for (Thread cpuService : CPUServices) {
             cpuService.start();
         }
-//        for (Thread gpuService : GPUServices) {
-//            gpuService.start();
-//        }
+        for (Thread gpuService : GPUServices) {
+            gpuService.start();
+        }
 
 //        for (Thread confrencesService : confrencesServices) {
 //            confrencesService.start();

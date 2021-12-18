@@ -67,7 +67,7 @@ public class MessageBusImpl implements MessageBus {
             subscribedBroadcast.put(type, tmpV);
 
         }
-        System.out.println("debug subscribeBroadcast" );
+       // System.out.println("debug subscribeBroadcast" );
     }
 
     @Override

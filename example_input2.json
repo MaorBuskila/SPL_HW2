@@ -31,8 +31,8 @@
 
         }
     ],
-    "GPUS": ["RTX2080","GTX1080"],
-    "CPUS": [32,32,16],
+    "GPUS": ["RTX2080"],
+    "CPUS": [32,16],
     "Conferences":
     [
         {"name": "ICML", "date": 2000}

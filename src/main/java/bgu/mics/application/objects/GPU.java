@@ -142,7 +142,7 @@ public class GPU {
 //            }
 
             //TODO: check how to train nonstop
-            if (!vRam.isEmpty()) {
+            if (vRam.firstElement() != null) {
                 DataBatch dataBatch = vRam.firstElement();
                 System.out.println("TRAINIG BATCH OF : " + model.getName());  ///////////////////////////
                 System.out.println("ALREADY PROCESSED DATA SIZE IS : " + dataBatch.getData().getProcessed());  ///////////////////////////

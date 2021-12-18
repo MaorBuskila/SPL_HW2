@@ -17,11 +17,11 @@ public class Data {
 
     //Constructor
     public Data(String sType, int size) {
-        if (sType.equals("Images"))
+        if (sType.equals("images"))
             this.type = Type.Images;
-        if (sType.equals("Text"))
+        if (sType.equals("text"))
             this.type = Type.Text;
-        if (sType.equals("Tabular"))
+        if (sType.equals("tabular"))
             this.type = Type.Tabular;
         this.size = size;
         this.processed = 0;
