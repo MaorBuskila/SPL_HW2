@@ -36,13 +36,6 @@ public class  CRMSRunner {
             /**
              * instantiating the cluster and initializing it
              */
-            Cluster cluster = Cluster.getInstance();
-            for(GPU g : gpuArray) {
-                cluster.addToGPUS(g);
-            }
-            for(CPU c : cpuArray) {
-                cluster.addToCPUs(c);
-            }
 
 
 
@@ -82,26 +75,20 @@ public class  CRMSRunner {
              */
             Thread clock = new Thread(timer);
 
-
-        for (Thread studentService : studentServices) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            studentService.start();
-        }
+//        for (Thread studentService : studentServices) {
+//            studentService.start();
+//        }
         for (Thread cpuService : CPUServices) {
             cpuService.start();
         }
-        for (Thread gpuService : GPUServices) {
-            gpuService.start();
-        }
-        clock.start();
+//        for (Thread gpuService : GPUServices) {
+//            gpuService.start();
+//        }
+
 //        for (Thread confrencesService : confrencesServices) {
 //            confrencesService.start();
 //        }
-
+        clock.start();
         }
     }
 

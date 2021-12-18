@@ -41,6 +41,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) { // ? is sog shel event kolsheu
+        System.out.println(m.getName() + " is subscribing to "  + type);
         if (subscribedEvents.containsKey(type))
             subscribedEvents.get(type).addElement((m));
         else {
@@ -56,6 +57,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void subscribeBroadcast(Class<? extends Broadcast> type, MicroService m) {
+        System.out.println(m.getName() + " is subscribing to "  + type.getSimpleName());
         if (subscribedBroadcast.containsKey(type))
             subscribedBroadcast.get(type).addElement((m));
         else {
@@ -65,7 +67,7 @@ public class MessageBusImpl implements MessageBus {
             subscribedBroadcast.put(type, tmpV);
 
         }
-
+        System.out.println("debug subscribeBroadcast" );
     }
 
     @Override
