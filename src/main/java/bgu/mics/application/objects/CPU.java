@@ -21,6 +21,7 @@ public class CPU {
         this.numberOfCores = numberOfCores;
         this.cluster = Cluster.getInstance();
         this.processingTick = 0;
+        this.ticksFromService=0;
         cluster.addToCPUs(this);
     }
 
@@ -30,14 +31,25 @@ public class CPU {
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
     //////// MAIN FUNCTION: process the databatch with ticks ////////
-    public DataBatch process(DataBatch dataBatch) { // TODO CHANGE TICKINGS
-        this.db = dataBatch; //set the db the cpu currently working on
+    public DataBatch process() { // TODO CHANGE TICKINGS
+
+        //this.db = dataBatch; //set the db the cpu currently working on
+        if(db==null) {
+            if(!cluster.getUnProcessedQueue(this).isEmpty())
+                 this.db = cluster.getUnProcessedQueue(this).remove();
+            else
+                return null;
+
+        }
         switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
             case Images:
                 processingTick = 32 / numberOfCores * 4 - ticksFromService;
+                System.out.println("try take");
                 if (processingTick == 0) {
+
                     ticksFromService = 0;
-                    dataBatch.process();
+                    db.process();
+                    doneProcessThisBatch(db);
                     Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
                 }
                 break;
@@ -45,7 +57,8 @@ public class CPU {
                 processingTick = 32 / numberOfCores * 2 - ticksFromService; //TODO Start Tick,not stop checkcc
                 if (processingTick == 0) {
                     ticksFromService = 0;
-                    dataBatch.process();
+                    db.process();
+                    doneProcessThisBatch(db);
                     Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
 
 
@@ -55,18 +68,25 @@ public class CPU {
                 processingTick = 32 / numberOfCores - ticksFromService;
                 if (processingTick == 0) {
                     ticksFromService = 0;
-                    dataBatch.process();
+                    db.process();
+                    doneProcessThisBatch(db);
                     Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
 
                 }
                 break;
         }
-        dataBatch.getData().updateProcessed();
-        this.db = null;
-        isBusy = false;
-        return dataBatch;
+
+
+        return db;
     }
 
+    public void doneProcessThisBatch(DataBatch dataBatch)
+    {
+        System.out.println("done process");
+        dataBatch.getData().updateProcessed();
+
+        isBusy = false;
+    }
     /////////////////////////////////////////////////////////////////////
 
     //////////// Getters ///////////
@@ -118,7 +138,8 @@ public class CPU {
     }
 
     public void updateTick(int tick) {
-        this.ticksFromService = tick;
+        ticksFromService++;
+        //this.ticksFromService = tick;
     }
 
     public void updateProcessingTick() {
@@ -127,6 +148,10 @@ public class CPU {
 
     public String getName() {
         return name;
+    }
+
+    public void clearDataBatch() {
+        db=null;
     }
 }
 

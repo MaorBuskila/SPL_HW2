@@ -30,13 +30,13 @@ class CPUTest {
     @BeforeEach
     public void setUp() {
         msgbus = MessageBusImpl.getInstance();
-        Data data=new Data("Images" , 10000);
-        db = new DataBatch(data,0);
+        Data data = new Data("Images", 10000);
+        db = new DataBatch(data, 0);
         queue = new LinkedList<DataBatch>();
         queue.add(db);
         cluster = new Cluster();
-        cpu = new CPU("cpu1" ,16);
-        cpuService = new CPUService("CPUSER" , cpu);
+        cpu = new CPU("cpu1", 16);
+        cpuService = new CPUService("CPUSER", cpu);
         gpu = new GPU("RTX3090");
         gpuService = new GPUService("gpu", gpu);
         gpu.sendUnprocessedDataBatchToCluster(db); //actually sending to cpu queue
@@ -53,7 +53,7 @@ class CPUTest {
         DataBatch tmp = cluster.getUnProcessedQueue(cpu).poll();
         assertEquals(tmp, db);
         //DataBatch tmp2 = cpu.getUnprocessed();
-      //  assertNull(tmp2);
+        //  assertNull(tmp2);
     }
 
     @Test
@@ -71,29 +71,30 @@ class CPUTest {
             msgbus.sendBroadcast(tickBroadCast);
             cpuService.updateTick(tickBroadCast);
         });
-     t1.start();
-     t2.start();
-       // int x=db.getData().getProcessed();
-      //  assertFalse(db.isProcessed());
-      //  cpu.process(db);
+        t1.start();
+        t2.start();
+        // int x=db.getData().getProcessed();
+        //  assertFalse(db.isProcessed());
+        //  cpu.process(db);
         assertTrue(db.isProcessed());
-     //   assertEquals(db.getData().getProcessed()-x,1000);
-      //    assertThrows("Should throw exception (DataBatch is already Processed)",Exception.class, () -> cpu.process(db));
-    }
-
-    @Test
-    void testsendToCluster() {
-        cpu.process(db);
-        cpu.sendToCluster(db);
-     //   assertEquals(cluster.getProcessedDataBatch().peek(), db);
-
-
-    }
-
-    //Todo: check if we need this?
-    @Test
-    void testcheckIfBusy() {
-        assertFalse(cpu.checkIfBusy());
-
+        //   assertEquals(db.getData().getProcessed()-x,1000);
+        //    assertThrows("Should throw exception (DataBatch is already Processed)",Exception.class, () -> cpu.process(db));
     }
 }
+
+ //   @Test
+//    void testsendToCluster() {
+//        cpu.process(db);
+//        cpu.sendToCluster(db);
+//     //   assertEquals(cluster.getProcessedDataBatch().peek(), db);
+//
+//
+//    }
+
+//    //Todo: check if we need this?
+//    @Test
+//    void testcheckIfBusy() {
+//        assertFalse(cpu.checkIfBusy());
+//
+//    }
+//}

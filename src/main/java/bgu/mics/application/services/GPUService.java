@@ -52,18 +52,29 @@ public class GPUService extends MicroService {
                 while(!gpu.getAllDataBatches().isEmpty()) {
                     int freeSpace = gpu.getvRam().size() - gpu.getCurrentProcessInVram();
                     for (int i = 0; i<freeSpace;i++) {
-                        gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(i)); // TODO CHECK IF REMOVE WORK?
+                        if(!gpu.getAllDataBatches().isEmpty())
+                            gpu.sendUnprocessedDataBatchToCluster(gpu.getAllDataBatches().remove(0)); // TODO CHECK IF REMOVE WORK?
+//                        System.out.print("DEBUG");
                     }
                 }
             });
             Thread t2=new Thread(()->{
 
                     gpu.trainDataBatchModel();
-                    if (gpu.finishTrain()) {
-                        gpu.getModel().setStatus("Trained");
-                        gpu.setModel(null);
-                        complete(trainModelEvent, model);
-                    }
+//                    if (model.getStatus()!="Trained"){
+//                        try {
+//                            wait();
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+                while(model.getStatus()!="Trained")
+                {}
+                    complete(trainModelEvent, model);
+                    model.getStudent().addToTrainedModel(model);
+                    gpu.setModel(null);
+                System.out.println(trainModelEvent.getModel().getName() + "is done");
+
 
 
             });

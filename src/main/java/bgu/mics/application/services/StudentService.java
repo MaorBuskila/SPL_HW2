@@ -34,24 +34,8 @@ public class StudentService extends MicroService {
 
 
 
-//        for(int i=0;i<student.getModels().length;i++)
-//        {
-//            System.out.println(student.getName() + " Sending Event");
-//            sendEvent(new TrainModelEvent(student.getModels()[i], "TrainModel" + String.valueOf(i)));
-//            //student.setFuture(f);
-////            while(student.getModels()[i].getStatus().equals"Trained")
-////            {}
-//           // if(student.getModels()[i].getStatus()=="Trained")
-//            MessageBusImpl.getInstance().sendEvent(new TestModelEvent(student.getModels()[i], "TestModel" + String.valueOf(i)));
-//            while(student.getModels()[i].getStatus()!="Tested")
-//            {}
-//            //if(student.getModels()[i].getStatus()=="Tested" && student.getModels()[i].isGood()) // TODO WHILE OR IF
-//            MessageBusImpl.getInstance().sendEvent(new PublishResultEvent(student.getModels()[i]));
-//        }
 
-//        subscribeBroadcast(PublishConferenceBroadcast.class,(PublishConferenceBroadcast publish)->{
-//            // TODO: Implement this
-//        });
+
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
             this.terminate();
         });
@@ -59,7 +43,7 @@ public class StudentService extends MicroService {
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             TrainModelEvent e = null;
             if (student.getFuture() == null) {
-                e = new TrainModelEvent(student.getModels()[0], this.getName());
+                e = new TrainModelEvent(student.getModels().firstElement(), this.getName());
                 System.out.println(Thread.currentThread().getName() + " is sending: " + e.getClass());        ///////////////////////////////////////////////////////////////////////
             }
 
@@ -68,8 +52,21 @@ public class StudentService extends MicroService {
         });
         subscribeBroadcast(PublishConferenceBroadcast.class, (PublishConferenceBroadcast pub) -> {
 
-
+        //TODO implement this
         });
+        for(int i=0;i<student.getModels().size();i++)
+        {
+            System.out.println(student.getName() + " Sending Event");
+            sendEvent(new TrainModelEvent(student.getModels().elementAt(i), "TrainModel" + String.valueOf(i)));
+           // student.setFuture(f);
+            while(!student.getModels().elementAt(i).getStatus().equals("Trained")){}
+//            if(student.getModels()[i].getStatus()=="Trained")
+                MessageBusImpl.getInstance().sendEvent(new TestModelEvent(student.getModels().elementAt(i), "TestModel" + String.valueOf(i)));
+//            while(student.getModels()[i].getStatus()!="Tested")
+//            {}
+            if(student.getModels().elementAt(i).getStatus()=="Tested" && student.getModels().elementAt(i).isGood()) // TODO WHILE OR IF
+                MessageBusImpl.getInstance().sendEvent(new PublishResultEvent(student.getModels().elementAt(i)));
+        }
 
     }
 }
