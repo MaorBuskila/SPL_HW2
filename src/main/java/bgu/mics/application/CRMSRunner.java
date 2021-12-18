@@ -81,7 +81,7 @@ public class  CRMSRunner {
              * running the micro-services one after another
              */
             Thread clock = new Thread(timer);
-            clock.start();
+
 
         for (Thread studentService : studentServices) {
             try {
@@ -97,6 +97,7 @@ public class  CRMSRunner {
         for (Thread gpuService : GPUServices) {
             gpuService.start();
         }
+        clock.start();
 //        for (Thread confrencesService : confrencesServices) {
 //            confrencesService.start();
 //        }
