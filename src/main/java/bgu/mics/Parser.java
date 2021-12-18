@@ -74,7 +74,7 @@ public class Parser {
                     counterOfModel++;
                 }
                 counterOfModel = 0;
-                Student student= new Student(name,department, status, models);
+                Student student= new Student(name,department, status,models);
                 String sSname=name+" SERVICE";
                 StudentService studentService= new StudentService(sSname,student);
                 students[counterOfStudents]=student;
@@ -84,7 +84,7 @@ public class Parser {
             }
             //*********************** getting GPUs ***********************
             JsonArray JsonArrayOfGpu = fileObject.get("GPUS").getAsJsonArray();
-            GPUArray = new GPU[JsonArrayOfGpu.size()];
+             GPUArray = new GPU[JsonArrayOfGpu.size()];
 
             for(JsonElement GPUElement : JsonArrayOfGpu){
                 String type = GPUElement.getAsString();
@@ -105,7 +105,7 @@ public class Parser {
                 CPU cpu=new CPU(cName,cores);
                 String cServiceName="CPUSERVICE" + String.valueOf(counterOfCPU);
                 CPUService cps=new CPUService(cServiceName,cpu);
-               CPUArray[counterOfCPU] = cpu;
+                CPUArray[counterOfCPU] = cpu;
                 counterOfCPU++;
             }
             //*********************** getting Conferences***********************
