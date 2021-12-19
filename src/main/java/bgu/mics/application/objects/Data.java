@@ -9,6 +9,15 @@ public class Data {
     private Type type;
     private int processed;
     private int size;
+    private int trained;
+
+    public int getTrained() {
+        return trained;
+    }
+
+    public void updateTrained() {
+        trained += 1;
+    }
 
     // Enum representing the Data type.
     enum Type {
@@ -25,11 +34,13 @@ public class Data {
             this.type = Type.Tabular;
         this.size = size;
         this.processed = 0;
+        this.trained = 0;
+
     }
 
 
     public void updateProcessed() {
-        processed += 1000;
+        processed += 1;
     }
 
     //////////////// Getters //////////////

@@ -10,9 +10,8 @@ public class CPU {
     private String name;
     private int numberOfCores;
     private Cluster cluster;
-    private boolean isBusy = false;
     private DataBatch db = null;
-    private int ticksFromService;
+    private int tickForAction;
     private int processingTick;
 
     //Constructor
@@ -21,7 +20,7 @@ public class CPU {
         this.numberOfCores = numberOfCores;
         this.cluster = Cluster.getInstance();
         this.processingTick = Integer.MAX_VALUE;
-        this.ticksFromService = 0;
+        this.tickForAction = 0;
         cluster.addToCPUs(this);
     }
 
@@ -31,76 +30,44 @@ public class CPU {
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
     //////// MAIN FUNCTION: process the databatch with ticks ////////
-    public DataBatch process2() { // TODO CHANGE TICKINGS
-        System.out.println("trying to Process");
-        if (isBusy()) {
-                try {
-                    this.db = cluster.getUnProcessedQueue(this).take();
-                } catch (InterruptedException e) {
-                    System.out.println("nothing in " + getName() + " queue");
-                }
-            }
-        else{
-            System.out.println("im busy");
+    public  DataBatch processDatabatch() {
+     //   System.out.println(this.getName()+ " trying to Process");
+        if(db!=null) {
+        //    System.out.println(this.getName() + " is processing");
+            processFunction();
         }
-        switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
-            case Images:
-                processingTick = 32 / numberOfCores * 4 - ticksFromService;
-
-                if (processingTick == 0) {
-                    ticksFromService = 0;
-                    db.process();
-                    System.out.println(getName() + " is done processing dataBatch number " + getProcessingDataBatch().getData().getProcessed());
-                    db.getData().updateProcessed();
-                    db = null;
-                    isBusy =false;
-                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
-                }
-                break;
-            case Text:
-                processingTick = 32 / numberOfCores * 2 - ticksFromService;
-                if (processingTick == 0) {
-                    ticksFromService = 0;
-                    db.process();
-                    doneProcessThisBatch(db);
-                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
-
-
-                }
-                break;
-            case Tabular:
-                processingTick = 32 / numberOfCores - ticksFromService;
-                if (processingTick == 0) {
-                    ticksFromService = 0;
-                    db.process();
-                    doneProcessThisBatch(db);
-                    Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
-
-                }
-                break;
+        else {
+            try {
+                db = cluster.getUnProcessedQueue(this).take();
+                processFunction();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return db;
     }
-    //////// MAIN FUNCTION: process the databatch with ticks ////////
-    public  synchronized DataBatch process() {
-        //System.out.println("trying to Process");
-        if (isBusy()) {
-            switch (db.getData().getType()) {
+
+    public synchronized DataBatch processFunction (){
+    System.out.println(this.getName()+ " im busy with: " + db.toString());
+            switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
                 case Images:
-                    processingTick = 32 / numberOfCores * 4 - ticksFromService;
-                    System.out.println("processingTick " + processingTick);
-                    System.out.println("ticksFromService " + ticksFromService);
+                    System.out.println(this.getName()+ " Images");
+                    processingTick = 32 / numberOfCores * 4 - tickForAction;
+                   // System.out.println("processingTick: " + processingTick);
+                   // System.out.println("tickForAction: " + tickForAction);
                     if (processingTick == 0) {
-                        ticksFromService = 0;
+                        System.out.println("Debug2");
+                        tickForAction = 0;
                         db.process();
                         doneProcessThisBatch(db);
                         Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
                     }
                     break;
                 case Text:
-                    processingTick = 32 / numberOfCores * 2 - ticksFromService;
+                    System.out.println(this.getName()+ " Text");
+                    processingTick = 32 / numberOfCores * 2 - tickForAction;
                     if (processingTick == 0) {
-                        ticksFromService = 0;
+                        tickForAction = 0;
                         db.process();
                         doneProcessThisBatch(db);
                         Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
@@ -109,9 +76,10 @@ public class CPU {
                     }
                     break;
                 case Tabular:
-                    processingTick = 32 / numberOfCores - ticksFromService;
+                    System.out.println(this.getName()+ " Tabular");
+                    processingTick = 32 / numberOfCores - tickForAction;
                     if (processingTick == 0) {
-                        ticksFromService = 0;
+                        tickForAction = 0;
                         db.process();
                         doneProcessThisBatch(db);
                         Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
@@ -119,24 +87,16 @@ public class CPU {
                     }
                     break;
             }
-
-        }
-        else{
-            try {
-                this.db = cluster.getUnProcessedQueue(this).take();
-            } catch (InterruptedException e) {
-                System.out.println("nothing in " + getName() + " queue");
-            }
-        }
         return db;
     }
 
 
-    public  synchronized void doneProcessThisBatch(DataBatch dataBatch) {
-        System.out.println(getName() + " is done processing dataBatch number " + getProcessingDataBatch().getData().getProcessed());
+    public  void doneProcessThisBatch(DataBatch dataBatch) {
+//        System.out.println(getName() + " is done processing dataBatch " + db + " or " + dataBatch);
+      //  System.out.println(this.getName() + " " + db.getData().getProcessed());
         db.getData().updateProcessed();
+        sendToCluster(db);
         db = null;
-        isBusy = false;
     }
     /////////////////////////////////////////////////////////////////////
 
@@ -151,17 +111,17 @@ public class CPU {
      * @post: cluster.processedBatch != null
      */
     public void sendToCluster(DataBatch processedDataBatch) {
+       // System.out.println("done process");
         this.cluster.sendToGPU(processedDataBatch);
     }
     ///////////////////////////////////////////////////////////
 
-    public boolean isBusy() {
-     return db!=null;
-    }
 
     public synchronized void updateTick(int tick) {
-        ticksFromService = tick;
-        process();
+      //  if (db!=null)
+            tickForAction++;
+        //notify(); //why?
+        processDatabatch();
     }
 
 

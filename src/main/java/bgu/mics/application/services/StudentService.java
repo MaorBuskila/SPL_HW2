@@ -31,11 +31,6 @@ public class StudentService extends MicroService {
         MessageBusImpl msgbus = MessageBusImpl.getInstance();
         msgbus.register(this);
 
-
-
-
-
-
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
             this.terminate();
         });
@@ -57,15 +52,26 @@ public class StudentService extends MicroService {
         for(int i=0;i<student.getModels().size();i++)
         {
             System.out.println(student.getName() + " Sending Event");
-            sendEvent(new TrainModelEvent(student.getModels().elementAt(i), "TrainModel" + String.valueOf(i)));
-           // student.setFuture(f);
-            while(!student.getModels().elementAt(i).getStatus().equals("Trained")){}
-//            if(student.getModels()[i].getStatus()=="Trained")
-                MessageBusImpl.getInstance().sendEvent(new TestModelEvent(student.getModels().elementAt(i), "TestModel" + String.valueOf(i)));
-//            while(student.getModels()[i].getStatus()!="Tested")
-//            {}
-            if(student.getModels().elementAt(i).getStatus()=="Tested" && student.getModels().elementAt(i).isGood()) // TODO WHILE OR IF
-                MessageBusImpl.getInstance().sendEvent(new PublishResultEvent(student.getModels().elementAt(i)));
+            student.setFuture(sendEvent(new TrainModelEvent(student.getModels().elementAt(i), "TrainModel" + String.valueOf(i))));
+
+
+            boolean b=true;
+            while(b) {
+                if (student.getFuture().get().getStatus().equals("Trained")) {
+                    b = false;
+                    student.setFuture(sendEvent(new TestModelEvent(student.getModels().elementAt(i), "TestModel" + String.valueOf(i)))) ;
+                }
+            }
+            b=true;
+            while (b) {
+                if (student.getFuture().get().getStatus().equals("Tested")) {
+                    System.out.println("im:      " + student.getModels().get(i).getStatus());
+                    if(student.getFuture().get().isGood())
+                        student.setFuture(sendEvent(new PublishResultEvent(student.getModels().elementAt(i)))) ;
+                    b=false;
+                }
+            }
+
         }
 
     }

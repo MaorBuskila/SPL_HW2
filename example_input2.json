@@ -2,41 +2,84 @@
     "Students":
     [
         {
-            "name": "Nala",
-            "department": "Computer Science",            
-            "status": "PhD",
+            "name": "Simba",
+            "department": "Computer Science",
+            "status": "MSc",
             "models":
             [
                 {
-                    "name": "YOLO9000",
+                    "name": "YOLO10",
                     "type": "images",
-                    "size": 100000
+                    "size": 200000
                 },
                 {
-                    "name": "VIT2",
+                    "name": "ResNet9000",
                     "type": "images",
-                    "size": 1000000
+                    "size": 200000
                 },
                 {
-                    "name": "MuchMoreEfficientNet",
+                    "name": "LessEfficientNet",
                     "type": "images",
                     "size": 20000
                 },
                 {
-                    "name": "DenserNet",
+                    "name": "DensestNet",
                     "type": "images",
-                    "size": 10000
+                    "size": 200000
+                }
+            ]
+
+        },
+        {
+            "name": "Zazu",
+            "department": "EE",
+            "status": "PhD",
+            "models":
+            [
+                {
+                    "name": "VIT",
+                    "type": "images",
+                    "size": 100000000
+                }
+            ]
+
+        },
+        {
+            "name": "Pumba",
+            "department": "Computer Science",
+            "status": "PhD",
+            "models":
+            [
+                {
+                    "name": "Bert",
+                    "type": "Text",
+                    "size": 1000000
+                },
+                {
+                    "name": "GPT4",
+                    "type": "Text",
+                    "size": 1000000
+                },
+                {
+                    "name": "GPT5",
+                    "type": "Text",
+                    "size": 200000
+                },
+                {
+                    "name": "GPT10",
+                    "type": "Text",
+                    "size": 50000
                 }
             ]
 
         }
     ],
-    "GPUS": ["RTX2080"],
-    "CPUS": [32,16],
+    "GPUS": ["RTX3090","RTX2080","GTX1080"],
+    "CPUS": [32,32,32,16,16,16,16],
     "Conferences":
     [
-        {"name": "ICML", "date": 2000}
+        {"name": "ICML", "date": 1000}
     ],
     "TickTime": 50,
-    "Duration": 5500
+    "Duration": 6500
 }

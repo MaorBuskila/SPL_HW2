@@ -29,6 +29,7 @@ public class Student {
     }
 
     public void addToTrainedModel(Model model) {
+        System.out.println("FINISHHHHHHHHHHHHH"+model);
         this.trainedModels.addElement(model);
     }
 

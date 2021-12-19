@@ -11,7 +11,7 @@ import java.util.TimerTask;
 /**
  * TimeService is the global system timer There is only one instance of this micro-service.
  * It keeps track of the amount of ticks passed since initialization and notifies
- * all other micro-services about the current time tick using {@link TickBroadcast}.
+ * all other micro-services about the current time tick using .
  * This class may not hold references for objects which it is not responsible for.
  * 
  * You can add private fields and public methods to this class.
@@ -35,41 +35,43 @@ public class TimeService extends MicroService{
 	@Override
 	protected void initialize() {
 		MessageBusImpl.getInstance().register(this);
-		timerTask = new TimerTask() {
-			@Override
-			public void run() {
-				time++;
-				System.out.println("Current Time: "+time);
-				sendBroadcast(new TickBroadCast(time));
+//		timerTask = new TimerTask() {
+//			@Override
+//			public void run() {
+//				time++;
+//				System.out.println("Current Time: "+time);
+//				sendBroadcast(new TickBroadCast(time));
+//			}
+//		};
+//		timer.scheduleAtFixedRate(timerTask , 0 , speed);
+//
+//		try{
+//			Thread.sleep(duration-50);}
+//		catch(Exception e){
+//			System.out.println("TimerException");
+//		}
+//
+//		timer.cancel();
+//		//sendBroadcast(new TerminateBroadcast());
+//		System.out.println("Terminate!");
+//		terminate();
+//
+//	}
+//
+//}
+		while(time < duration) {
+			time += speed;
+			System.out.println("Time is: " + time/speed);
+			MessageBusImpl.getInstance().sendBroadcast(new TickBroadCast(time));
+			try {
+				Thread.sleep(speed);
 			}
-		};
-		timer.scheduleAtFixedRate(timerTask , 0 , speed);
-
-		try{
-			Thread.sleep(duration-50);}
-		catch(Exception e){
-			System.out.println("TimerException");
+			catch (InterruptedException e) {
+			}
 		}
-
-		timer.cancel();
-		//sendBroadcast(new TerminateBroadcast());
+		MessageBusImpl.getInstance().sendBroadcast(new TerminateBroadcast());
 		System.out.println("Terminate!");
 		terminate();
-
 	}
 
 }
-//		while(time < duration) {
-//			time++;
-//			System.out.println("Time is " + time);
-//			MessageBusImpl.getInstance().sendBroadcast(new TickBroadCast(time));
-//			try {
-//				wait(speed);
-//			} catch (InterruptedException e) {
-//			}
-//		}
-//		MessageBusImpl.getInstance().sendBroadcast(new TerminateBroadcast());
-//		terminate();
-//	}
-
-//}

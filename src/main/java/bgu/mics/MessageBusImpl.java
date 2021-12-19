@@ -93,7 +93,7 @@ public class MessageBusImpl implements MessageBus {
                 System.out.println("No one register for TrainModel yet!");
                 return null;
             } else {
-                System.out.println("someone register for TrainModel!");
+                System.out.println("someone register for " + e.getClass());
                 Future<T> future = new Future<>();
                 eventsToFuture.put(e, future);
                 //TODO: check if we need to change the order

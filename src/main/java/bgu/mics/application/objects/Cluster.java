@@ -53,6 +53,7 @@ public class Cluster {
     //////////////// Getters ////////////////
 
     public BlockingQueue<DataBatch> getUnProcessedQueue(CPU cpu) {
+      //  System.out.println("left in" + cpu.getName() + " queue " + unProcessedQueues.get(cpu).size());
         return unProcessedQueues.get(cpu);
     }
 
@@ -93,7 +94,7 @@ public class Cluster {
         dataBatchToGpu.put(dataBatch, gpu); // add to hashmap to know who to return.
         CPU tmpMin = minFutureTime();
         unProcessedQueues.get(tmpMin).add(dataBatch); // add to best time cpu the databatch
-        System.out.println("add unprocesses Databatch To " + tmpMin.getName() );
+//        System.out.println("add unprocesses Databatch To " + tmpMin.getName() );
       //
         // notifyAll();
        // System.out.println("debug");
@@ -107,10 +108,10 @@ public class Cluster {
     /////////////////////// Send to GPU  processed Databatch ///////////////////////
 
     public void sendToGPU(DataBatch dataBatch) {
-        synchronized (this.dataBatchToGpu) {
             dataBatchToGpu.get(dataBatch).reciveProcessedDataBatch(dataBatch);
-            dataBatchToGpu.remove(dataBatch);
-        }
+     //   System.out.println("sending " + dataBatch + " to "  +  dataBatchToGpu.get(dataBatch));
+        dataBatchToGpu.remove(dataBatch);
+
         //send back to GPU ? ?because  we must to send to the fit GPU
     }
 

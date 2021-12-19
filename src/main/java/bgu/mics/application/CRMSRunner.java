@@ -21,7 +21,7 @@ public class  CRMSRunner {
 
     public static void main(String[] args) {
             Parser reader = new Parser();
-            reader.readInputFile("example_input2.json");  //the input path is starting from the folder of the project!
+            reader.readInputFile("example_input.json");  //the input path is starting from the folder of the project!
 
             /**
              * reading the input file
@@ -83,7 +83,7 @@ public class  CRMSRunner {
 
         }
         try {
-            Thread.sleep(500);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -93,9 +93,9 @@ public class  CRMSRunner {
 
             studentService.start();
         }
-        for (Thread confrencesService : confrencesServices) {
-            confrencesService.start();
-        }
+//        for (Thread confrencesService : confrencesServices) {
+//            confrencesService.start();
+//        }
 
         }
     }

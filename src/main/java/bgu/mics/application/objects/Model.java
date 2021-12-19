@@ -36,25 +36,33 @@ public class Model {
             return "PreTrained";
 
         if (status == Status.Training)
-            return "PreTrained";
+            return "Training";
 
         if (status == Status.Trained)
-            return "PreTrained";
+            return "Trained";
 
-        else
+        else {
+            System.out.println("here");
             return "Tested";
+        }
     }
 
     public void setStatus(String sStatus) {
 
-        if (sStatus.equals("PreTrained"))
-            status = Status.PreTrained;
-        if (sStatus.equals("Training"))
-            status = Status.Training;
-        if (sStatus.equals("Trained"))
-            status = Status.Trained;
-        else
-            status = Status.Tested;
+        switch (sStatus) {
+            case "PreTrained":
+                status = status.PreTrained;
+                break;
+            case "Training":
+                status = status.Training;
+                break;
+            case "Trained":
+                status = status.Trained;
+                break;
+            case "Tested":
+                status = status.Tested;
+                break;
+        }
 
     }
 
