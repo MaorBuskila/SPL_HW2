@@ -34,7 +34,6 @@ public class Cluster {
         CPUs = new Vector<>();
         dataBatchToGpu = new ConcurrentHashMap<>();
         unProcessedQueues = new ConcurrentHashMap<>();
-        //	processedBatch=new LinkedBlockingQueue<>();
         trainedModels = new Vector<>();
         cpuTimeUnitUsed=0;
         gpuTimeUnitUsed=0;

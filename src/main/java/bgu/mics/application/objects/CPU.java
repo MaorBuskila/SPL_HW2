@@ -31,27 +31,29 @@ public class CPU {
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
     //////// MAIN FUNCTION: process the databatch with ticks ////////
-    public synchronized DataBatch process() { // TODO CHANGE TICKINGS
-
-        //this.db = dataBatch; //set the db the cpu currently working on
-        if (db == null) {
-            if (!cluster.getUnProcessedQueue(this).isEmpty()) {
-                this.db = cluster.getUnProcessedQueue(this).poll();
-                System.out.println("queue unpro databatch size in" + this.getName() + " is " + cluster.getUnProcessedQueue(this).size());
-            } else {
-                System.out.println("queue is empty");
-                return null;
+    public DataBatch process2() { // TODO CHANGE TICKINGS
+        System.out.println("trying to Process");
+        if (isBusy()) {
+                try {
+                    this.db = cluster.getUnProcessedQueue(this).take();
+                } catch (InterruptedException e) {
+                    System.out.println("nothing in " + getName() + " queue");
+                }
             }
+        else{
+            System.out.println("im busy");
         }
         switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
             case Images:
                 processingTick = 32 / numberOfCores * 4 - ticksFromService;
-                System.out.println(getName() + " Processing tick:" + processingTick);
-                System.out.println(getName() + " ticksFromService: " + ticksFromService);
+
                 if (processingTick == 0) {
                     ticksFromService = 0;
                     db.process();
-                    doneProcessThisBatch(db);
+                    System.out.println(getName() + " is done processing dataBatch number " + getProcessingDataBatch().getData().getProcessed());
+                    db.getData().updateProcessed();
+                    db = null;
+                    isBusy =false;
                     Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
                 }
                 break;
@@ -79,26 +81,66 @@ public class CPU {
         }
         return db;
     }
+    //////// MAIN FUNCTION: process the databatch with ticks ////////
+    public  synchronized DataBatch process() {
+        //System.out.println("trying to Process");
+        if (isBusy()) {
+            switch (db.getData().getType()) {
+                case Images:
+                    processingTick = 32 / numberOfCores * 4 - ticksFromService;
+                    System.out.println("processingTick " + processingTick);
+                    System.out.println("ticksFromService " + ticksFromService);
+                    if (processingTick == 0) {
+                        ticksFromService = 0;
+                        db.process();
+                        doneProcessThisBatch(db);
+                        Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
+                    }
+                    break;
+                case Text:
+                    processingTick = 32 / numberOfCores * 2 - ticksFromService;
+                    if (processingTick == 0) {
+                        ticksFromService = 0;
+                        db.process();
+                        doneProcessThisBatch(db);
+                        Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
+
+
+                    }
+                    break;
+                case Tabular:
+                    processingTick = 32 / numberOfCores - ticksFromService;
+                    if (processingTick == 0) {
+                        ticksFromService = 0;
+                        db.process();
+                        doneProcessThisBatch(db);
+                        Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
+
+                    }
+                    break;
+            }
+
+        }
+        else{
+            try {
+                this.db = cluster.getUnProcessedQueue(this).take();
+            } catch (InterruptedException e) {
+                System.out.println("nothing in " + getName() + " queue");
+            }
+        }
+        return db;
+    }
+
 
     public  synchronized void doneProcessThisBatch(DataBatch dataBatch) {
         System.out.println(getName() + " is done processing dataBatch number " + getProcessingDataBatch().getData().getProcessed());
-        dataBatch.getData().updateProcessed();
+        db.getData().updateProcessed();
         db = null;
         isBusy = false;
     }
     /////////////////////////////////////////////////////////////////////
 
-    //////////// Getters ///////////
 
-    public Cluster getCluster() {
-        return cluster;
-    }
-
-    public int getNumberOfCores() {
-        return numberOfCores;
-    }
-
-    ////////////////////////////////
 
 
     // send to cluster processed databatch and then send to relevant GPU //
@@ -113,26 +155,8 @@ public class CPU {
     }
     ///////////////////////////////////////////////////////////
 
-    /**
-     * take databatch from cluster
-     * <p>
-     * public void takeDataBatchCluster()
-     * {
-     * if(cluster.
-     * }
-     */
-
-    //  {
-    //    if(!cluster.getNotProccesedData.isEmpty())
-    //         DataBatch db=cluster.getNotProcesedData.remove(0);
-    //       db.process();
-    //}
-    public boolean checkIfBusy() {
-        if (db != null)
-            isBusy = true;
-        else
-            isBusy = false;
-        return isBusy;
+    public boolean isBusy() {
+     return db!=null;
     }
 
     public synchronized void updateTick(int tick) {
@@ -140,8 +164,16 @@ public class CPU {
         process();
     }
 
-    public void updateProcessingTick() {
 
+
+    //////////// Getters ///////////
+
+    public Cluster getCluster() {
+        return cluster;
+    }
+
+    public int getNumberOfCores() {
+        return numberOfCores;
     }
 
     public String getName() {
@@ -152,9 +184,7 @@ public class CPU {
         return db;
     }
 
-    public void clearDataBatch() {
-        db = null;
-    }
+    ////////////////////////////////
 }
 
 
