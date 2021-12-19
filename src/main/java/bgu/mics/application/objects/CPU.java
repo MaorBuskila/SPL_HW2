@@ -51,7 +51,7 @@ public class CPU {
     System.out.println(this.getName()+ " im busy with: " + db.toString());
             switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
                 case Images:
-                    System.out.println(this.getName()+ " Images");
+                    System.out.println(" Images");
                     processingTick = 32 / numberOfCores * 4 - tickForAction;
                    // System.out.println("processingTick: " + processingTick);
                    // System.out.println("tickForAction: " + tickForAction);
