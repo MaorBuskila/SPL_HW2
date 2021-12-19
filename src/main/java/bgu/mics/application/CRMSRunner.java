@@ -93,9 +93,9 @@ public class  CRMSRunner {
 
             studentService.start();
         }
-//        for (Thread confrencesService : confrencesServices) {
-//            confrencesService.start();
-//        }
+        for (Thread confrencesService : confrencesServices) {
+            confrencesService.start();
+        }
 
         }
     }

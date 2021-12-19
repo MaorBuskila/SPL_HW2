@@ -21,7 +21,7 @@ public class CPU {
         this.numberOfCores = numberOfCores;
         this.cluster = Cluster.getInstance();
         this.processingTick = Integer.MAX_VALUE;
-        this.ticksFromService=0;
+        this.ticksFromService = 0;
         cluster.addToCPUs(this);
     }
 
@@ -31,24 +31,24 @@ public class CPU {
      * @post: dataBatch.isProcessed == true AND  data.proccesed=@pre data.processed+1000
      */
     //////// MAIN FUNCTION: process the databatch with ticks ////////
-    public  DataBatch process() { // TODO CHANGE TICKINGS
+    public synchronized DataBatch process() { // TODO CHANGE TICKINGS
 
         //this.db = dataBatch; //set the db the cpu currently working on
-        if(db==null) {
-            if(!cluster.getUnProcessedQueue(this).isEmpty())
-                 this.db = cluster.getUnProcessedQueue(this).remove();
-            else
+        if (db == null) {
+            if (!cluster.getUnProcessedQueue(this).isEmpty()) {
+                this.db = cluster.getUnProcessedQueue(this).poll();
+                System.out.println("queue unpro databatch size in" + this.getName() + " is " + cluster.getUnProcessedQueue(this).size());
+            } else {
+                System.out.println("queue is empty");
                 return null;
-
+            }
         }
-        System.out.println(getName() + " Processing tick:" + processingTick);
-        System.out.println(getName() + " ticksFromService: " + ticksFromService);
         switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
             case Images:
                 processingTick = 32 / numberOfCores * 4 - ticksFromService;
-
+                System.out.println(getName() + " Processing tick:" + processingTick);
+                System.out.println(getName() + " ticksFromService: " + ticksFromService);
                 if (processingTick == 0) {
-                    System.out.println("Process");
                     ticksFromService = 0;
                     db.process();
                     doneProcessThisBatch(db);
@@ -56,7 +56,7 @@ public class CPU {
                 }
                 break;
             case Text:
-                processingTick = 32 / numberOfCores * 2 - ticksFromService; //TODO Start Tick,not stop checkcc
+                processingTick = 32 / numberOfCores * 2 - ticksFromService;
                 if (processingTick == 0) {
                     ticksFromService = 0;
                     db.process();
@@ -77,16 +77,13 @@ public class CPU {
                 }
                 break;
         }
-
-
         return db;
     }
 
-    public void doneProcessThisBatch(DataBatch dataBatch)
-    {
-        System.out.println("done process");
+    public  synchronized void doneProcessThisBatch(DataBatch dataBatch) {
+        System.out.println(getName() + " is done processing dataBatch number " + getProcessingDataBatch().getData().getProcessed());
         dataBatch.getData().updateProcessed();
-
+        db = null;
         isBusy = false;
     }
     /////////////////////////////////////////////////////////////////////
@@ -118,18 +115,17 @@ public class CPU {
 
     /**
      * take databatch from cluster
-     *
+     * <p>
      * public void takeDataBatchCluster()
      * {
-     *     if(cluster.
+     * if(cluster.
      * }
-     *
      */
 
-  //  {
+    //  {
     //    if(!cluster.getNotProccesedData.isEmpty())
-   //         DataBatch db=cluster.getNotProcesedData.remove(0);
-     //       db.process();
+    //         DataBatch db=cluster.getNotProcesedData.remove(0);
+    //       db.process();
     //}
     public boolean checkIfBusy() {
         if (db != null)
@@ -139,10 +135,9 @@ public class CPU {
         return isBusy;
     }
 
-    public void updateTick(int tick) {
-        ticksFromService=tick;
+    public synchronized void updateTick(int tick) {
+        ticksFromService = tick;
         process();
-        //this.ticksFromService = tick;
     }
 
     public void updateProcessingTick() {
@@ -158,7 +153,7 @@ public class CPU {
     }
 
     public void clearDataBatch() {
-        db=null;
+        db = null;
     }
 }
 
