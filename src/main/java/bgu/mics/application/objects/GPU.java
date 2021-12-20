@@ -157,6 +157,7 @@ public class GPU {
         }
 
     public DataBatch trainFunction (){
+        cluster.addGpuTimeUnitUsed();
         switch (this.getType()) {
             case RTX3090:
                 trainingTime = 1 - tickForAction;
@@ -182,7 +183,7 @@ public class GPU {
         return trainingDatabatch;
     }
     public void doneTrainThisBatch() {
-        System.out.println(this.getType() + " TRAINING BATCH OF : " + model.getName() + " ALREADY TRAINED DATA SIZE IS : " + trainingDatabatch.getData().getTrained());  ///////////////////////////
+    //    System.out.println(this.getType() + " TRAINING BATCH OF : " + model.getName() + " ALREADY TRAINED DATA SIZE IS : " + trainingDatabatch.getData().getTrained());  ///////////////////////////
         if (model.getStatus().equals("PreTrained"))
             model.setStatus("Training");
         tickForAction = 0;
@@ -200,14 +201,13 @@ public class GPU {
     public void updateTick(int tick) {
         if (!vRam.isEmpty())
               tickForAction++;
-
         if (model == null) {
             return;
         }
         //System.out.println(this.getType() + " trained: "+model.getName()+ " " +totalCurrentModelTrained);
         //System.out.println("total size of: "+model.getName()+ " " + model.getData().getSize()/1000);
         if(totalCurrentModelTrained==model.getData().getSize()/1000) {
-            System.out.println("trained");
+            //System.out.println("trained");
             this.getModel().setStatus("Trained");
             totalCurrentModelTrained=0;
         }

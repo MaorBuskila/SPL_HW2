@@ -38,16 +38,14 @@ public class CPUService extends MicroService {
     @Override
     protected void initialize() {
         MessageBusImpl.getInstance().register(this);
+        subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
+            this.terminate();
+        });
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             cpu.updateTick(tickBroadCast.getTick());
         });
-        // tmpDataBatch = cpu.getCluster().getUnProcessedQueue(cpu).take();
-        subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
-        //    Cluster.getInstance().addCpuTimeUnitUsed(cpu.getTotalTicks());
-            this.terminate();
-        });
+
         DoneSub=true;
-        System.out.println( cpu.getName() + " Service Running");
     }
     public boolean DoneSubscribe() {
         return DoneSub;

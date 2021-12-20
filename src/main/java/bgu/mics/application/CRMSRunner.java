@@ -13,94 +13,119 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 
-/** This is the Main class of Compute Resources Management System application. You should parse the input file,
+/**
+ * This is the Main class of Compute Resources Management System application. You should parse the input file,
  * create the different instances of the objects, and run the system.
  * In the end, you should output a text file.
  */
-public class  CRMSRunner {
+public class CRMSRunner {
 
-
+    public static CountDownLatch threadInitCounter;
     public static void main(String[] args) {
-            Parser reader = new Parser();
-            reader.readInputFile("example_input.json");  //the input path is starting from the folder of the project!
+        Parser reader = new Parser();
+        reader.readInputFile("example_input4.json");  //the input path is starting from the folder of the project!
 
-            /**
-             * reading the input file
-             */
-            Student[] studentArray = reader.getStudents();
-            GPU[] gpuArray = reader.getGPUArray();
-            CPU[] cpuArray = reader.getCPUArray();
-            ConfrenceInformation[] conferenceArray = reader.getConfrenceInformations();
-            int TickTime = reader.getTickTime();
-            int Duration = reader.getDuration();
+        /**
+         * reading the input file
+         */
+        Student[] studentArray = reader.getStudents();
+        GPU[] gpuArray = reader.getGPUArray();
+        CPU[] cpuArray = reader.getCPUArray();
+        ConfrenceInformation[] conferenceArray = reader.getConfrenceInformations();
+        int TickTime = reader.getTickTime();
+        int Duration = reader.getDuration();
 
-            /**
-             * instantiating the cluster and initializing it
-             */
-
-
+        /**
+         * instantiating the cluster and initializing it
+         */
 
 
-            /**
-             * instantiating the threads empty arrays
-             */
-            Thread[] studentServices = new Thread[studentArray.length];
-            Thread[] CPUServices = new Thread[cpuArray.length];
-            Thread[] GPUServices = new Thread[gpuArray.length];
-            Thread[] confrencesServices = new Thread[conferenceArray.length];
+        /**
+         * instantiating the threads empty arrays
+         */
+        Thread[] studentServices = new Thread[studentArray.length];
+        Thread[] CPUServices = new Thread[cpuArray.length];
+        Thread[] GPUServices = new Thread[gpuArray.length];
+        Thread[] confrencesServices = new Thread[conferenceArray.length];
 
-            /**
-             * instantiating the micro - services and register them.
-             */
+        /**
+         * instantiating the micro - services and register them.
+         */
+        int allTread = GPUServices.length + confrencesServices.length + CPUServices.length;
+        threadInitCounter = new CountDownLatch(allTread);
+        MicroService timer = new TimeService(TickTime , Duration);
+        for (int i = 0; i < studentServices.length; i++) {
+            MicroService tmpservice = new StudentService(studentArray[i].getName(), studentArray[i]);
+            studentServices[i] = new Thread(tmpservice);
 
-            MicroService timer = new TimeService(TickTime , Duration);
-            for (int i=0 ;i< studentServices.length ; i++){
-                MicroService tmpservice = new StudentService(studentArray[i].getName() , studentArray[i]);
-                studentServices[i] = new Thread(tmpservice);
+        }
+        for (int i = 0; i < CPUServices.length; i++) {
+            MicroService tmpservice = new CPUService("CPU" + i, cpuArray[i]);
+            CPUServices[i] = new Thread(tmpservice);
+        }
+        for (int i = 0; i < GPUServices.length; i++) {
+            MicroService tmpservice = new GPUService("GPU" + i, gpuArray[i]);
+            GPUServices[i] = new Thread(tmpservice);
+        }
+        for (int i = 0; i < confrencesServices.length; i++) {
+            MicroService tmpservice = new ConferenceService(conferenceArray[i].getName(), conferenceArray[i]);
+            confrencesServices[i] = new Thread(tmpservice);
+        }
 
-            }
-            for (int i=0 ; i < CPUServices.length; i++){
-                MicroService tmpservice =new CPUService("CPU" + i, cpuArray[i]);
-                CPUServices[i] = new Thread(tmpservice);
-            }
-            for (int i=0 ; i < GPUServices.length; i++){
-                MicroService tmpservice = new GPUService("GPU" + i, gpuArray[i]);
-                GPUServices[i] = new Thread(tmpservice);
-            }
-            for (int i=0 ; i < confrencesServices.length; i++){
-                MicroService tmpservice = new ConferenceService(conferenceArray[i].getName() , conferenceArray[i]);
-                confrencesServices[i] = new Thread(tmpservice);
-            }
-
-            /**
-             * running the micro-services one after another
-             */
-            Thread clock = new Thread(timer);
-        Cluster cluster =  Cluster.getInstance();
-
+        /**
+         * running the micro-services one after another
+         */
+        Thread clock = new Thread(timer);
+        Cluster cluster = Cluster.getInstance();
         for (Thread cpuService : CPUServices) {
             cpuService.start();
         }
         for (Thread gpuService : GPUServices) {
             gpuService.start();
-
         }
         for (Thread confrencesService : confrencesServices) {
             confrencesService.start();
         }
-        try {
-            Thread.currentThread().sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        try{
+            Thread.currentThread().sleep(300);}
+        catch (Exception ex){}
+
+        for (int i=0 ;i< studentServices.length ; i++){
+            studentServices[i].setName(studentArray[i].getName());
+            studentServices[i].start();
         }
+
+        try{
+            Thread.currentThread().sleep(300);}
+        catch(Exception ex){}
+
         clock.start();
 
-        for (Thread studentService : studentServices) {
-            studentService.start();
+        try {
+            clock.join();
+        }catch (Exception exz){}
+
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        for(Thread th : threadSet){
+//            if(th.isAlive())
+            try {
+                th.interrupt();
+            }catch(Exception ex){}
         }
+
+
         //--------------------File-output-----------------------
+
+
+//        boolean b = true;
+//        while (b) {
+//            if (!clock.isAlive())
+//                b = false;
+//        }
 
         File output = new File("C:\\Users\\maorb\\OneDrive\\Ben-Gurion\\SPL\\HW2\\files\\output_try.txt");
 //        File output = new File(args[1]);
@@ -152,98 +177,12 @@ public class  CRMSRunner {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+//        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+//        for (Thread t :threadSet){
+//            t.interrupt();
+//        }
+//        System.exit(0);
     }
-    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        System.out.println("Hello World!");
-//        //Testing fileReader
-//        Parser reader = new Parser();
-//        //the input path is starting from the folder of the project!
-//        reader.readInputFile("example_input.json");
-//        Student[] s = reader.getStudents();
-//        GPU[] g = reader.getGPUArray();
-//        CPU[] c = reader.getCPUArray();
-//        List<Model[]> m = reader.getListOfArraysOfModels();
-//
-//
-//        MessageBusImpl msgBus = MessageBusImpl.getInstance();
-
-     //   Cluster cluster = Cluster.getInstance();
-//        Student student = s[0];
-//        CPU cpu = c[0];
-//        GPU gpu = g[0];
-//        Model model = m.get(0)[0];
-//        TrainModelEvent ev = new TrainModelEvent(model,student.getName());
-//        MicroService m1 =  new GPUService("GPU1" , gpu );
-    //    cpu.setCluster(cluster);
-    //    msgBus.register(student);
-      //  msgBus.register(cpu);
-//        Callback<TrainModelEvent> callback = new Callback<TrainModelEvent>() {
-//            @Override
-//            public void call(TrainModelEvent c) {
-//            msgBus.sendEvent(ev);
-//            }
-//        };
-
-       // cpu.subscribeEvent(TrainModelEvent.class,callback);
-
-
-
-
-        //Test
-//        for(GPU x : g){
-//            System.out.println(x.getType());
-//        }
-//        for(CPU y : c){
-//            System.out.println(y.getNumberOfCores());
-//        }
-//        for(Student z : s){
-//            System.out.println(z.getName());
-//        }
-//        for(Model z1[] : m){
-//            for (Model z2 : z1){
-//                System.out.println(z2.getData().getSize());
-//            }
-//        }
-
+}

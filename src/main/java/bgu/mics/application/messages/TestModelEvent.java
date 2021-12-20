@@ -27,9 +27,6 @@ public class TestModelEvent implements Event<Model> {
     public Future<Model> getFuture() {
         return this.f;
     }
-    public Model getFutureModel() {
-        return this.f.get();
-    }
 
     @Override
     public int getPriority() {

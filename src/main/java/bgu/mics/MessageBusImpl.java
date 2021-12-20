@@ -1,10 +1,13 @@
 package bgu.mics;
 
+import bgu.mics.application.messages.TerminateBroadcast;
+import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.messages.TrainModelEvent;
 
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /**
@@ -16,7 +19,7 @@ public class MessageBusImpl implements MessageBus {
     //queue of messages for every micro service
     private ConcurrentHashMap<MicroService, PriorityBlockingQueue<Message>> queueMap;
     //queue of MicroServices subscribed to a message type for every message type
-    private ConcurrentHashMap<Class<? extends Event<?>>, Vector<MicroService>> subscribedEvents;
+    private ConcurrentHashMap<Class<? extends Event<?>>, Queue<MicroService>> subscribedEvents;
     private ConcurrentHashMap<Class<? extends Broadcast>, Vector<MicroService>> subscribedBroadcast;
     private ConcurrentHashMap<Event<?>, Future<?>> eventsToFuture;
 
@@ -43,11 +46,11 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) { // ? is sog shel event kolsheu
-        System.out.println(m.getName() + " is subscribing to " + type);
+        //System.out.println(m.getName() + " is subscribing to " + type);
         if (subscribedEvents.containsKey(type))
-            subscribedEvents.get(type).addElement((m));
+            subscribedEvents.get(type).add((m));
         else {
-            Vector<MicroService> tmpV = new Vector<>();
+            Queue<MicroService> tmpV = new LinkedBlockingQueue<>();
             tmpV.add(m);
             subscribedEvents.put(type, tmpV);
 
@@ -59,7 +62,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void subscribeBroadcast(Class<? extends Broadcast> type, MicroService m) {
-       // System.out.println(m.getName() + " is subscribing to " + type.getSimpleName());
+        // System.out.println(m.getName() + " is subscribing to " + type.getSimpleName());
         if (subscribedBroadcast.containsKey(type))
             subscribedBroadcast.get(type).addElement((m));
         else {
@@ -81,69 +84,99 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void sendBroadcast(Broadcast b) {
-        Vector<MicroService> v = subscribedBroadcast.get(b.getClass());
-        if (subscribedBroadcast.containsKey(b.getClass())) {
-            for (int i = 0; i < subscribedBroadcast.get(b.getClass()).size(); i++) {
-                synchronized (subscribedBroadcast.get(b.getClass()).get(i)) {
-                    queueMap.get(subscribedBroadcast.get(b.getClass()).get(i)).put(b);
+        synchronized (subscribedBroadcast.get(b.getClass())) {
+            try {
+                if (subscribedBroadcast.containsKey(b.getClass())) {
+                    for (MicroService microService : subscribedBroadcast.get(b.getClass())) {
+                        synchronized (queueMap.get(microService)) {
+                            queueMap.get(microService).put(b);
+                        }
+                    }
                 }
+            } catch (NullPointerException e) {
+             //   System.out.println("problem with " + b.getClass());
             }
         }
+        // Vector<MicroService> v = subscribedBroadcast.get(b.getClass());
+//        if (subscribedBroadcast.containsKey(b.getClass())) {
+//            for (int i = 0; i < subscribedBroadcast.get(b.getClass()).size(); i++) {
+//
+//                        queueMap.get(subscribedBroadcast.get(b.getClass()).get(i)).put(b);
+//
+//
+//
+//            }
+//        }
+//  }
     }
 
     @Override
     public <T> Future<T> sendEvent(Event<T> e) {
-       // System.out.println(e.);
-        if(e instanceof TrainModelEvent)
-        {
-            System.out.println( "shimi  " + ((TrainModelEvent) e).getModel().getName());
-        }
-        if (!subscribedEvents.containsKey(e.getClass())) {
-            System.out.println("No one register for TrainModel yet!");
-            return null;
-        } else {
-            synchronized (subscribedEvents.get(e.getClass())) {
-                System.out.println("someone register for " + e.getClass());
-                Future<T> future = new Future<>();
-                eventsToFuture.put(e, future);
-                //TODO: check if we need to change the order
-                //the roundrubin work for all MicroSerivec
-                MicroService m = subscribedEvents.get(e.getClass()).remove(0);
-               // System.out.println(m.getName() +" get the " + e.getClass().toString() );
+        Future<T> future = new Future<>();
+        synchronized (subscribedEvents.get(e.getClass())) {
+
+            //TODO: check if we need to change the order
+            //the roundrubin work for all MicroSerivec
+
+            if (e instanceof TrainModelEvent) {
+                MicroService m = subscribedEvents.get(e.getClass()).peek();
+                System.out.println( ((TrainModelEvent) e).getModel().getStudent().getName() + " sending event " + ((TrainModelEvent) e).getModel().getName());
+                subscribedEvents.get(e.getClass()).remove();
+//                 System.out.println(m.getName() +" get the " + e.getClass().toString() );
                 queueMap.get(m).put(e);
-              //  System.out.println(m.getName() + " queue size: " + getQueueMap(m).size() );
+             //   System.out.println(m.getName() + " queue size: " + getQueueMap(m).size());
                 //subscribedEvents.get(e.getClass()).remove(m);
-                subscribedEvents.get(e.getClass()).addElement(m);
+                subscribedEvents.get(e.getClass()).add(m);
 
-
-                return future;
+            } else {
+                MicroService m = subscribedEvents.get(e.getClass()).peek();
+                queueMap.get(m).put(e);
             }
+            eventsToFuture.put(e, future);
         }
+
+
+        return future;
 
     }
+
 
     @Override
     public void register(MicroService m) {
 
         PriorityBlockingQueue<Message> queue = new PriorityBlockingQueue<>(10, new MessageComparatorByPriority());
         queueMap.put(m, queue);
-        System.out.println(m.getName() + " Register");
+      //  System.out.println(m.getName() + " Register");
     }
 
     @Override
     public void unregister(MicroService m) {
+        for(Class<? extends Event<?>> e : subscribedEvents.keySet())
+        {
+            if(subscribedEvents.get(e).contains(m))
+                subscribedEvents.get(e).remove(m);
+
+        }
+        for(Class<? extends Broadcast> b : subscribedBroadcast.keySet())
+        {
+            if(subscribedBroadcast.get(b).contains(m))
+                subscribedBroadcast.get(b).remove(m);
+
+        }
         queueMap.remove(m);
     }
 
     @Override
     public Message awaitMessage(MicroService m) throws InterruptedException {
-
+        Message msg = null;
         if (queueMap.containsKey(m)) {
-            return queueMap.get(m).take();
-        }
-        else
-            throw new NullPointerException(m.getName() + " is not registered");
-
+                msg = queueMap.get(m).take();
+            }
+            else{
+            InterruptedException IllegalStateException = new InterruptedException();
+            throw IllegalStateException;
+            }
+        return msg;
     }
 
 

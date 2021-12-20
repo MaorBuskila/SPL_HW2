@@ -45,10 +45,6 @@ public class Student {
             return "PhD";
     }
 
-    public void addToTrainedModel(Model model) {
-       // System.out.println("FINISH "+ model);
-        this.trainedModels.addElement(model);
-    }
 
     public void incrementPublished() {
         publications++;
@@ -70,6 +66,13 @@ public class Student {
     enum Degree {
         MSc, PhD
     }
+
+    public void addToTrainedModel(Model model) {
+       // System.out.println("FINISH "+ model);
+        this.trainedModels.addElement(model);
+    }
+
+
 
 
     public Vector<Model> getModels()

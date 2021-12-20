@@ -41,7 +41,7 @@ public class CPU {
                 db = cluster.getUnProcessedQueue(this).take();
 //                processFunction();
             } catch (InterruptedException e) {
-                System.out.println("didnt take from queue");
+          //      System.out.println("didnt take from queue");
             }
             if(db!=null)
                 processFunction();
@@ -49,7 +49,8 @@ public class CPU {
         return db;
     }
 
-    public synchronized DataBatch processFunction (){
+    public  DataBatch processFunction (){
+        cluster.addCpuTimeUnitUsed();
     //System.out.println(this.getName()+ " im busy with: " + db.toString());
             switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
                 case Images:
@@ -61,7 +62,6 @@ public class CPU {
                         tickForAction = 0;
                         db.process();
                         doneProcessThisBatch(db);
-                        Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
                     }
                     break;
                 case Text:
@@ -71,7 +71,6 @@ public class CPU {
                         tickForAction = 0;
                         db.process();
                         doneProcessThisBatch(db);
-                        Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
 
 
                     }
@@ -83,7 +82,6 @@ public class CPU {
                         tickForAction = 0;
                         db.process();
                         doneProcessThisBatch(db);
-                        Cluster.getInstance().addCpuTimeUnitUsed(32 / numberOfCores * 4);
 
                     }
                     break;
@@ -93,6 +91,7 @@ public class CPU {
 
 
     public  void doneProcessThisBatch(DataBatch dataBatch) {
+        cluster.addToTotalDataBatchProccesedCPu();
 //        System.out.println(getName() + " is done processing dataBatch " + db + " or " + dataBatch);
       //  System.out.println(this.getName() + " " + db.getData().getProcessed());
         db.getData().updateProcessed();
@@ -111,17 +110,15 @@ public class CPU {
      * @pre: dataBatch.isProcessed == true
      * @post: cluster.processedBatch != null
      */
-    public void sendToCluster(DataBatch processedDataBatch) {
+    public  void sendToCluster(DataBatch processedDataBatch) {
        // System.out.println("done process");
         this.cluster.sendToGPU(processedDataBatch);
     }
     ///////////////////////////////////////////////////////////
 
 
-    public synchronized void updateTick(int tick) {
-      //  if (db!=null)
+    public void updateTick(int tick) {
             tickForAction++;
-        //notify(); //why?
         processDatabatch();
     }
 

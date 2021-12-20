@@ -43,24 +43,27 @@ public class StudentService extends MicroService {
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             myFuture = student.getFuture();
             if (myFuture == null) {
-                System.out.println("my future is null");
+               // System.out.println(student.getName() + " my future is null");
                 if (student.getTestedCounter() < student.getModels().size()) {
+                //   System.out.println(student.getName() + " tested counetr " + student.getTestedCounter() + " VS " + "student.getModels().size(): " + student.getModels().size() );
                     TrainModelEvent trainModelEvent = new TrainModelEvent(student.getModels().get(student.getTestedCounter()), "TrainModel" + String.valueOf(student.getTestedCounter()));
-                    student.setFuture(sendEvent(trainModelEvent));
-                    System.out.println("set the future to: " + trainModelEvent.getFuture());
+                    Future f = (sendEvent(trainModelEvent));
+                    student.setFuture(f);
+                 //   System.out.println("set the future to: " +student.getName());
                 }
                  // System.out.println(Thread.currentThread().getName() + " is sending: " + e.getClass());        ///////////////////////////////////////////////////////////////////////
             } else {
                 if (myFuture.isDone()) {
-                    System.out.println("id done");
+                   // System.out.println("id done");
                     myModel = (Model) myFuture.get();
                     if (myModel.getStatus().equals("Trained")) {
-                    //    System.out.println(myModel.getName() + " is Trained");
+                //        System.out.println("done trained");
+                        System.out.println(myModel.getName() + " is Trained");
                         TestModelEvent testModelEvent = new TestModelEvent(myModel, "TestModel" + String.valueOf(student.getTestedCounter()));
                         student.setFuture(sendEvent(testModelEvent));
                         //student.setFuture(sendEvent(new TestModelEvent(student.getModels().elementAt(student.getTestedCounter()), "TestModel" + String.valueOf(student.getTestedCounter()))));
                     } else if (myModel.getStatus().equals("Tested")) {
-                    //    System.out.println(myModel.getName() + " is Tested");
+                        System.out.println(myModel.getName() + " is Tested");
                         if (myModel.getRes().equals("Good")) {
                             try {
                                 student.setFuture(sendEvent(new PublishResultEvent(myModel)));
@@ -69,6 +72,7 @@ public class StudentService extends MicroService {
                             }
                         }
                         student.setFuture(null);
+                      //  System.out.println("done tested");
                     }
 
                 }

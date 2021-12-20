@@ -49,7 +49,7 @@ public class GPUService extends MicroService {
                 if (gpu.getModel().getStatus().equals("Trained")) {
                     complete(trainModelEvent, trainModelEvent.getModel());
                     gpu.setModel(null);
-                   // System.out.println(this.getName() + " complete" + trainModelEvent.getModel().getName());
+                    System.out.println(this.getName() + " complete" + trainModelEvent.getModel().getName());
                     trainModelEvent.getModel().getStudent().addToTrainedModel(trainModelEvent.getModel());
                  //   System.out.println(getName() + " train the model: " + trainModelEvent.getModel().getName() + " and send complete");
                 }

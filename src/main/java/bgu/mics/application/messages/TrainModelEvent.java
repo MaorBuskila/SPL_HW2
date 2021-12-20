@@ -19,10 +19,11 @@ public class TrainModelEvent implements Event<Model> {
     public Model getModel() {
         return model;
     }
+
     public String getSenderName() {
         return senderName;
     }
-    public Model getFutureModel() { return this.future.get(); } // BLOCKING
+
     public Future<Model> getFuture() { return future; }
 
     @Override

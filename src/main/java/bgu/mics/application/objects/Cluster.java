@@ -1,5 +1,7 @@
 package bgu.mics.application.objects;
 
+import bgu.mics.application.services.TimeService;
+
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.Vector;
@@ -85,13 +87,16 @@ public class Cluster {
     }
 
 
-    public void addCpuTimeUnitUsed(int timeByCpu)
+    public void addCpuTimeUnitUsed()
     {
-        this.cpuTimeUnitUsed+=timeByCpu;
+        this.cpuTimeUnitUsed ++;
     }
-    public void addGpuTimeUnitUsed(int timeByGpu)
+    public void addGpuTimeUnitUsed() {
+        this.gpuTimeUnitUsed++;
+    }
+    public void addToTotalDataBatchProccesedCPu()
     {
-        this.gpuTimeUnitUsed+=timeByGpu;
+        totalDataBatchProcessedCpu++;
     }
 
     ///////////////////////////////////////////////////////////

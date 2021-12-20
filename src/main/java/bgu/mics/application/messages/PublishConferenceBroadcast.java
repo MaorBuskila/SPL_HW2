@@ -6,12 +6,11 @@ import bgu.mics.application.objects.Model;
 import java.util.Vector;
 
 public class PublishConferenceBroadcast implements Broadcast {
-    private String senderName;
+
     private static int priority = 2;
     Vector<Model> models;
     public PublishConferenceBroadcast(Vector<Model> models){
         this.models=models;
-
 
     }
     public Vector<Model> getModels() {

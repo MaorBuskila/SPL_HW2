@@ -62,7 +62,7 @@ class CPUTest {
             cpuService.run();
         });
         Thread t2 = new Thread(() -> {
-            TickBroadCast tickBroadCast = new TickBroadCast(8);
+            TickBroadCast tickBroadCast = new TickBroadCast();
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

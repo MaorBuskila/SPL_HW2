@@ -8,24 +8,24 @@
             "models":
             [
                 {
-                    "name": "A1",
-                    "type": "Tabular",
-                    "size": 2000
+                    "name": "YOLO10",
+                    "type": "images",
+                    "size": 200000
                 },
                 {
-                    "name": "A2",
+                    "name": "ResNet9000",
                     "type": "images",
-                    "size": 2000
+                    "size": 200000
                 },
                 {
-                    "name": "A3",
+                    "name": "LessEfficientNet",
                     "type": "images",
-                    "size": 2000
+                    "size": 20000
                 },
                 {
-                    "name": "A4",
+                    "name": "DensestNet",
                     "type": "images",
-                    "size": 2000
+                    "size": 200000
                 }
             ]
 
@@ -37,9 +37,9 @@
             "models":
             [
                 {
-                    "name": "B1",
-                    "type": "Tabular",
-                    "size": 2000
+                    "name": "VIT",
+                    "type": "images",
+                    "size": 100000000
                 }
             ]
 
@@ -51,24 +51,24 @@
             "models":
             [
                 {
-                    "name": "C1",
-                    "type": "Tabular",
-                    "size": 2000
+                    "name": "Bert",
+                    "type": "Text",
+                    "size": 1000000
                 },
                 {
-                    "name": "C2",
+                    "name": "GPT4",
                     "type": "Text",
-                    "size": 1000
+                    "size": 1000000
                 },
                 {
-                    "name": "C3",
+                    "name": "GPT5",
                     "type": "Text",
-                    "size": 3000
+                    "size": 200000
                 },
                 {
-                    "name": "C4",
+                    "name": "GPT10",
                     "type": "Text",
-                    "size": 2000
+                    "size": 50000
                 }
             ]
 
@@ -80,24 +80,24 @@
             "models":
             [
                 {
-                    "name": "D1",
+                    "name": "Percepetron",
                     "type": "Tabular",
-                    "size": 2000
+                    "size": 1000000
                 },
                 {
-                    "name": "D2",
+                    "name": "GNN",
                     "type": "Tabular",
-                    "size": 1000
+                    "size": 1000000
                 },
                 {
-                    "name": "D3",
+                    "name": "MoreStyleGAN",
                     "type": "Images",
-                    "size": 3000
+                    "size": 100000
                 },
                 {
-                    "name": "D4",
+                    "name": "ConditionalGAN",
                     "type": "Images",
-                    "size": 3000
+                    "size": 500000
                 }
             ]
 
@@ -109,31 +109,31 @@
             "models":
             [
                 {
-                    "name": "E1",
-                    "type": "Tabular",
-                    "size": 5000
+                    "name": "YOLO9000",
+                    "type": "images",
+                    "size": 100000
                 },
                 {
-                    "name": "E2",
+                    "name": "VIT2",
                     "type": "images",
-                    "size": 3000
+                    "size": 1000000
                 },
                 {
-                    "name": "E3",
+                    "name": "MuchMoreEfficientNet",
                     "type": "images",
-                    "size": 2000
+                    "size": 20000
                 },
                 {
-                    "name": "E4",
+                    "name": "DenserNet",
                     "type": "images",
-                    "size": 4000
+                    "size": 100000
                 }
             ]
 
         }
     ],
-    "GPUS": ["RTX3090","RTX2080","GTX1080"],
-    "CPUS": [32,32,32],
+    "GPUS": ["RTX3090","RTX3090","RTX2080","GTX1080"],
+    "CPUS": [32,32,32,16,16,16,16],
     "Conferences":
     [
         {"name": "ICML", "date": 2000},
@@ -142,6 +142,6 @@
         {"name": "ECCV", "date": 4000},
         {"name": "AISTATS", "date": 5000}
     ],
-    "TickTime": 1,
-    "Duration": 5000
+    "TickTime": 5,
+    "Duration": 10000
 }

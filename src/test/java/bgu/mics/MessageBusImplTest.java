@@ -44,7 +44,7 @@ class MessageBusImplTest {
     void subscribeEvent() throws InterruptedException {
             ExampleEvent exampleEvent = new ExampleEvent("0");
             m1.subscribeEvent(ExampleEvent.class, message -> {
-                System.out.println("callback");
+      //          System.out.println("callback");
             });
             msgbus.sendEvent(exampleEvent);
             Message msg = msgbus.awaitMessage(m1);

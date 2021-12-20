@@ -5,40 +5,40 @@
 			"department": "Computer Science",
 			"status": "MSc",
 			"publications": 0,
-			"papersRead": 0,
+			"papersRead": 5,
 			"trainedModels": [
 				{
-					"name": "A1",
+					"name": "YOLO10",
 					"data": {
-						"type": "Tabular",
-						"size": 2000
+						"type": "Images",
+						"size": 200000
+					},
+					"status": "Tested",
+					"results": "Bad"
+				},
+				{
+					"name": "ResNet9000",
+					"data": {
+						"type": "Images",
+						"size": 200000
+					},
+					"status": "Training",
+					"results": "None"
+				},
+				{
+					"name": "LessEfficientNet",
+					"data": {
+						"type": "Images",
+						"size": 20000
 					},
 					"status": "PreTrained",
 					"results": "None"
 				},
 				{
-					"name": "A2",
+					"name": "DensestNet",
 					"data": {
 						"type": "Images",
-						"size": 2000
-					},
-					"status": "PreTrained",
-					"results": "None"
-				},
-				{
-					"name": "A3",
-					"data": {
-						"type": "Images",
-						"size": 2000
-					},
-					"status": "PreTrained",
-					"results": "None"
-				},
-				{
-					"name": "A4",
-					"data": {
-						"type": "Images",
-						"size": 2000
+						"size": 200000
 					},
 					"status": "PreTrained",
 					"results": "None"
@@ -50,15 +50,15 @@
 			"department": "EE",
 			"status": "PhD",
 			"publications": 0,
-			"papersRead": 0,
+			"papersRead": 5,
 			"trainedModels": [
 				{
-					"name": "B1",
+					"name": "VIT",
 					"data": {
-						"type": "Tabular",
-						"size": 2000
+						"type": "Images",
+						"size": 100000000
 					},
-					"status": "PreTrained",
+					"status": "Training",
 					"results": "None"
 				}
 			]
@@ -67,43 +67,43 @@
 			"name": "Pumba",
 			"department": "Computer Science",
 			"status": "PhD",
-			"publications": 0,
-			"papersRead": 0,
+			"publications": 3,
+			"papersRead": 2,
 			"trainedModels": [
 				{
-					"name": "C1",
-					"data": {
-						"type": "Tabular",
-						"size": 2000
-					},
-					"status": "PreTrained",
-					"results": "None"
-				},
-				{
-					"name": "C2",
+					"name": "Bert",
 					"data": {
 						"type": "Text",
-						"size": 1000
+						"size": 1000000
 					},
-					"status": "PreTrained",
-					"results": "None"
+					"status": "Tested",
+					"results": "Good"
 				},
 				{
-					"name": "C3",
+					"name": "GPT4",
 					"data": {
 						"type": "Text",
-						"size": 3000
+						"size": 1000000
 					},
-					"status": "PreTrained",
-					"results": "None"
+					"status": "Tested",
+					"results": "Good"
 				},
 				{
-					"name": "C4",
+					"name": "GPT5",
 					"data": {
 						"type": "Text",
-						"size": 2000
+						"size": 200000
 					},
-					"status": "PreTrained",
+					"status": "Tested",
+					"results": "Good"
+				},
+				{
+					"name": "GPT10",
+					"data": {
+						"type": "Text",
+						"size": 50000
+					},
+					"status": "Training",
 					"results": "None"
 				}
 			]
@@ -111,45 +111,45 @@
 		{
 			"name": "Timon",
 			"department": "SE",
-			"status": "null",
-			"publications": 0,
-			"papersRead": 0,
+			"status": "MSc",
+			"publications": 2,
+			"papersRead": 3,
 			"trainedModels": [
 				{
-					"name": "D1",
+					"name": "Percepetron",
 					"data": {
 						"type": "Tabular",
-						"size": 2000
+						"size": 1000000
 					},
-					"status": "PreTrained",
-					"results": "None"
+					"status": "Tested",
+					"results": "Good"
 				},
 				{
-					"name": "D2",
+					"name": "GNN",
 					"data": {
 						"type": "Tabular",
-						"size": 1000
+						"size": 1000000
 					},
-					"status": "PreTrained",
-					"results": "None"
+					"status": "Tested",
+					"results": "Bad"
 				},
 				{
-					"name": "D3",
+					"name": "MoreStyleGAN",
 					"data": {
 						"type": "Images",
-						"size": 3000
+						"size": 100000
 					},
-					"status": "PreTrained",
-					"results": "None"
+					"status": "Tested",
+					"results": "Bad"
 				},
 				{
-					"name": "D4",
+					"name": "ConditionalGAN",
 					"data": {
 						"type": "Images",
-						"size": 3000
+						"size": 500000
 					},
-					"status": "PreTrained",
-					"results": "None"
+					"status": "Tested",
+					"results": "Good"
 				}
 			]
 		},
@@ -158,40 +158,40 @@
 			"department": "Computer Science",
 			"status": "PhD",
 			"publications": 0,
-			"papersRead": 0,
+			"papersRead": 5,
 			"trainedModels": [
 				{
-					"name": "E1",
+					"name": "YOLO9000",
 					"data": {
-						"type": "Tabular",
-						"size": 5000
+						"type": "Images",
+						"size": 100000
 					},
 					"status": "PreTrained",
 					"results": "None"
 				},
 				{
-					"name": "E2",
+					"name": "VIT2",
 					"data": {
 						"type": "Images",
-						"size": 3000
+						"size": 1000000
 					},
 					"status": "PreTrained",
 					"results": "None"
 				},
 				{
-					"name": "E3",
+					"name": "MuchMoreEfficientNet",
 					"data": {
 						"type": "Images",
-						"size": 2000
+						"size": 20000
 					},
 					"status": "PreTrained",
 					"results": "None"
 				},
 				{
-					"name": "E4",
+					"name": "DenserNet",
 					"data": {
 						"type": "Images",
-						"size": 4000
+						"size": 100000
 					},
 					"status": "PreTrained",
 					"results": "None"
@@ -202,31 +202,71 @@
 	"conferences": [
 		{
 			"name": "ICML",
-			"date": 2000,
+			"date": 20000,
 			"publications": []
 		},
 		{
 			"name": "NeurIPS",
-			"date": 2500,
+			"date": 25000,
 			"publications": []
 		},
 		{
 			"name": "CVPR",
-			"date": 3000,
+			"date": 30000,
 			"publications": []
 		},
 		{
 			"name": "ECCV",
-			"date": 4000,
-			"publications": []
+			"date": 40000,
+			"publications": [{
+			"name": "Percepetron",
+					"data": {
+						"type": "Tabular",
+						"size": 1000000
+					},
+					"status": "Tested",
+					"results": "Good"
+},{
+			"name": "Bert",
+					"data": {
+						"type": "Text",
+						"size": 1000000
+					},
+					"status": "Tested",
+					"results": "Good"
+},{
+			"name": "GPT4",
+					"data": {
+						"type": "Text",
+						"size": 1000000
+					},
+					"status": "Tested",
+					"results": "Good"
+},{
+			"name": "GPT5",
+					"data": {
+						"type": "Text",
+						"size": 200000
+					},
+					"status": "Tested",
+					"results": "Good"
+},{
+			"name": "ConditionalGAN",
+					"data": {
+						"type": "Images",
+						"size": 500000
+					},
+					"status": "Tested",
+					"results": "Good"
+}]
 		},
 		{
 			"name": "AISTATS",
-			"date": 5000,
+			"date": 50000,
 			"publications": []
 		}
 	],
-	"cpuTimeUnitUsed": 0,
-	"gpuTimeUnitUsed": 0,
-	"totalDataBatchProcessedCpu": 0,
+	"cpuTimeUnitUsed": 18128,
+	"gpuTimeUnitUsed": 10409,
+	"totalDataBatchProcessedCpu": 5675,
 }
