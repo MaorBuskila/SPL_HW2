@@ -8,24 +8,24 @@
             "models":
             [
                 {
-                    "name": "AAA",
+                    "name": "A1",
                     "type": "Tabular",
-                    "size": 5000
+                    "size": 2000
                 },
                 {
-                    "name": "FFF",
+                    "name": "A2",
                     "type": "images",
-                    "size": 6000
+                    "size": 2000
                 },
                 {
-                    "name": "LessEfficientNet",
+                    "name": "A3",
                     "type": "images",
-                    "size": 20000
+                    "size": 2000
                 },
                 {
-                    "name": "DensestNet",
+                    "name": "A4",
                     "type": "images",
-                    "size": 200000
+                    "size": 2000
                 }
             ]
 
@@ -37,9 +37,9 @@
             "models":
             [
                 {
-                    "name": "BBB",
+                    "name": "B1",
                     "type": "Tabular",
-                    "size": 6000
+                    "size": 2000
                 }
             ]
 
@@ -51,24 +51,24 @@
             "models":
             [
                 {
-                    "name": "CCC",
+                    "name": "C1",
                     "type": "Tabular",
+                    "size": 2000
+                },
+                {
+                    "name": "C2",
+                    "type": "Text",
+                    "size": 1000
+                },
+                {
+                    "name": "C3",
+                    "type": "Text",
                     "size": 3000
                 },
                 {
-                    "name": "GGGG",
+                    "name": "C4",
                     "type": "Text",
-                    "size": 4000
-                },
-                {
-                    "name": "GPT5",
-                    "type": "Text",
-                    "size": 200000
-                },
-                {
-                    "name": "GPT10",
-                    "type": "Text",
-                    "size": 50000
+                    "size": 2000
                 }
             ]
 
@@ -80,24 +80,24 @@
             "models":
             [
                 {
-                    "name": "DDD",
+                    "name": "D1",
                     "type": "Tabular",
-                    "size": 4000
+                    "size": 2000
                 },
                 {
-                    "name": "HHH",
+                    "name": "D2",
                     "type": "Tabular",
+                    "size": 1000
+                },
+                {
+                    "name": "D3",
+                    "type": "Images",
                     "size": 3000
                 },
                 {
-                    "name": "MoreStyleGAN",
+                    "name": "D4",
                     "type": "Images",
-                    "size": 100000
-                },
-                {
-                    "name": "ConditionalGAN",
-                    "type": "Images",
-                    "size": 500000
+                    "size": 3000
                 }
             ]
 
@@ -109,24 +109,24 @@
             "models":
             [
                 {
-                    "name": "EEE",
+                    "name": "E1",
                     "type": "Tabular",
                     "size": 5000
                 },
                 {
-                    "name": "IIII",
+                    "name": "E2",
                     "type": "images",
-                    "size": 7000
+                    "size": 3000
                 },
                 {
-                    "name": "MuchMoreEfficientNet",
+                    "name": "E3",
                     "type": "images",
-                    "size": 20000
+                    "size": 2000
                 },
                 {
-                    "name": "DenserNet",
+                    "name": "E4",
                     "type": "images",
-                    "size": 100000
+                    "size": 4000
                 }
             ]
 
