@@ -182,7 +182,7 @@ public class GPU {
         return trainingDatabatch;
     }
     public void doneTrainThisBatch() {
-      //  System.out.println("TRAINING BATCH OF : " + model.getName() + " ALREADY TRAINED DATA SIZE IS : " + trainingDatabatch.getData().getTrained());  ///////////////////////////
+        System.out.println("TRAINING BATCH OF : " + model.getName() + " ALREADY TRAINED DATA SIZE IS : " + trainingDatabatch.getData().getTrained());  ///////////////////////////
         if (model.getStatus().equals("PreTrained"))
             model.setStatus("Training");
         tickForAction = 0;
