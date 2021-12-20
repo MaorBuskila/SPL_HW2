@@ -29,9 +29,9 @@ public class CRMSRunner {
         Parser reader = new Parser();
         reader.readInputFile("example_input4.json");  //the input path is starting from the folder of the project!
 
-        /**
-         * reading the input file
-         */
+
+//         Reading input file
+
         Student[] studentArray = reader.getStudents();
         GPU[] gpuArray = reader.getGPUArray();
         CPU[] cpuArray = reader.getCPUArray();
@@ -39,22 +39,18 @@ public class CRMSRunner {
         int TickTime = reader.getTickTime();
         int Duration = reader.getDuration();
 
-        /**
-         * instantiating the cluster and initializing it
-         */
+
+//
 
 
-        /**
-         * instantiating the threads empty arrays
-         */
         Thread[] studentServices = new Thread[studentArray.length];
         Thread[] CPUServices = new Thread[cpuArray.length];
         Thread[] GPUServices = new Thread[gpuArray.length];
         Thread[] confrencesServices = new Thread[conferenceArray.length];
 
-        /**
-         * instantiating the micro - services and register them.
-         */
+
+//      register micro services
+
         int allTread = GPUServices.length + confrencesServices.length + CPUServices.length;
         threadInitCounter = new CountDownLatch(allTread);
         MicroService timer = new TimeService(TickTime , Duration);
@@ -76,9 +72,9 @@ public class CRMSRunner {
             confrencesServices[i] = new Thread(tmpservice);
         }
 
-        /**
-         * running the micro-services one after another
-         */
+
+//          Running microSerivce
+
         Thread clock = new Thread(timer);
         Cluster cluster = Cluster.getInstance();
         for (Thread cpuService : CPUServices) {
@@ -118,7 +114,6 @@ public class CRMSRunner {
         }
 
 
-        //--------------------File-output-----------------------
 
 
 //        boolean b = true;
@@ -127,8 +122,7 @@ public class CRMSRunner {
 //                b = false;
 //        }
 
-        File output = new File("C:\\Users\\maorb\\OneDrive\\Ben-Gurion\\SPL\\HW2\\files\\output_try.txt");
-//        File output = new File(args[1]);
+        File output = new File("C:\\Users\\maorb\\OneDrive\\Ben-Gurion\\SPL\\HW2\\files\\output.txt");
         FileWriter writer = null;
         try {
             writer = new FileWriter(output);
@@ -177,11 +171,7 @@ public class CRMSRunner {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-//        for (Thread t :threadSet){
-//            t.interrupt();
-//        }
-//        System.exit(0);
+//
     }
 
 

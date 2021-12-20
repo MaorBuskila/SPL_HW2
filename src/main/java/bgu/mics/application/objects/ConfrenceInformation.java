@@ -25,7 +25,7 @@ public class ConfrenceInformation {
 
     public void addPublication(Model model) // TODO Check when to add model
     {
-       publication.addElement(model);
+       publication.add(model);
     }
 
     public Vector<Model> getModels() {

@@ -5,7 +5,7 @@
 			"department": "Computer Science",
 			"status": "MSc",
 			"publications": 0,
-			"papersRead": 5,
+			"papersRead": 0,
 			"trainedModels": [
 				{
 					"name": "YOLO10",
@@ -13,8 +13,8 @@
 						"type": "Images",
 						"size": 200000
 					},
-					"status": "Tested",
-					"results": "Bad"
+					"status": "Training",
+					"results": "None"
 				},
 				{
 					"name": "ResNet9000",
@@ -22,7 +22,7 @@
 						"type": "Images",
 						"size": 200000
 					},
-					"status": "Training",
+					"status": "PreTrained",
 					"results": "None"
 				},
 				{
@@ -50,7 +50,7 @@
 			"department": "EE",
 			"status": "PhD",
 			"publications": 0,
-			"papersRead": 5,
+			"papersRead": 0,
 			"trainedModels": [
 				{
 					"name": "VIT",
@@ -58,7 +58,7 @@
 						"type": "Images",
 						"size": 100000000
 					},
-					"status": "Training",
+					"status": "PreTrained",
 					"results": "None"
 				}
 			]
@@ -67,8 +67,8 @@
 			"name": "Pumba",
 			"department": "Computer Science",
 			"status": "PhD",
-			"publications": 3,
-			"papersRead": 2,
+			"publications": 0,
+			"papersRead": 0,
 			"trainedModels": [
 				{
 					"name": "Bert",
@@ -76,8 +76,8 @@
 						"type": "Text",
 						"size": 1000000
 					},
-					"status": "Tested",
-					"results": "Good"
+					"status": "PreTrained",
+					"results": "None"
 				},
 				{
 					"name": "GPT4",
@@ -85,8 +85,8 @@
 						"type": "Text",
 						"size": 1000000
 					},
-					"status": "Tested",
-					"results": "Good"
+					"status": "PreTrained",
+					"results": "None"
 				},
 				{
 					"name": "GPT5",
@@ -94,8 +94,8 @@
 						"type": "Text",
 						"size": 200000
 					},
-					"status": "Tested",
-					"results": "Good"
+					"status": "PreTrained",
+					"results": "None"
 				},
 				{
 					"name": "GPT10",
@@ -103,7 +103,7 @@
 						"type": "Text",
 						"size": 50000
 					},
-					"status": "Training",
+					"status": "PreTrained",
 					"results": "None"
 				}
 			]
@@ -112,8 +112,8 @@
 			"name": "Timon",
 			"department": "SE",
 			"status": "MSc",
-			"publications": 2,
-			"papersRead": 3,
+			"publications": 0,
+			"papersRead": 0,
 			"trainedModels": [
 				{
 					"name": "Percepetron",
@@ -121,8 +121,8 @@
 						"type": "Tabular",
 						"size": 1000000
 					},
-					"status": "Tested",
-					"results": "Good"
+					"status": "PreTrained",
+					"results": "None"
 				},
 				{
 					"name": "GNN",
@@ -130,8 +130,8 @@
 						"type": "Tabular",
 						"size": 1000000
 					},
-					"status": "Tested",
-					"results": "Bad"
+					"status": "PreTrained",
+					"results": "None"
 				},
 				{
 					"name": "MoreStyleGAN",
@@ -139,8 +139,8 @@
 						"type": "Images",
 						"size": 100000
 					},
-					"status": "Tested",
-					"results": "Bad"
+					"status": "PreTrained",
+					"results": "None"
 				},
 				{
 					"name": "ConditionalGAN",
@@ -148,8 +148,8 @@
 						"type": "Images",
 						"size": 500000
 					},
-					"status": "Tested",
-					"results": "Good"
+					"status": "PreTrained",
+					"results": "None"
 				}
 			]
 		},
@@ -158,7 +158,7 @@
 			"department": "Computer Science",
 			"status": "PhD",
 			"publications": 0,
-			"papersRead": 5,
+			"papersRead": 0,
 			"trainedModels": [
 				{
 					"name": "YOLO9000",
@@ -166,7 +166,7 @@
 						"type": "Images",
 						"size": 100000
 					},
-					"status": "PreTrained",
+					"status": "Training",
 					"results": "None"
 				},
 				{
@@ -218,47 +218,7 @@
 		{
 			"name": "ECCV",
 			"date": 40000,
-			"publications": [{
-			"name": "Percepetron",
-					"data": {
-						"type": "Tabular",
-						"size": 1000000
-					},
-					"status": "Tested",
-					"results": "Good"
-},{
-			"name": "Bert",
-					"data": {
-						"type": "Text",
-						"size": 1000000
-					},
-					"status": "Tested",
-					"results": "Good"
-},{
-			"name": "GPT4",
-					"data": {
-						"type": "Text",
-						"size": 1000000
-					},
-					"status": "Tested",
-					"results": "Good"
-},{
-			"name": "GPT5",
-					"data": {
-						"type": "Text",
-						"size": 200000
-					},
-					"status": "Tested",
-					"results": "Good"
-},{
-			"name": "ConditionalGAN",
-					"data": {
-						"type": "Images",
-						"size": 500000
-					},
-					"status": "Tested",
-					"results": "Good"
-}]
+			"publications": []
 		},
 		{
 			"name": "AISTATS",
@@ -266,7 +226,7 @@
 			"publications": []
 		}
 	],
-	"cpuTimeUnitUsed": 18128,
-	"gpuTimeUnitUsed": 10409,
-	"totalDataBatchProcessedCpu": 5675,
+	"cpuTimeUnitUsed": 1290,
+	"gpuTimeUnitUsed": 572,
+	"totalDataBatchProcessedCpu": 281,
 }
