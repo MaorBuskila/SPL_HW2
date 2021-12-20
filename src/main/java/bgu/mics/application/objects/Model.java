@@ -93,4 +93,14 @@ public class Model {
     public Data getData() {
         return data;
     }
+    public String toString(){
+        String str = "";
+
+        str += "\"name\": \"" + name + "\",\n";
+        str += "\t\t\t\t\t\"data\": {\n" + data.toString() + "\t\t\t\t\t},\n";
+        str += "\t\t\t\t\t\"status\": \"" + status + "\",\n";
+        str += "\t\t\t\t\t\"results\": \"" + res + "\"";
+
+        return str;
+    }
 }

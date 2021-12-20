@@ -4,6 +4,7 @@ import bgu.mics.Future;
 import bgu.mics.MicroService;
 import bgu.mics.application.services.StudentService;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -80,5 +81,37 @@ public class Student {
 
     public void setFuture(Future<Model> future) {
         this.future = future;
+    }
+
+    public String toString(){
+        String output = "";
+
+        output += "\t\"name\": \"" + name + "\",\n";
+        output += "\t\t\t\"department\": \"" + department + "\",\n";
+        output += "\t\t\t\"status\": \"" + status + "\",\n";
+        output += "\t\t\t\"publications\": " + Integer.toString(publications) + ",\n";
+        output += "\t\t\t\"papersRead\": " + Integer.toString(papersRead) + ",\n";
+        output += "\t\t\t\"trainedModels\": [\n\t\t\t\t";
+        if (models.size() > 0){
+            Iterator<Model> itr = models.iterator();
+
+            while (itr.hasNext()){
+                Model m = itr.next();
+                while ( m.getStatus() .equals("Trained")){
+                    if ( itr.hasNext() )
+                        m = itr.next();
+                    else
+                        break;
+                }
+                output += "{\n\t\t\t";
+                output += "\t\t" + m.toString() + "\n\t\t\t\t}";
+                output += ",\n\t\t\t\t";
+            }
+            output = output.substring(0, output.length() - 6);
+            output += "\n";
+        }
+        output += "\t\t\t]";
+
+        return output;
     }
 }

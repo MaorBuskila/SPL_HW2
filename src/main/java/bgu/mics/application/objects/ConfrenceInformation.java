@@ -48,4 +48,18 @@ public class ConfrenceInformation {
     {
         return name;
     }
+    public String toString() {
+        String str = "";
+
+        str += "\t\"name\": \"" + name + "\",\n";
+        str += "\t\t\t\"date\": " + Integer.toString(setDate) + ",\n";
+        str += "\t\t\t\"publications\": [";
+        for (int i = 0; i < publication.size(); i++){
+            str += "{\n\t\t\t" + publication.get(i).toString() + "\n}";
+            if ( i < publication.size() - 1 )
+                str += ",";
+        }
+        str += "]";
+        return str;
+    }
 }
