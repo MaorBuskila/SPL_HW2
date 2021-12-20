@@ -36,7 +36,7 @@ public class GPUService extends MicroService {
 
     // to doo simultaneity : sendToCluster,getFromCluster,Train on vRAM
     @Override
-    protected void initialize() { // just need to take responsibilty on time
+    protected void initialize() {
         MessageBusImpl.getInstance().register(this);
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
             this.terminate();
@@ -45,19 +45,19 @@ public class GPUService extends MicroService {
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
             gpu.updateTick(tickBroadCast.getTick());
             if(gpu.getModel()!=null) {
-                System.out.println("model status: "+gpu.getModel().getStatus());
+//                System.out.println(this.getName() + " model status: "+gpu.getvRam().size());
                 if (gpu.getModel().getStatus().equals("Trained")) {
                     complete(trainModelEvent, trainModelEvent.getModel());
+                    System.out.println(this.getName() + " complete" + trainModelEvent.getModel());
                     trainModelEvent.getModel().getStudent().addToTrainedModel(trainModelEvent.getModel());
                     gpu.setModel(null);
-                    System.out.println(trainModelEvent.getModel().getName() + "is done");
+                    System.out.println(getName() + " train the model: " + trainModelEvent.getModel().getName() + " and send complete");
                 }
             }
         });
         subscribeEvent(TrainModelEvent.class, (TrainModelEvent trainModelEvent) -> {
             this.trainModelEvent=trainModelEvent;
             Model model = trainModelEvent.getModel();
-            if (this.gpu.getModel() == null)
                 this.gpu.setModel(model);
             Data data = model.getData();
             gpu.divide((data));
@@ -89,7 +89,7 @@ public class GPUService extends MicroService {
             //System.out.println("im here");
                     model.setStatus("Tested");
                     complete(testModelEvent, model);
-            System.out.println(model.getStatus());
+            System.out.println(model.isGood());
                 }
 
         );

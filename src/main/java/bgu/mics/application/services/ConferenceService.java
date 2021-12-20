@@ -8,6 +8,7 @@ import bgu.mics.application.messages.PublishResultEvent;
 import bgu.mics.application.messages.TerminateBroadcast;
 import bgu.mics.application.messages.TickBroadCast;
 import bgu.mics.application.objects.ConfrenceInformation;
+import bgu.mics.application.objects.Model;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -22,25 +23,29 @@ import java.util.Vector;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class ConferenceService extends MicroService {
-
     private ConfrenceInformation conf;
     private int ticks;
+    private Vector<Model> models;
+    private int date;
+
     public ConferenceService(String name,ConfrenceInformation conf) {
         super(name);
         this.conf=conf;
         ticks=0;
+        this.date = conf.getSetDate();
+        models =new Vector<>();
         // TODO Implement this
-    }
-    public void updateTick(TickBroadCast t) {
-        conf.updateTick(t.getTick());
-        //ticks++;
     }
 
     @Override
     protected void initialize() {
         MessageBusImpl.getInstance().register(this);
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
-            updateTick(tickBroadCast);
+            ticks ++;
+            if (ticks == date) {
+                sendBroadcast(new PublishConferenceBroadcast(models));
+                terminate();
+            }
 
         });
 
@@ -49,11 +54,13 @@ public class ConferenceService extends MicroService {
         });
 
         subscribeEvent(PublishResultEvent.class, (PublishResultEvent publishResultEvent)-> {
-            conf.addModel(publishResultEvent.getModel());
+            System.out.println(publishResultEvent.getModel());
+            models.add(publishResultEvent.getModel());
+            conf.addPublication(publishResultEvent.getModel());
         });
 
         if(ticks==conf.getSetDate())
-            MessageBusImpl.getInstance().sendBroadcast(new PublishConferenceBroadcast("Publish"));
+            MessageBusImpl.getInstance().sendBroadcast(new PublishConferenceBroadcast(models));
 
         // TODO Implement this
 

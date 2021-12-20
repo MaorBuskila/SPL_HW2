@@ -107,19 +107,19 @@ public class Cluster {
 
     /////////////////////// Send to GPU  processed Databatch ///////////////////////
 
-    public void sendToGPU(DataBatch dataBatch) {
+    public  void sendToGPU(DataBatch dataBatch) {
+        synchronized (dataBatchToGpu.get(dataBatch)){
             dataBatchToGpu.get(dataBatch).reciveProcessedDataBatch(dataBatch);
-     //   System.out.println("sending " + dataBatch + " to "  +  dataBatchToGpu.get(dataBatch));
-        dataBatchToGpu.remove(dataBatch);
-
-        //send back to GPU ? ?because  we must to send to the fit GPU
+            //   System.out.println("sending " + dataBatch + " to "  +  dataBatchToGpu.get(dataBatch));
+            dataBatchToGpu.remove(dataBatch);
+        }
     }
 
     ///////////////////////////////////////////////////////////
 
 
     ////////////// finding the best CPU to send him the DataBatch ////////////////////
-    public CPU minFutureTime() {
+    public  CPU minFutureTime() {
         int sum;
         int min = Integer.MAX_VALUE;
 

@@ -21,7 +21,7 @@ public class  CRMSRunner {
 
     public static void main(String[] args) {
             Parser reader = new Parser();
-            reader.readInputFile("example_input.json");  //the input path is starting from the folder of the project!
+            reader.readInputFile("example_input2.json");  //the input path is starting from the folder of the project!
 
             /**
              * reading the input file
@@ -75,6 +75,7 @@ public class  CRMSRunner {
              * running the micro-services one after another
              */
             Thread clock = new Thread(timer);
+
         for (Thread cpuService : CPUServices) {
             cpuService.start();
         }
@@ -82,20 +83,20 @@ public class  CRMSRunner {
             gpuService.start();
 
         }
+        for (Thread confrencesService : confrencesServices) {
+            confrencesService.start();
+        }
         try {
-            Thread.sleep(2000);
+            Thread.currentThread().sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         clock.start();
 
         for (Thread studentService : studentServices) {
-
             studentService.start();
         }
-//        for (Thread confrencesService : confrencesServices) {
-//            confrencesService.start();
-//        }
+
 
         }
     }

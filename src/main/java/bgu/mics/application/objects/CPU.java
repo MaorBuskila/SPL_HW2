@@ -39,24 +39,25 @@ public class CPU {
         else {
             try {
                 db = cluster.getUnProcessedQueue(this).take();
-                processFunction();
+//                processFunction();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("didnt take from queue");
             }
+            if(db!=null)
+                processFunction();
         }
         return db;
     }
 
     public synchronized DataBatch processFunction (){
-    System.out.println(this.getName()+ " im busy with: " + db.toString());
+    //System.out.println(this.getName()+ " im busy with: " + db.toString());
             switch (db.getData().getType()) { // why noy WHILE AND WAIT ?
                 case Images:
-                    System.out.println(" Images");
+                    //System.out.println(this.getName() +" Images" );
                     processingTick = 32 / numberOfCores * 4 - tickForAction;
                    // System.out.println("processingTick: " + processingTick);
                    // System.out.println("tickForAction: " + tickForAction);
                     if (processingTick == 0) {
-                        System.out.println("Debug2");
                         tickForAction = 0;
                         db.process();
                         doneProcessThisBatch(db);
@@ -64,7 +65,7 @@ public class CPU {
                     }
                     break;
                 case Text:
-                    System.out.println(this.getName()+ " Text");
+
                     processingTick = 32 / numberOfCores * 2 - tickForAction;
                     if (processingTick == 0) {
                         tickForAction = 0;
@@ -76,7 +77,7 @@ public class CPU {
                     }
                     break;
                 case Tabular:
-                    System.out.println(this.getName()+ " Tabular");
+
                     processingTick = 32 / numberOfCores - tickForAction;
                     if (processingTick == 0) {
                         tickForAction = 0;
@@ -137,6 +138,7 @@ public class CPU {
     }
 
     public String getName() {
+       // System.out.println("my name is: " +name);
         return name;
     }
 

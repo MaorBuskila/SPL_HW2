@@ -4,7 +4,10 @@ import bgu.mics.Future;
 import bgu.mics.MessageBusImpl;
 import bgu.mics.MicroService;
 import bgu.mics.application.messages.*;
+import bgu.mics.application.objects.Model;
 import bgu.mics.application.objects.Student;
+
+import java.util.Vector;
 
 /**
  * Student is responsible for sending the {@link TrainModelEvent},
@@ -39,19 +42,25 @@ public class StudentService extends MicroService {
             TrainModelEvent e = null;
             if (student.getFuture() == null) {
                 e = new TrainModelEvent(student.getModels().firstElement(), this.getName());
-                System.out.println(Thread.currentThread().getName() + " is sending: " + e.getClass());        ///////////////////////////////////////////////////////////////////////
+              //  System.out.println(Thread.currentThread().getName() + " is sending: " + e.getClass());        ///////////////////////////////////////////////////////////////////////
             }
 
             student.setFuture(sendEvent(e));
 
         });
         subscribeBroadcast(PublishConferenceBroadcast.class, (PublishConferenceBroadcast pub) -> {
+            Vector<Model> vecOfModels = pub.getModels();
+            for (Model model : vecOfModels){
+                if (model.getStudent() .equals(student))
+                    student.incrementPublished();
+                else
+                    student.readPaper();
+            }
 
-        //TODO implement this
         });
+
         for(int i=0;i<student.getModels().size();i++)
         {
-            System.out.println(student.getName() + " Sending Event");
             student.setFuture(sendEvent(new TrainModelEvent(student.getModels().elementAt(i), "TrainModel" + String.valueOf(i))));
 
 
@@ -59,13 +68,14 @@ public class StudentService extends MicroService {
             while(b) {
                 if (student.getFuture().get().getStatus().equals("Trained")) {
                     b = false;
+                    System.out.println("send test model event");
                     student.setFuture(sendEvent(new TestModelEvent(student.getModels().elementAt(i), "TestModel" + String.valueOf(i)))) ;
                 }
             }
             b=true;
             while (b) {
                 if (student.getFuture().get().getStatus().equals("Tested")) {
-                    System.out.println("im:      " + student.getModels().get(i).getStatus());
+                  //  System.out.println("im:      " + student.getModels().get(i).getStatus());
                     if(student.getFuture().get().isGood())
                         student.setFuture(sendEvent(new PublishResultEvent(student.getModels().elementAt(i)))) ;
                     b=false;

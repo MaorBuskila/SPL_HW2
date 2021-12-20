@@ -42,7 +42,6 @@ public class Model {
             return "Trained";
 
         else {
-            System.out.println("here");
             return "Tested";
         }
     }

@@ -29,8 +29,16 @@ public class Student {
     }
 
     public void addToTrainedModel(Model model) {
-        System.out.println("FINISHHHHHHHHHHHHH"+model);
+        System.out.println("FINISH "+ model);
         this.trainedModels.addElement(model);
+    }
+
+    public void incrementPublished() {
+        publications++;
+    }
+
+    public void readPaper() {
+        papersRead++;
     }
 
 

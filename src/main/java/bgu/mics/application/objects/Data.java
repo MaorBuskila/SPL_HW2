@@ -16,6 +16,7 @@ public class Data {
     }
 
     public void updateTrained() {
+      //  System.out.println(this +  "      updated     " + trained);
         trained += 1;
     }
 
@@ -25,12 +26,12 @@ public class Data {
     }
 
     //Constructor
-    public Data(String sType, int size) {
-        if (sType.equals("images"))
+    public  Data(String sType, int size) {
+        if (sType.equals("images") || sType.equals("Images"))
             this.type = Type.Images;
-        if (sType.equals("text"))
+        if (sType.equals("text") || sType.equals("Text"))
             this.type = Type.Text;
-        if (sType.equals("tabular"))
+        if (sType.equals("tabular") || sType.equals("Tabular"))
             this.type = Type.Tabular;
         this.size = size;
         this.processed = 0;

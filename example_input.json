@@ -8,14 +8,14 @@
             "models":
             [
                 {
-                    "name": "YOLO10",
-                    "type": "images",
-                    "size": 200000
+                    "name": "AAA",
+                    "type": "Tabular",
+                    "size": 5000
                 },
                 {
-                    "name": "ResNet9000",
+                    "name": "FFF",
                     "type": "images",
-                    "size": 200000
+                    "size": 6000
                 },
                 {
                     "name": "LessEfficientNet",
@@ -37,9 +37,9 @@
             "models":
             [
                 {
-                    "name": "VIT",
-                    "type": "images",
-                    "size": 100000000
+                    "name": "BBB",
+                    "type": "Tabular",
+                    "size": 6000
                 }
             ]
 
@@ -51,14 +51,14 @@
             "models":
             [
                 {
-                    "name": "Bert",
-                    "type": "Text",
-                    "size": 1000000
+                    "name": "CCC",
+                    "type": "Tabular",
+                    "size": 3000
                 },
                 {
-                    "name": "GPT4",
+                    "name": "GGGG",
                     "type": "Text",
-                    "size": 1000000
+                    "size": 4000
                 },
                 {
                     "name": "GPT5",
@@ -80,14 +80,14 @@
             "models":
             [
                 {
-                    "name": "Percepetron",
+                    "name": "DDD",
                     "type": "Tabular",
-                    "size": 1000000
+                    "size": 4000
                 },
                 {
-                    "name": "GNN",
+                    "name": "HHH",
                     "type": "Tabular",
-                    "size": 1000000
+                    "size": 3000
                 },
                 {
                     "name": "MoreStyleGAN",
@@ -109,14 +109,14 @@
             "models":
             [
                 {
-                    "name": "YOLO9000",
-                    "type": "images",
-                    "size": 100000
+                    "name": "EEE",
+                    "type": "Tabular",
+                    "size": 5000
                 },
                 {
-                    "name": "VIT2",
+                    "name": "IIII",
                     "type": "images",
-                    "size": 1000000
+                    "size": 7000
                 },
                 {
                     "name": "MuchMoreEfficientNet",
@@ -132,8 +132,8 @@
 
         }
     ],
-    "GPUS": ["RTX3090","RTX3090","RTX2080","GTX1080"],
-    "CPUS": [32,32,32,32,32,32],
+    "GPUS": ["RTX3090","RTX2080","GTX1080"],
+    "CPUS": [32,32,32],
     "Conferences":
     [
         {"name": "ICML", "date": 2000},
@@ -143,5 +143,5 @@
         {"name": "AISTATS", "date": 5000}
     ],
     "TickTime": 50,
-    "Duration": 10000
+    "Duration": 5500
 }

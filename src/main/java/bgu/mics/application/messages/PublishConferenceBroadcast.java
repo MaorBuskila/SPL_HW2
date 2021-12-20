@@ -1,16 +1,21 @@
 package bgu.mics.application.messages;
 
 import bgu.mics.Broadcast;
+import bgu.mics.application.objects.Model;
+
+import java.util.Vector;
 
 public class PublishConferenceBroadcast implements Broadcast {
     private String senderName;
     private static int priority = 2;
-    public PublishConferenceBroadcast(String senderName){
-        this.senderName=senderName;
+    Vector<Model> models;
+    public PublishConferenceBroadcast(Vector<Model> models){
+        this.models=models;
+
 
     }
-    public String getSenderName() {
-        return senderName;
+    public Vector<Model> getModels() {
+        return models;
     }
 
     @Override

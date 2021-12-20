@@ -41,7 +41,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public <T> void subscribeEvent(Class<? extends Event<T>> type, MicroService m) { // ? is sog shel event kolsheu
-        System.out.println(m.getName() + " is subscribing to "  + type);
+        System.out.println(m.getName() + " is subscribing to " + type);
         if (subscribedEvents.containsKey(type))
             subscribedEvents.get(type).addElement((m));
         else {
@@ -57,7 +57,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void subscribeBroadcast(Class<? extends Broadcast> type, MicroService m) {
-        System.out.println(m.getName() + " is subscribing to "  + type.getSimpleName());
+        System.out.println(m.getName() + " is subscribing to " + type.getSimpleName());
         if (subscribedBroadcast.containsKey(type))
             subscribedBroadcast.get(type).addElement((m));
         else {
@@ -67,7 +67,7 @@ public class MessageBusImpl implements MessageBus {
             subscribedBroadcast.put(type, tmpV);
 
         }
-       // System.out.println("debug subscribeBroadcast" );
+        // System.out.println("debug subscribeBroadcast" );
     }
 
     @Override
@@ -80,35 +80,45 @@ public class MessageBusImpl implements MessageBus {
     @Override
     public void sendBroadcast(Broadcast b) {
         Vector<MicroService> v = subscribedBroadcast.get(b.getClass());
-            if (subscribedBroadcast.containsKey(b.getClass())) {
-                for (int i = 0; i < subscribedBroadcast.get(b.getClass()).size(); i++) {
+        if (subscribedBroadcast.containsKey(b.getClass())) {
+            for (int i = 0; i < subscribedBroadcast.get(b.getClass()).size(); i++) {
+                synchronized (subscribedBroadcast.get(b.getClass()).get(i)) {
                     queueMap.get(subscribedBroadcast.get(b.getClass()).get(i)).put(b);
                 }
+            }
         }
     }
 
     @Override
     public <T> Future<T> sendEvent(Event<T> e) {
-            if (!subscribedEvents.containsKey(e.getClass())) {
-                System.out.println("No one register for TrainModel yet!");
-                return null;
-            } else {
-                System.out.println("someone register for " + e.getClass());
+
+        if (!subscribedEvents.containsKey(e.getClass())) {
+            System.out.println("No one register for TrainModel yet!");
+            return null;
+        } else {
+            synchronized (subscribedEvents.get(e.getClass())) {
+               // System.out.println("someone register for " + e.getClass());
                 Future<T> future = new Future<>();
                 eventsToFuture.put(e, future);
                 //TODO: check if we need to change the order
                 //the roundrubin work for all MicroSerivec
-                MicroService m = subscribedEvents.get(e.getClass()).firstElement();
+                MicroService m = subscribedEvents.get(e.getClass()).remove(0);
+                System.out.println(m.getName() +" get the " + e.getClass().toString() );
                 queueMap.get(m).put(e);
+                System.out.println(m.getName() + " queue size: " + getQueueMap(m).size() );
+                //subscribedEvents.get(e.getClass()).remove(m);
                 subscribedEvents.get(e.getClass()).addElement(m);
-                subscribedEvents.get(e.getClass()).remove(0);
+
 
                 return future;
             }
+        }
+
     }
 
     @Override
-    public synchronized void register(MicroService m) {
+    public void register(MicroService m) {
+
         PriorityBlockingQueue<Message> queue = new PriorityBlockingQueue<>(10, new MessageComparatorByPriority());
         queueMap.put(m, queue);
         System.out.println(m.getName() + " Register");
@@ -121,8 +131,8 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public Message awaitMessage(MicroService m) throws InterruptedException {
-       // System.out.println("debug");
-        if(queueMap.containsKey(m))
+        // System.out.println("debug");
+        if (queueMap.containsKey(m))
             return queueMap.get(m).take();
         else
             throw new NullPointerException(m.getName() + " is not registered");

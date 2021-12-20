@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConfrenceInformation {
 
     private int ticksFromService;
-    private Vector<Model> models;
+    private Vector<Model> publication;
     private String name;
     private int setDate;
 
@@ -19,17 +19,17 @@ public class ConfrenceInformation {
         this.name = name;
         this.setDate = setDate;
         ticksFromService=0;
-        models=new Vector<>();
+        publication=new Vector<>();
 
     }
 
-    public void addModel(Model model) // TODO Check when to add model
+    public void addPublication(Model model) // TODO Check when to add model
     {
-       models.addElement(model);
+       publication.addElement(model);
     }
 
     public Vector<Model> getModels() {
-        return models;
+        return publication;
     }
 
     public void updateTick(int tick) {
