@@ -21,6 +21,22 @@ public class Student {
     private Vector<Model> models;
     private Vector<Model> trainedModels;
      private Future<Model> future;
+    private int testedCounter;
+
+    //Constructor
+    public Student(String name, String department, String sStatus) {
+        this.name=name;
+        this.department = department;
+        if (sStatus.equals("MSc"))
+            this.status = Degree.MSc;
+        if (sStatus.equals("PhD"))
+            this.status = Degree.PhD;
+
+        this.publications = 0;
+        this.papersRead = 0;
+        models=new Vector<>();
+        trainedModels=new Vector<>();
+    }
 
     public String getStatus() {
         if (status ==  Degree.MSc)
@@ -30,7 +46,7 @@ public class Student {
     }
 
     public void addToTrainedModel(Model model) {
-        System.out.println("FINISH "+ model);
+       // System.out.println("FINISH "+ model);
         this.trainedModels.addElement(model);
     }
 
@@ -42,25 +58,20 @@ public class Student {
         papersRead++;
     }
 
+    public int getTestedCounter() {
+        return testedCounter;
+    }
+
+    public void incrementTestedCounter () {
+        this.testedCounter++;
+    }
 
     // Enum representing the Degree the student is studying for.
     enum Degree {
         MSc, PhD
     }
 
-    //Constructor
-    public Student(String name, String department, String sStatus) {
-        this.name=name;
-        this.department = department;
-        if (sStatus.equals("MSc"))
-            this.status = Degree.MSc;
-        if (sStatus.equals("PhD"))
-            this.status = Degree.PhD;
-        this.publications = 0;
-        this.papersRead = 0;
-        models=new Vector<>();
-        trainedModels=new Vector<>();
-    }
+
     public Vector<Model> getModels()
     {
         return models;

@@ -1,5 +1,7 @@
 package bgu.mics;
 
+import bgu.mics.application.messages.TrainModelEvent;
+
 import java.util.Queue;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,7 +59,7 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public void subscribeBroadcast(Class<? extends Broadcast> type, MicroService m) {
-        System.out.println(m.getName() + " is subscribing to " + type.getSimpleName());
+       // System.out.println(m.getName() + " is subscribing to " + type.getSimpleName());
         if (subscribedBroadcast.containsKey(type))
             subscribedBroadcast.get(type).addElement((m));
         else {
@@ -91,21 +93,25 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public <T> Future<T> sendEvent(Event<T> e) {
-
+       // System.out.println(e.);
+        if(e instanceof TrainModelEvent)
+        {
+            System.out.println( "shimi  " + ((TrainModelEvent) e).getModel().getName());
+        }
         if (!subscribedEvents.containsKey(e.getClass())) {
             System.out.println("No one register for TrainModel yet!");
             return null;
         } else {
             synchronized (subscribedEvents.get(e.getClass())) {
-               // System.out.println("someone register for " + e.getClass());
+                System.out.println("someone register for " + e.getClass());
                 Future<T> future = new Future<>();
                 eventsToFuture.put(e, future);
                 //TODO: check if we need to change the order
                 //the roundrubin work for all MicroSerivec
                 MicroService m = subscribedEvents.get(e.getClass()).remove(0);
-                System.out.println(m.getName() +" get the " + e.getClass().toString() );
+               // System.out.println(m.getName() +" get the " + e.getClass().toString() );
                 queueMap.get(m).put(e);
-                System.out.println(m.getName() + " queue size: " + getQueueMap(m).size() );
+              //  System.out.println(m.getName() + " queue size: " + getQueueMap(m).size() );
                 //subscribedEvents.get(e.getClass()).remove(m);
                 subscribedEvents.get(e.getClass()).addElement(m);
 
@@ -131,9 +137,10 @@ public class MessageBusImpl implements MessageBus {
 
     @Override
     public Message awaitMessage(MicroService m) throws InterruptedException {
-        // System.out.println("debug");
-        if (queueMap.containsKey(m))
+
+        if (queueMap.containsKey(m)) {
             return queueMap.get(m).take();
+        }
         else
             throw new NullPointerException(m.getName() + " is not registered");
 

@@ -48,17 +48,17 @@ public class GPUService extends MicroService {
 //                System.out.println(this.getName() + " model status: "+gpu.getvRam().size());
                 if (gpu.getModel().getStatus().equals("Trained")) {
                     complete(trainModelEvent, trainModelEvent.getModel());
-                    System.out.println(this.getName() + " complete" + trainModelEvent.getModel());
-                    trainModelEvent.getModel().getStudent().addToTrainedModel(trainModelEvent.getModel());
                     gpu.setModel(null);
-                    System.out.println(getName() + " train the model: " + trainModelEvent.getModel().getName() + " and send complete");
+                   // System.out.println(this.getName() + " complete" + trainModelEvent.getModel().getName());
+                    trainModelEvent.getModel().getStudent().addToTrainedModel(trainModelEvent.getModel());
+                 //   System.out.println(getName() + " train the model: " + trainModelEvent.getModel().getName() + " and send complete");
                 }
             }
         });
         subscribeEvent(TrainModelEvent.class, (TrainModelEvent trainModelEvent) -> {
             this.trainModelEvent=trainModelEvent;
             Model model = trainModelEvent.getModel();
-                this.gpu.setModel(model);
+            this.gpu.setModel(model);
             Data data = model.getData();
             gpu.divide((data));
 
@@ -86,10 +86,10 @@ public class GPUService extends MicroService {
                         else
                             model.setRes("Bad");
                     }
-            //System.out.println("im here");
                     model.setStatus("Tested");
+                    model.getStudent().incrementTestedCounter();
                     complete(testModelEvent, model);
-            System.out.println(model.isGood());
+              //      System.out.println("complete test Model event " + model.getRes() );
                 }
 
         );

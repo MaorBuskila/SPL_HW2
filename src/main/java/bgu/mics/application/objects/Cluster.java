@@ -23,7 +23,7 @@ public class Cluster {
     ///////////////////////////Statitics////////////////////////////////
 
     private Vector<String> trainedModels;
-    private int totalDataBatchProcessedCpu; // TODO: CHECK
+    private int totalDataBatchProcessedCpu;
     private int cpuTimeUnitUsed;
     private int gpuTimeUnitUsed;
     private static Cluster cluster = null;
@@ -57,8 +57,23 @@ public class Cluster {
         return unProcessedQueues.get(cpu);
     }
 
+    public Vector<GPU> getGpus() {
+        return gpus;
+    }
 
-    /////////////////////////////////////
+    public int getTotalDataBatchProcessedCpu() {
+        return totalDataBatchProcessedCpu;
+    }
+
+    public int getCpuTimeUnitUsed() {
+        return cpuTimeUnitUsed;
+    }
+
+    public int getGpuTimeUnitUsed() {
+        return gpuTimeUnitUsed;
+    }
+
+/////////////////////////////////////
 
     ///////////////////// Statistics //////////////////////////////
     public void updateTotalDataBatchProccessedbyCpu() {
@@ -79,13 +94,6 @@ public class Cluster {
         this.gpuTimeUnitUsed+=timeByGpu;
     }
 
-//    public void addGpuTimeUnitUsed(GPU gpu1) {
-//
-//        Integer x = gpuTimeUnitUsed.get(gpu1);
-//        x++;
-//        gpuTimeUnitUsed.replace(gpu1, x); // TODO Check how to simplify this
-//
-//    }
     ///////////////////////////////////////////////////////////
 
     /////////////////////// Send to CPU  unProcessed Databatch ///////////////////////

@@ -7,6 +7,8 @@ import bgu.mics.application.messages.*;
 import bgu.mics.application.objects.Model;
 import bgu.mics.application.objects.Student;
 
+import javax.jws.WebParam;
+import java.util.NoSuchElementException;
 import java.util.Vector;
 
 /**
@@ -21,10 +23,12 @@ import java.util.Vector;
 public class StudentService extends MicroService {
 
     private Student student;
+    private Future myFuture;
+    private Model myModel;
 
-    public StudentService(String name,Student student) {
+    public StudentService(String name, Student student) {
         super(name);
-        this.student=student;
+        this.student = student;
         // TODO Implement this
     }
 
@@ -33,25 +37,49 @@ public class StudentService extends MicroService {
     protected void initialize() {
         MessageBusImpl msgbus = MessageBusImpl.getInstance();
         msgbus.register(this);
-
         subscribeBroadcast(TerminateBroadcast.class, (TerminateBroadcast terminateBroadcast) -> {
             this.terminate();
         });
-
         subscribeBroadcast(TickBroadCast.class, (TickBroadCast tickBroadCast) -> {
-            TrainModelEvent e = null;
-            if (student.getFuture() == null) {
-                e = new TrainModelEvent(student.getModels().firstElement(), this.getName());
-              //  System.out.println(Thread.currentThread().getName() + " is sending: " + e.getClass());        ///////////////////////////////////////////////////////////////////////
-            }
+            myFuture = student.getFuture();
+            if (myFuture == null) {
+                System.out.println("my future is null");
+                if (student.getTestedCounter() < student.getModels().size()) {
+                    TrainModelEvent trainModelEvent = new TrainModelEvent(student.getModels().get(student.getTestedCounter()), "TrainModel" + String.valueOf(student.getTestedCounter()));
+                    student.setFuture(sendEvent(trainModelEvent));
+                    System.out.println("set the future to: " + trainModelEvent.getFuture());
+                }
+                 // System.out.println(Thread.currentThread().getName() + " is sending: " + e.getClass());        ///////////////////////////////////////////////////////////////////////
+            } else {
+                if (myFuture.isDone()) {
+                    System.out.println("id done");
+                    myModel = (Model) myFuture.get();
+                    if (myModel.getStatus().equals("Trained")) {
+                    //    System.out.println(myModel.getName() + " is Trained");
+                        TestModelEvent testModelEvent = new TestModelEvent(myModel, "TestModel" + String.valueOf(student.getTestedCounter()));
+                        student.setFuture(sendEvent(testModelEvent));
+                        //student.setFuture(sendEvent(new TestModelEvent(student.getModels().elementAt(student.getTestedCounter()), "TestModel" + String.valueOf(student.getTestedCounter()))));
+                    } else if (myModel.getStatus().equals("Tested")) {
+                    //    System.out.println(myModel.getName() + " is Tested");
+                        if (myModel.getRes().equals("Good")) {
+                            try {
+                                student.setFuture(sendEvent(new PublishResultEvent(myModel)));
+                            } catch (NoSuchElementException ex) {
+                                student.getFuture().resolve(student.getModels().elementAt(student.getTestedCounter()));
+                            }
+                        }
+                        student.setFuture(null);
+                    }
 
-            student.setFuture(sendEvent(e));
+                }
+
+            }
 
         });
         subscribeBroadcast(PublishConferenceBroadcast.class, (PublishConferenceBroadcast pub) -> {
             Vector<Model> vecOfModels = pub.getModels();
-            for (Model model : vecOfModels){
-                if (model.getStudent() .equals(student))
+            for (Model model : vecOfModels) {
+                if (model.getStudent().equals(student))
                     student.incrementPublished();
                 else
                     student.readPaper();
@@ -59,30 +87,7 @@ public class StudentService extends MicroService {
 
         });
 
-        for(int i=0;i<student.getModels().size();i++)
-        {
-            student.setFuture(sendEvent(new TrainModelEvent(student.getModels().elementAt(i), "TrainModel" + String.valueOf(i))));
-
-
-            boolean b=true;
-            while(b) {
-                if (student.getFuture().get().getStatus().equals("Trained")) {
-                    b = false;
-                    System.out.println("send test model event");
-                    student.setFuture(sendEvent(new TestModelEvent(student.getModels().elementAt(i), "TestModel" + String.valueOf(i)))) ;
-                }
-            }
-            b=true;
-            while (b) {
-                if (student.getFuture().get().getStatus().equals("Tested")) {
-                  //  System.out.println("im:      " + student.getModels().get(i).getStatus());
-                    if(student.getFuture().get().isGood())
-                        student.setFuture(sendEvent(new PublishResultEvent(student.getModels().elementAt(i)))) ;
-                    b=false;
-                }
-            }
 
         }
 
-    }
 }

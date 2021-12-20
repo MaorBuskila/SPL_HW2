@@ -182,7 +182,7 @@ public class GPU {
         return trainingDatabatch;
     }
     public void doneTrainThisBatch() {
-        System.out.println("TRAINING BATCH OF : " + model.getName() + " ALREADY TRAINED DATA SIZE IS : " + trainingDatabatch.getData().getTrained());  ///////////////////////////
+        System.out.println(this.getType() + " TRAINING BATCH OF : " + model.getName() + " ALREADY TRAINED DATA SIZE IS : " + trainingDatabatch.getData().getTrained());  ///////////////////////////
         if (model.getStatus().equals("PreTrained"))
             model.setStatus("Training");
         tickForAction = 0;
@@ -204,9 +204,10 @@ public class GPU {
         if (model == null) {
             return;
         }
-       // System.out.println(this.getType() + " trained: "+model.getName()+ " " +totalCurrentModelTrained);
-      //  System.out.println("total size of: "+model.getName()+ " " + model.getData().getSize()/1000);
+        //System.out.println(this.getType() + " trained: "+model.getName()+ " " +totalCurrentModelTrained);
+        //System.out.println("total size of: "+model.getName()+ " " + model.getData().getSize()/1000);
         if(totalCurrentModelTrained==model.getData().getSize()/1000) {
+            System.out.println("trained");
             this.getModel().setStatus("Trained");
             totalCurrentModelTrained=0;
         }

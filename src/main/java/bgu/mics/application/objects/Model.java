@@ -12,8 +12,11 @@ public class Model {
     private Result res;
     private Status status;
 
-    public Result getRes() {
-        return res;
+    public String getRes() {
+        if(res==Result.Good)
+            return "Good";
+      else
+          return "Bad";
     }
 
     public void setRes(String res) {
